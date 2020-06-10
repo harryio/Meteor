@@ -36,5 +36,7 @@ class NetworkInteractor(val apiKey: String, val defaultScheduler: Scheduler) {
 
     private fun getMoshi() = Moshi.Builder().build()
 
-    private fun getOkHttpClient() = OkHttpClient.Builder().build()
+    private fun getOkHttpClient() = OkHttpClient.Builder()
+        .addInterceptor(ApiKeyInterceptor(apiKey))
+        .build()
 }
