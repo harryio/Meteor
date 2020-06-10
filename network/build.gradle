@@ -10,15 +10,15 @@ ext {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation libraries.kotlinStdLib
 
-    implementation "com.squareup.moshi:moshi:$moshiVersion"
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$loggingLibVersion"
+    implementation networkLibraries.moshi
+    implementation networkLibraries.retrofit
+    implementation networkLibraries.retrofitRxJavaAdapter
+    implementation networkLibraries.retrofitMoshiConverter
+    implementation networkLibraries.networkLogging
 
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+    kapt networkLibraries.moshiCodeGen
 }
 
 sourceCompatibility = "8"

@@ -1,0 +1,22 @@
+ext {
+    def kotlinVersion = '1.3.72'
+    def rxJavaVersion = "2.2.19"
+
+    def retrofitVersion  = '2.8.1'
+    def moshiVersion = '1.9.2'
+    def loggingLibVersion = "4.5.0"
+
+    libraries = [
+            kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+            rxJava : "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    ]
+
+    networkLibraries = [
+            moshi: "com.squareup.moshi:moshi:$moshiVersion",
+            moshiCodeGen: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion",
+            retrofit: "com.squareup.retrofit2:retrofit:$retrofitVersion",
+            retrofitRxJavaAdapter: "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
+            retrofitMoshiConverter: "com.squareup.retrofit2:converter-moshi:$retrofitVersion",
+            networkLogging: "com.squareup.okhttp3:logging-interceptor:$loggingLibVersion"
+    ]
+}
