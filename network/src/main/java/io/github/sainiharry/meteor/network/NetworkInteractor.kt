@@ -25,22 +25,16 @@ class NetworkInteractor(val apiKey: String, val defaultScheduler: Scheduler) {
     }
 
     private val openWeatherService by lazy {
-        retrofit.create(OpenWeatherService::class.java)
+        getRetrofit().create(OpenWeatherService::class.java)
     }
 
-    private val moshi by lazy {
-        Moshi.Builder().build()
-    }
+    private fun getRetrofit() = Retrofit.Builder().baseUrl(BASE_API_URL)
+        .client(getOkHttpClient())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(defaultScheduler))
+        .addConverterFactory(MoshiConverterFactory.create(getMoshi()))
+        .build()
 
-    private val retrofit by lazy {
-        Retrofit.Builder().baseUrl(BASE_API_URL)
-            .client(okHttpClient)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(defaultScheduler))
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-    }
+    private fun getMoshi() = Moshi.Builder().build()
 
-    private val okHttpClient by lazy {
-        OkHttpClient.Builder().build()
-    }
+    private fun getOkHttpClient() = OkHttpClient.Builder().build()
 }
