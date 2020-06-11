@@ -1,8 +1,8 @@
-package io.github.sainiharry.meteor.currentweatherrepository
+package io.github.sainiharry.meteor.currentweatherrepository.network
 
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
-import io.reactivex.Single
 
 internal interface OpenWeatherService {
 

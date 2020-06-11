@@ -1,4 +1,4 @@
-package io.github.sainiharry.meteor.currentweatherrepository
+package io.github.sainiharry.meteor.currentweatherrepository.network
 
 import okhttp3.Interceptor
 import okhttp3.Response

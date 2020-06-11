@@ -1,4 +1,4 @@
-package io.github.sainiharry.meteor.currentweatherrepository
+package io.github.sainiharry.meteor.currentweatherrepository.network
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

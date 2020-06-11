@@ -1,6 +1,9 @@
 package io.github.sainiharry.meteor.currentweatherrepository
 
 import io.github.sainiharry.meteor.common.Weather
+import io.github.sainiharry.meteor.currentweatherrepository.network.OpenWeatherService
+import io.github.sainiharry.meteor.currentweatherrepository.network.WeatherApi
+import io.github.sainiharry.meteor.currentweatherrepository.network.flatten
 import io.github.sainiharry.meteor.network.NetworkInteractor
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -13,7 +16,10 @@ interface WeatherRepository {
 
         fun getInstance(scheduler: Scheduler): WeatherRepository {
             if (weatherRepository == null) {
-                val weatherApi = WeatherApi(BuildConfig.WEATHER_API_KEY)
+                val weatherApi =
+                    WeatherApi(
+                        BuildConfig.WEATHER_API_KEY
+                    )
                 val retrofit = NetworkInteractor.getRetrofit(weatherApi, scheduler)
                 val openWeatherService = retrofit.create(OpenWeatherService::class.java)
                 weatherRepository = WeatherRepositoryImpl(openWeatherService)
@@ -26,7 +32,7 @@ interface WeatherRepository {
     fun getCurrentWeather(cityName: String): Single<Weather>
 }
 
-internal class WeatherRepositoryImpl(val openWeatherService: OpenWeatherService) :
+internal class WeatherRepositoryImpl(private val openWeatherService: OpenWeatherService) :
     WeatherRepository {
 
     override fun getCurrentWeather(cityName: String): Single<Weather> =
