@@ -27,8 +27,11 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":network")
+    implementation project(":common")
 
     implementation libraries.kotlinStdLib
+    api libraries.rxJava
+
     implementation androidLibraries.coreKtx
     implementation androidLibraries.appCompat
 
