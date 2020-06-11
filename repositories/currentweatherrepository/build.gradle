@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
@@ -23,6 +24,7 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
                         "room.incremental":"true",
                         "room.expandProjection":"true"
                 ]
@@ -47,7 +49,7 @@ dependencies {
 
     implementation archComponentsLibraries.room
     implementation archComponentsLibraries.roomRxJava
-    annotationProcessor archComponentsLibraries.roomCompiler
+    kapt archComponentsLibraries.roomCompiler
 
     api libraries.rxJava
 
