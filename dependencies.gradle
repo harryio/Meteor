@@ -8,6 +8,7 @@ ext {
 
     def ktxVersion = '1.3.0'
     def appCompatVersion = '1.1.0'
+    def fragmentVersion = '1.2.5'
     def lifecycleVersion = '2.2.0'
 
     def junitVersion = '4.13'
@@ -35,14 +36,14 @@ ext {
 
     androidLibraries = [
             "androidx.core:core-ktx:$ktxVersion",
-            "androidx.appcompat:appcompat:$appCompatVersion"
+            "androidx.appcompat:appcompat:$appCompatVersion",
+            "androidx.fragment:fragment-ktx:$fragmentVersion"
     ]
 
     lifecycleLibraries = [
-            "androidx.lifecycle:lifecycle-viewmodel-ktx:lifecycleVersion",
-            "androidx.lifecycle:lifecycle-livedata-ktx:lifecycleVersion",
-            "androidx.lifecycle:lifecycle-viewmodel-savedstate:lifecycleVersion",
-            "androidx.lifecycle:lifecycle-common-java8:lifecycleVersion"
+            "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
+            "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
+            "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion"
     ]
 
     room = [
@@ -52,7 +53,8 @@ ext {
 
     compilerLibraries = [
             room: "androidx.room:room-compiler:$roomVersion",
-            moshi: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+            moshi: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion",
+            lifecycle: "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
     ]
 
     testLibraries = [
