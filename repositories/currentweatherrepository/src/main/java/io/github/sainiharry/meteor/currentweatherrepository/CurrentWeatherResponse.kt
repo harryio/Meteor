@@ -2,6 +2,7 @@ package io.github.sainiharry.meteor.currentweatherrepository
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import io.github.sainiharry.meteor.common.Weather
 
 @JsonClass(generateAdapter = true)
 internal data class CurrentWeatherResponse(
@@ -29,4 +30,16 @@ internal data class WeatherInfoResponse(
 @JsonClass(generateAdapter = true)
 internal data class WeatherSysResponse(
     val country: String
+)
+
+internal fun CurrentWeatherResponse.flatten(): Weather = Weather(
+    weather[0].id,
+    weather[0].main,
+    weather[0].icon,
+    cityId,
+    cityName,
+    weatherInfo.temp,
+    weatherInfo.minTemp,
+    weatherInfo.maxTemp,
+    weatherSys.country
 )

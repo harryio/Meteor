@@ -7,5 +7,5 @@ import io.reactivex.Single
 internal interface OpenWeatherService {
 
     @GET("/2.5/weather")
-    fun getCurrentWeather(@Query("q") cityName: String): Single<WeatherResponse>
+    fun getCurrentWeather(@Query("q") cityName: String): Single<CurrentWeatherResponse>
 }

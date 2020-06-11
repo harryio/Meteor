@@ -29,7 +29,6 @@ interface WeatherRepository {
 internal class WeatherRepositoryImpl(val openWeatherService: OpenWeatherService) :
     WeatherRepository {
 
-    override fun getCurrentWeather(cityName: String): Single<Weather> {
-        TODO("Not yet implemented")
-    }
+    override fun getCurrentWeather(cityName: String): Single<Weather> =
+        openWeatherService.getCurrentWeather(cityName).map { it.flatten() }
 }
