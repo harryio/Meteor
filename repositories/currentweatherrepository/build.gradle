@@ -19,6 +19,15 @@ android {
         consumerProguardFiles "consumer-rules.pro"
 
         buildConfigField "String", "WEATHER_API_KEY", localProperties['weatherApiKey']
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.incremental":"true",
+                        "room.expandProjection":"true"
+                ]
+            }
+        }
     }
 
     buildTypes {
@@ -35,6 +44,11 @@ dependencies {
     implementation project(":common")
 
     implementation libraries.kotlinStdLib
+
+    implementation archComponentsLibraries.room
+    implementation archComponentsLibraries.roomRxJava
+    annotationProcessor archComponentsLibraries.roomCompiler
+
     api libraries.rxJava
 
     implementation androidLibraries.coreKtx

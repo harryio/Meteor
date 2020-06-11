@@ -13,6 +13,8 @@ ext {
     def androidXTest = '1.1.1'
     def espressoTest = '3.2.0'
 
+    def roomVersion = '2.2.5'
+
     libraries = [
             kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             rxJava : "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
@@ -30,6 +32,12 @@ ext {
     androidLibraries = [
             coreKtx: "androidx.core:core-ktx:$ktxVersion",
             appCompat: "androidx.appcompat:appcompat:$appCompatVersion"
+    ]
+
+    archComponentsLibraries = [
+            room: "androidx.room:room-runtime:$roomVersion",
+            roomCompiler: "androidx.room:room-compiler:$roomVersion",
+            roomRxJava: "androidx.room:room-rxjava2:$roomVersion"
     ]
 
     testLibraries = [
