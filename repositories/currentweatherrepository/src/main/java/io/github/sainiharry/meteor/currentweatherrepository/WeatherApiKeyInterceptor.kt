@@ -1,11 +1,11 @@
-package io.github.sainiharry.meteor.network
+package io.github.sainiharry.meteor.currentweatherrepository
 
 import okhttp3.Interceptor
 import okhttp3.Response
 
 private const val API_KEY_QUERY_PARAM = "appid"
 
-internal class ApiKeyInterceptor(val apiKey: String) : Interceptor {
+internal class WeatherApiKeyInterceptor(val apiKey: String) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()

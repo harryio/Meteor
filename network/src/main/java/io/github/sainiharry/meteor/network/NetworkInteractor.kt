@@ -8,37 +8,60 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-private const val BASE_API_URL = "http://api.openweathermap.org/data/"
+class NetworkInteractor(val scheduler: Scheduler) {
 
-class NetworkInteractor(val apiKey: String, val defaultScheduler: Scheduler) {
+    private val retrofitMap = mutableMapOf<Api, Retrofit>()
 
     companion object {
 
         private var networkInteractor: NetworkInteractor? = null
 
-        fun getOpenWeatherService(apiKey: String, defaultScheduler: Scheduler): OpenWeatherService {
+        fun getRetrofit(api: Api, scheduler: Scheduler): Retrofit {
             if (networkInteractor == null) {
-                networkInteractor = NetworkInteractor(apiKey, defaultScheduler)
+                networkInteractor = NetworkInteractor(scheduler)
             }
 
-            return networkInteractor!!.openWeatherService
+            return networkInteractor!!.getRetrofit(api)
         }
     }
 
-    private val openWeatherService by lazy {
-        getRetrofit().create(OpenWeatherService::class.java)
+    private fun getRetrofit(api: Api): Retrofit {
+        val retrofit = retrofitMap[api]
+        return if (retrofit == null) {
+            val apiOkHttpClient = api.buildOkHttpClient(baseOkHttpClient.newBuilder())
+                .addInterceptor(HttpLoggingInterceptor().apply { setLevel(HttpLoggingInterceptor.Level.BODY) })
+                .build()
+            val apiMoshi = api.buildMoshi(baseMoshi.newBuilder()).build()
+            val apiRetrofit = api.buildRetrofit(baseRetrofit.newBuilder())
+                .client(apiOkHttpClient)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(scheduler))
+                .addConverterFactory(MoshiConverterFactory.create(apiMoshi))
+                .build()
+            retrofitMap[api] = apiRetrofit
+            apiRetrofit
+        } else {
+            retrofit
+        }
     }
 
-    private fun getRetrofit() = Retrofit.Builder().baseUrl(BASE_API_URL)
-        .client(getOkHttpClient())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(defaultScheduler))
-        .addConverterFactory(MoshiConverterFactory.create(getMoshi()))
-        .build()
+    private val baseRetrofit by lazy {
+        Retrofit.Builder().build()
+    }
 
-    private fun getMoshi() = Moshi.Builder().build()
+    private val baseOkHttpClient by lazy {
+        OkHttpClient.Builder().build()
+    }
 
-    private fun getOkHttpClient() = OkHttpClient.Builder()
-        .addInterceptor(ApiKeyInterceptor(apiKey))
-        .addInterceptor(HttpLoggingInterceptor().apply { setLevel(HttpLoggingInterceptor.Level.BODY) })
-        .build()
+    private val baseMoshi by lazy {
+        Moshi.Builder().build()
+    }
+}
+
+interface Api {
+
+    fun buildRetrofit(retrofitBuilder: Retrofit.Builder): Retrofit.Builder
+
+    fun buildOkHttpClient(okHttpBuilder: OkHttpClient.Builder): OkHttpClient.Builder = okHttpBuilder
+
+    fun buildMoshi(moshiBuilder: Moshi.Builder): Moshi.Builder = moshiBuilder
 }

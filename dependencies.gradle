@@ -6,6 +6,13 @@ ext {
     def moshiVersion = '1.9.2'
     def loggingLibVersion = "4.5.0"
 
+    def ktxVersion = '1.3.0'
+    def appCompatVersion = '1.1.0'
+
+    def junitVersion = '4.13'
+    def androidXTest = '1.1.1'
+    def espressoTest = '3.2.0'
+
     libraries = [
             kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             rxJava : "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
@@ -18,5 +25,16 @@ ext {
             retrofitRxJavaAdapter: "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
             retrofitMoshiConverter: "com.squareup.retrofit2:converter-moshi:$retrofitVersion",
             networkLogging: "com.squareup.okhttp3:logging-interceptor:$loggingLibVersion"
+    ]
+
+    androidLibraries = [
+            coreKtx: "androidx.core:core-ktx:$ktxVersion",
+            appCompat: "androidx.appcompat:appcompat:$appCompatVersion"
+    ]
+
+    testLibraries = [
+            junit: "junit:junit:$junitVersion",
+            androidXTest: "androidx.test.ext:junit:$androidXTest",
+            espressoTest: "androidx.test.espresso:espresso-core:$espressoTest"
     ]
 }
