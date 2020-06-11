@@ -29,6 +29,7 @@ dependencies {
 
     implementation libraries.kotlinStdLib
     implementation androidLibraries
+    implementation uiLibraries
 
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries

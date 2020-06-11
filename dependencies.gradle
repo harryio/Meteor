@@ -10,6 +10,8 @@ ext {
     def appCompatVersion = '1.1.0'
     def fragmentVersion = '1.2.5'
     def lifecycleVersion = '2.2.0'
+    def constraintLayoutVersion = '2.0.0-beta6'
+    def materialVersion = '1.3.0-alpha01'
 
     def junitVersion = '4.13'
     def androidXTest = '1.1.1'
@@ -44,6 +46,11 @@ ext {
             "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
             "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
             "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion"
+    ]
+
+    uiLibraries = [
+            "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion",
+            "com.google.android.material:material:$materialVersion"
     ]
 
     room = [
