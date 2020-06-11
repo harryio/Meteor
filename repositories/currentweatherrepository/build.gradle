@@ -46,17 +46,13 @@ dependencies {
     implementation project(":common")
 
     implementation libraries.kotlinStdLib
+    implementation libraries.rxJava
 
-    implementation archComponentsLibraries.room
-    implementation archComponentsLibraries.roomRxJava
-    kapt archComponentsLibraries.roomCompiler
+    implementation androidLibraries
+    implementation room
 
-    api libraries.rxJava
+    kapt compilerLibraries.room
 
-    implementation androidLibraries.coreKtx
-    implementation androidLibraries.appCompat
-
-    testImplementation testLibraries.junit
-    androidTestImplementation testLibraries.androidXTest
-    androidTestImplementation testLibraries.espressoTest
+    testImplementation testLibraries
+    androidTestImplementation androidTestLibraries
 }

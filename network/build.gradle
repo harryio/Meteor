@@ -11,6 +11,7 @@ ext {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation libraries.kotlinStdLib
+    implementation libraries.rxJava
 
     api networkLibraries.moshi
     api networkLibraries.retrofit
@@ -18,7 +19,7 @@ dependencies {
     implementation networkLibraries.retrofitMoshiConverter
     implementation networkLibraries.networkLogging
 
-    kapt networkLibraries.moshiCodeGen
+    kapt compilerLibraries.moshi
 }
 
 sourceCompatibility = "8"

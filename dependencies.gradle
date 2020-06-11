@@ -2,12 +2,13 @@ ext {
     def kotlinVersion = '1.3.72'
     def rxJavaVersion = "2.2.19"
 
-    def retrofitVersion  = '2.8.1'
+    def retrofitVersion = '2.8.1'
     def moshiVersion = '1.9.2'
     def loggingLibVersion = "4.5.0"
 
     def ktxVersion = '1.3.0'
     def appCompatVersion = '1.1.0'
+    def lifecycleVersion = '2.2.0'
 
     def junitVersion = '4.13'
     def androidXTest = '1.1.1'
@@ -20,29 +21,46 @@ ext {
             rxJava : "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     ]
 
+    tools = [
+            "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    ]
+
     networkLibraries = [
-            moshi: "com.squareup.moshi:moshi:$moshiVersion",
-            moshiCodeGen: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion",
-            retrofit: "com.squareup.retrofit2:retrofit:$retrofitVersion",
-            retrofitRxJavaAdapter: "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
+            moshi                 : "com.squareup.moshi:moshi:$moshiVersion",
+            retrofit              : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+            retrofitRxJavaAdapter : "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
             retrofitMoshiConverter: "com.squareup.retrofit2:converter-moshi:$retrofitVersion",
-            networkLogging: "com.squareup.okhttp3:logging-interceptor:$loggingLibVersion"
+            networkLogging        : "com.squareup.okhttp3:logging-interceptor:$loggingLibVersion"
     ]
 
     androidLibraries = [
-            coreKtx: "androidx.core:core-ktx:$ktxVersion",
-            appCompat: "androidx.appcompat:appcompat:$appCompatVersion"
+            "androidx.core:core-ktx:$ktxVersion",
+            "androidx.appcompat:appcompat:$appCompatVersion"
     ]
 
-    archComponentsLibraries = [
-            room: "androidx.room:room-runtime:$roomVersion",
-            roomCompiler: "androidx.room:room-compiler:$roomVersion",
-            roomRxJava: "androidx.room:room-rxjava2:$roomVersion"
+    lifecycleLibraries = [
+            "androidx.lifecycle:lifecycle-viewmodel-ktx:lifecycleVersion",
+            "androidx.lifecycle:lifecycle-livedata-ktx:lifecycleVersion",
+            "androidx.lifecycle:lifecycle-viewmodel-savedstate:lifecycleVersion",
+            "androidx.lifecycle:lifecycle-common-java8:lifecycleVersion"
+    ]
+
+    room = [
+            "androidx.room:room-runtime:$roomVersion",
+            "androidx.room:room-rxjava2:$roomVersion"
+    ]
+
+    compilerLibraries = [
+            room: "androidx.room:room-compiler:$roomVersion",
+            moshi: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
     ]
 
     testLibraries = [
-            junit: "junit:junit:$junitVersion",
-            androidXTest: "androidx.test.ext:junit:$androidXTest",
-            espressoTest: "androidx.test.espresso:espresso-core:$espressoTest"
+            "junit:junit:$junitVersion",
+    ]
+
+    androidTestLibraries = [
+            "androidx.test.ext:junit:$androidXTest",
+            "androidx.test.espresso:espresso-core:$espressoTest"
     ]
 }

@@ -28,11 +28,8 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     implementation libraries.kotlinStdLib
-    implementation androidLibraries.coreKtx
-    implementation androidLibraries.appCompat
+    implementation androidLibraries
 
-    testImplementation testLibraries.junit
-    androidTestImplementation testLibraries.androidXTest
-    androidTestImplementation testLibraries.espressoTest
-
+    testImplementation testLibraries
+    androidTestImplementation androidTestLibraries
 }
