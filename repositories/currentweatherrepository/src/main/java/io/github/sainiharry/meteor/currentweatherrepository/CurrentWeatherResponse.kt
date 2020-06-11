@@ -7,7 +7,9 @@ data class CurrentWeatherResponse(
     @Json(name = "name") val cityName: String,
     val weather: WeatherResponse,
     @Json(name = "main")
-    val weatherInfo: WeatherInfoResponse
+    val weatherInfo: WeatherInfoResponse,
+    @Json(name = "sys")
+    val weatherSys: WeatherSysResponse
 )
 
 data class WeatherResponse(val id: Long, val main: String, val description: String, val icon: String)
@@ -20,4 +22,8 @@ data class WeatherInfoResponse(
     val minTemp: Float,
     @Json(name = "temp_max")
     val maxTemp: Float
+)
+
+data class WeatherSysResponse(
+    val country: String
 )
