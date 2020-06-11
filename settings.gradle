@@ -1,3 +1,4 @@
+include ':features:currentweather'
 include ':commonfeature'
 include ':common'
 include ':repositories:currentweatherrepository'
