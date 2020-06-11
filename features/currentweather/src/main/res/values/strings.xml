@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="today_forecast">Today\'s Forecast</string>
+    <string name="current_temp">%d\u00b0</string>
+    <string name="max_min_temp">%1$d\u00b0/%2$d\u00b0</string>
 </resources>

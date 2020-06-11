@@ -7,7 +7,7 @@ data class Weather(
     val cityId: Long,
     val cityName: String,
     val temp: Float,
-    val minTemp: Float,
     val maxTemp: Float,
+    val minTemp: Float,
     val country: String
 )
