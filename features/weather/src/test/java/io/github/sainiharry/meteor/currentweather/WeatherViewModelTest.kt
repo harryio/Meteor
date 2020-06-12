@@ -1,5 +1,6 @@
 package io.github.sainiharry.meteor.currentweather
 
+import android.accounts.NetworkErrorException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.github.sainiharry.meteor.common.Weather
 import io.github.sainiharry.meteor.commonfeature.Event
@@ -120,9 +121,23 @@ internal class WeatherViewModelTest {
             assertEquals(Event(true), values[1])
         }
     }
+
+    @Test
+    fun testError() {
+        weatherViewModel.error.captureValues {
+            weatherRepository.error = true
+
+            weatherViewModel.loadWeatherData("London")
+
+            assertEquals(1, values.size)
+            assertEquals(Event(R.string.error_current_weather_fetch), values[0])
+        }
+    }
 }
 
 internal class MockWeatherRepository : WeatherRepository {
+
+    var error = false
 
     private val weatherPusherMap = mutableMapOf<String, Subject<Weather>>()
 
@@ -148,8 +163,11 @@ internal class MockWeatherRepository : WeatherRepository {
         return weatherPusher
     }
 
-    override fun fetchCurrentWeather(cityName: String): Single<Weather> =
+    override fun fetchCurrentWeather(cityName: String): Single<Weather> = if (error) {
+        Single.error(NetworkErrorException("Failed to fetch network error"))
+    } else {
         Single.just(mockWeather(cityName))
+    }
 
     override fun getCurrentWeatherListener(cityName: String): Flowable<Weather> =
         getWeatherPusher(cityName).toFlowable(BackpressureStrategy.LATEST)

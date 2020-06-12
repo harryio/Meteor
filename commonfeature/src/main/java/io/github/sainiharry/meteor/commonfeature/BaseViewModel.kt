@@ -7,15 +7,29 @@ import io.reactivex.disposables.CompositeDisposable
 
 open class BaseViewModel : ViewModel() {
 
+    protected val disposables = CompositeDisposable()
+
     val loading: LiveData<Event<Boolean>>
         get() = _loading
 
     protected val _loading = MutableLiveData<Event<Boolean>>()
 
-    protected val disposables = CompositeDisposable()
+    val error: LiveData<Event<Int>>
+        get() = _error
+
+    protected val _error = MutableLiveData<Event<Int>>()
 
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
     }
+
+    protected fun getErrorHandler(errorMsgId: Int = R.string.error_generic): (Throwable) -> Unit =
+        { throwable ->
+            if (BuildConfig.DEBUG) {
+                throwable.printStackTrace()
+            }
+
+            _error.value = Event(errorMsgId)
+        }
 }

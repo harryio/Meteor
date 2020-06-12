@@ -39,11 +39,13 @@ internal class WeatherViewModel(
         }
 
         _loading.value = Event(true)
-        // TODO: 11/06/20 Add error handling
-        disposables.add(weatherRepository.fetchCurrentWeather(cityName)
-            .observeOn(observableScheduler)
-            .ignoreElement()
-            .subscribe { cityNameObserver.onNext(cityName) }
+        disposables.add(
+            weatherRepository.fetchCurrentWeather(cityName)
+                .observeOn(observableScheduler)
+                .ignoreElement()
+                .subscribe({
+                    cityNameObserver.onNext(cityName)
+                }, getErrorHandler(R.string.error_current_weather_fetch))
         )
     }
 }
