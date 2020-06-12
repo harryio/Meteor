@@ -40,7 +40,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":features:currentweather")
+    implementation project(":features:weather")
 
     implementation libraries.kotlinStdLib
     implementation androidLibraries

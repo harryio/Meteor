@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.github.sainiharry.meteor.common.Weather
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
+import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.currentweatherrepository.WeatherRepository
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Scheduler
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
-class CurrentWeatherViewModel(
+class WeatherViewModel(
     private val weatherRepository: WeatherRepository,
     private val observableScheduler: Scheduler
 ) : BaseViewModel() {
@@ -37,6 +38,7 @@ class CurrentWeatherViewModel(
             return
         }
 
+        _loading.value = Event(true)
         // TODO: 11/06/20 Add error handling
         disposables.add(weatherRepository.fetchCurrentWeather(cityName)
             .observeOn(observableScheduler)

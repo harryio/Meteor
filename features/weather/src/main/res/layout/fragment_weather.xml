@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="io.github.sainiharry.meteor.currentweather.CurrentWeatherViewModel" />
+            type="io.github.sainiharry.meteor.currentweather.WeatherViewModel" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

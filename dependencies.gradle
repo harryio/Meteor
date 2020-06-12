@@ -9,6 +9,7 @@ ext {
 
     def ktxVersion = '1.3.0'
     def appCompatVersion = '1.1.0'
+    def legacySupportVersion = '1.0.0'
     def fragmentVersion = '1.2.5'
     def lifecycleVersion = '2.2.0'
     def constraintLayoutVersion = '2.0.0-beta6'
@@ -41,7 +42,8 @@ ext {
     androidLibraries = [
             "androidx.core:core-ktx:$ktxVersion",
             "androidx.appcompat:appcompat:$appCompatVersion",
-            "androidx.fragment:fragment-ktx:$fragmentVersion"
+            "androidx.fragment:fragment-ktx:$fragmentVersion",
+            "androidx.legacy:legacy-support-v4:$legacySupportVersion"
     ]
 
     lifecycleLibraries = [
