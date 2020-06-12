@@ -46,6 +46,7 @@ dependencies {
 
     implementation libraries.kotlinStdLib
     implementation libraries.rxJava
+    implementation libraries.rxAndroid
 
     implementation androidLibraries
     implementation uiLibraries

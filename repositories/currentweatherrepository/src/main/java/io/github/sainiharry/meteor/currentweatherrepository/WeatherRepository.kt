@@ -55,7 +55,7 @@ interface WeatherRepository {
 
     fun fetchCurrentWeather(cityName: String): Single<Weather>
 
-    fun getCurrentWeather(cityName: String): Flowable<Weather>
+    fun getCurrentWeatherListener(cityName: String): Flowable<Weather>
 }
 
 internal class WeatherRepositoryImpl(
@@ -71,7 +71,7 @@ internal class WeatherRepositoryImpl(
                 weatherDatabase.weatherDao().insertCurrentWeather(CurrentWeatherModel(weather))
             }
 
-    override fun getCurrentWeather(cityName: String): Flowable<Weather> =
+    override fun getCurrentWeatherListener(cityName: String): Flowable<Weather> =
         weatherDatabase.weatherDao().getCurrentWeather(cityName)
             .map(CurrentWeatherModel::flatten)
 }
