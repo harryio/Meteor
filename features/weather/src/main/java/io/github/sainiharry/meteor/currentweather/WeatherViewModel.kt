@@ -11,7 +11,7 @@ import io.reactivex.Scheduler
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
-class WeatherViewModel(
+internal class WeatherViewModel(
     private val weatherRepository: WeatherRepository,
     private val observableScheduler: Scheduler
 ) : BaseViewModel() {
@@ -33,8 +33,8 @@ class WeatherViewModel(
         disposables.add(weatherObservableSubscription)
     }
 
-    fun loadWeatherData(cityName: String) {
-        if (cityName.isEmpty() || cityName.isBlank()) {
+    fun loadWeatherData(cityName: String?) {
+        if (cityName.isNullOrEmpty() || cityName.isBlank()) {
             return
         }
 

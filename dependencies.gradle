@@ -16,6 +16,7 @@ ext {
     def materialVersion = '1.3.0-alpha01'
 
     def junitVersion = '4.13'
+    def coreTestingVersion = '2.1.0'
     def androidXTest = '1.1.1'
     def espressoTest = '3.2.0'
 
@@ -70,6 +71,7 @@ ext {
 
     testLibraries = [
             "junit:junit:$junitVersion",
+            "androidx.arch.core:core-testing:$coreTestingVersion"
     ]
 
     androidTestLibraries = [
