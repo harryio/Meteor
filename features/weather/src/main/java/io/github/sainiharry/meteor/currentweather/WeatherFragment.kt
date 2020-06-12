@@ -16,12 +16,13 @@ import io.reactivex.schedulers.Schedulers
 class WeatherFragment : BaseFragment() {
 
     private val viewModel by viewModels<WeatherViewModel>(factoryProducer = {
-        object: ViewModelProvider.Factory {
+        object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
                 return WeatherViewModel(
                     getWeatherRepository(Schedulers.io(), requireContext().applicationContext),
-                    AndroidSchedulers.mainThread()) as T
+                    AndroidSchedulers.mainThread()
+                ) as T
             }
         }
     })
@@ -35,5 +36,11 @@ class WeatherFragment : BaseFragment() {
         binding.model = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.error.observe(viewLifecycleOwner, defaultErrorHandler())
     }
 }

@@ -54,10 +54,6 @@ dependencies {
     implementation libraries.rxJava
     implementation libraries.rxAndroid
 
-    implementation androidLibraries
-    implementation uiLibraries
-    implementation lifecycleLibraries
-
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries
 }

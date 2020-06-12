@@ -40,8 +40,9 @@ dependencies {
     implementation libraries.kotlinStdLib
     implementation libraries.rxJava
 
-    implementation androidLibraries
-    implementation lifecycleLibraries
+    api androidLibraries
+    api lifecycleLibraries
+    api uiLibraries
 
     kapt compilerLibraries.lifecycle
 
