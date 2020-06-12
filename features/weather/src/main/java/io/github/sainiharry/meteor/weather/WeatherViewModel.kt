@@ -1,4 +1,4 @@
-package io.github.sainiharry.meteor.currentweather
+package io.github.sainiharry.meteor.weather
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

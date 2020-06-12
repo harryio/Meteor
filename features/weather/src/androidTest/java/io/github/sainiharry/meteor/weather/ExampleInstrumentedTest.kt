@@ -1,4 +1,4 @@
-package io.github.sainiharry.meteor.currentweather
+package io.github.sainiharry.meteor.weather
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

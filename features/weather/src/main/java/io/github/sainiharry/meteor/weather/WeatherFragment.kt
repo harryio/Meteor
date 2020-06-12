@@ -1,4 +1,4 @@
-package io.github.sainiharry.meteor.currentweather
+package io.github.sainiharry.meteor.weather
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.commonfeature.EventObserver
-import io.github.sainiharry.meteor.currentweather.databinding.FragmentWeatherBinding
+import io.github.sainiharry.meteor.weather.databinding.FragmentWeatherBinding
 import io.github.sainiharry.meteor.currentweatherrepository.getWeatherRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

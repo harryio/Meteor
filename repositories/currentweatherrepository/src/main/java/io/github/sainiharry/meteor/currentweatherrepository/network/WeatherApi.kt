@@ -4,7 +4,7 @@ import io.github.sainiharry.meteor.network.Api
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-private const val WEATHER_BASE_API_URL = "http://api.openweathermap.org/data/"
+private const val WEATHER_BASE_API_URL = "https://api.openweathermap.org/data/"
 
 internal class WeatherApi(private val apiKey: String) : Api {
 

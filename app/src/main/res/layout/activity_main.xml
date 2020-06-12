@@ -10,7 +10,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/current_weather_fragment"
-        android:name="io.github.sainiharry.meteor.currentweather.WeatherFragment"
+        android:name="io.github.sainiharry.meteor.weather.WeatherFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
