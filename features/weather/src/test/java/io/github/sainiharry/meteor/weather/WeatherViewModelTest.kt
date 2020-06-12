@@ -1,179 +1,203 @@
 package io.github.sainiharry.meteor.weather
 
-import android.accounts.NetworkErrorException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import io.github.sainiharry.meteor.common.Weather
 import io.github.sainiharry.meteor.commonfeature.Event
-import io.github.sainiharry.meteor.commonfeature.captureValues
-import io.github.sainiharry.meteor.commonfeature.getValueForTest
 import io.github.sainiharry.meteor.currentweatherrepository.WeatherRepository
-import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.*
+import org.mockito.junit.MockitoJUnitRunner
 
-internal class WeatherViewModelTest {
+@RunWith(MockitoJUnitRunner::class)
+class WeatherViewModelTest {
 
-    private lateinit var weatherRepository: MockWeatherRepository
+    @Mock
+    lateinit var weatherRepository: WeatherRepository
 
-    private lateinit var testScheduler: Scheduler
+    @Mock
+    lateinit var weatherObserver: Observer<Weather>
 
-    private lateinit var weatherViewModel: WeatherViewModel
+    @Mock
+    lateinit var loadingObserver: Observer<Event<Boolean>>
+
+    @Mock
+    lateinit var errorObserver: Observer<Event<Int>>
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private lateinit var weatherViewModel: WeatherViewModel
+
+    private val weatherLiveData = MutableLiveData<Weather>()
+
+    private val cityName = "Montreal"
+
+    private val location = 34.23 to 383.32
+
     @Before
     fun setup() {
-        weatherRepository = MockWeatherRepository()
-        testScheduler = Schedulers.trampoline()
-        weatherViewModel = WeatherViewModel(weatherRepository, testScheduler)
+        weatherViewModel = WeatherViewModel(weatherRepository, Schedulers.trampoline())
+        weatherViewModel.weather.observeForever(weatherObserver)
+        weatherViewModel.loading.observeForever(loadingObserver)
+        weatherViewModel.error.observeForever(errorObserver)
+
+        `when`(weatherRepository.fetchCurrentWeather(cityName)).thenReturn(Single.just(mockWeather()))
+        `when`(weatherRepository.fetchCurrentWeather(cityName)).thenReturn(Single.just(mockWeather()))
+        `when`(weatherRepository.fetchCurrentWeather(location.first, location.second)).thenReturn(
+            Single.just(mockWeather())
+        )
+        `when`(weatherRepository.getCurrentWeatherListener(cityName)).thenReturn(weatherLiveData)
+        `when`(weatherRepository.getCurrentWeatherListener(cityName)).thenReturn(weatherLiveData)
+    }
+
+    @After
+    fun tearDown() {
+        weatherViewModel.weather.removeObserver(weatherObserver)
+        weatherViewModel.loading.removeObserver(loadingObserver)
+        weatherViewModel.error.removeObserver(errorObserver)
     }
 
     @Test
     fun testInvalidCityName() {
-        weatherViewModel.weather.captureValues {
-            weatherViewModel.handleUserQuery(null)
-            weatherViewModel.handleUserQuery("")
-            weatherViewModel.handleUserQuery("          ")
+        weatherViewModel.handleUserQuery(null)
+        weatherViewModel.handleUserQuery("")
+        weatherViewModel.handleUserQuery("          ")
 
-            assertTrue(values.isEmpty())
-        }
+        verifyZeroInteractions(weatherObserver)
+        verifyZeroInteractions(loadingObserver)
+        verifyZeroInteractions(errorObserver)
     }
 
     @Test
     fun testWeatherEvents() {
-        weatherViewModel.weather.captureValues {
-            val cityName = "London"
-            weatherViewModel.handleUserQuery(cityName)
+        weatherViewModel.handleUserQuery(cityName)
 
-            val weather1 = weatherRepository.mockWeather(cityName)
-            val weather2 = weatherRepository.mockWeather(cityName, temp = 32.1f)
-            weatherRepository.getWeatherPusher(cityName).value = weather1
-            weatherRepository.getWeatherPusher(cityName).value = weather2
+        verify(loadingObserver).onChanged(Event(true))
+        verify(loadingObserver).onChanged(Event(false))
+        verifyZeroInteractions(weatherObserver)
 
-            assertEquals(2, values.size)
-            assertEquals(weather1, values[0])
-            assertEquals(weather2, values[1])
-        }
+        val weather1 = mockWeather()
+        weatherLiveData.value = weather1
+        verify(weatherObserver).onChanged(weather1)
+
+        val weather2 = mockWeather(temp = 383.4f)
+        weatherLiveData.value = weather2
+        verify(weatherObserver).onChanged(weather2)
+
+        verifyNoMoreInteractions(loadingObserver)
+        verifyNoMoreInteractions(weatherObserver)
+        verifyZeroInteractions(errorObserver)
     }
 
     @Test
     fun testThatOnlyLatestWeatherWillBeShown() {
-        val cityName = "London"
         weatherViewModel.handleUserQuery(cityName)
-
-        val weather = weatherRepository.mockWeather(cityName, temp = 32.1f)
-        weatherRepository.getWeatherPusher(cityName).value = weatherRepository.mockWeather(cityName)
-        weatherRepository.getWeatherPusher(cityName).value = weather
-
-        assertEquals(weather, weatherViewModel.weather.getValueForTest())
+        weatherLiveData.value = mockWeather()
+        val weather2 = mockWeather(temp = 383.4f)
+        weatherLiveData.value = weather2
+        assertEquals(weather2, weatherViewModel.weather.value)
     }
 
     @Test
     fun testCityChange() {
-        val city1 = "London"
-        val city2 = "Paris"
+        weatherViewModel.handleUserQuery(cityName)
+        verify(loadingObserver).onChanged(Event(true))
+        verify(loadingObserver).onChanged(Event(false))
+        verifyZeroInteractions(weatherObserver)
 
-        val city1WeatherPusher = weatherRepository.getWeatherPusher(city1)
-        val city2WeatherPusher = weatherRepository.getWeatherPusher(city2)
+        val weather1 = mockWeather()
+        weatherLiveData.value = weather1
+        verify(weatherObserver).onChanged(weather1)
 
-        weatherViewModel.handleUserQuery(city1)
-        val city1Weather = weatherRepository.mockWeather(city1)
-        city1WeatherPusher.value = city1Weather
-        assertEquals(city1Weather, weatherViewModel.weather.getValueForTest())
+        val newCity = "London"
+        val newCityWeatherLiveData = MutableLiveData<Weather>()
+        `when`(weatherRepository.fetchCurrentWeather(newCity)).thenReturn(
+            Single.just(
+                mockWeather(
+                    newCity
+                )
+            )
+        )
+        `when`(weatherRepository.getCurrentWeatherListener(newCity)).thenReturn(
+            newCityWeatherLiveData
+        )
 
-        weatherViewModel.handleUserQuery(city2)
-        val city2Weather = weatherRepository.mockWeather(city2)
-        city2WeatherPusher.value = city2Weather
-        assertEquals(city2Weather, weatherViewModel.weather.getValueForTest())
+        weatherViewModel.handleUserQuery(newCity)
+        verify(loadingObserver, times(2)).onChanged(Event(true))
+        verify(loadingObserver, times(2)).onChanged(Event(false))
 
-        city1WeatherPusher.value = weatherRepository.mockWeather(city1, temp = 72.2f)
-        city1WeatherPusher.value = weatherRepository.mockWeather(city1, temp = 21.3f)
-        city1WeatherPusher.value = weatherRepository.mockWeather(city1, temp = 32.3f)
-        assertEquals(city2Weather, weatherViewModel.weather.getValueForTest())
+        weatherLiveData.value = mockWeather(temp = 383.1f)
+
+        val weather2 = mockWeather(newCity)
+        newCityWeatherLiveData.value = weather2
+        verify(weatherObserver).onChanged(weather2)
+
+        weatherLiveData.value = mockWeather(temp = 383.1f, maxTemp = 382.2f)
+
+        verifyNoMoreInteractions(loadingObserver)
+        verifyNoMoreInteractions(weatherObserver)
+        verifyZeroInteractions(errorObserver)
     }
 
     @Test
-    fun testLoading() {
-        weatherViewModel.loading.captureValues {
-            val cityName = "London"
-            weatherViewModel.handleUserQuery(cityName)
+    fun testWeatherResultsWithCoordinates() {
+        weatherViewModel.handleUserLocation(location.first, location.second)
 
-            val weather1 = weatherRepository.mockWeather(cityName)
-            val weather2 = weatherRepository.mockWeather(cityName, temp = 32.1f)
-            weatherRepository.getWeatherPusher(cityName).value = weather1
-            weatherRepository.getWeatherPusher(cityName).value = weather2
+        verify(loadingObserver).onChanged(Event(true))
+        verify(loadingObserver).onChanged(Event(false))
+        verifyZeroInteractions(weatherObserver)
 
-            assertEquals(2, values.size)
-            assertEquals(Event(true), values[0])
-            assertEquals(Event(false), values[1])
+        val weather1 = mockWeather()
+        weatherLiveData.value = weather1
+        verify(weatherObserver).onChanged(weather1)
 
-            weatherViewModel.handleUserQuery("New York")
-            assertEquals(4, values.size)
-            assertEquals(Event(true), values[2])
-            assertEquals(Event(false), values[3])
-        }
+        val weather2 = mockWeather(temp = 383.4f)
+        weatherLiveData.value = weather2
+        verify(weatherObserver).onChanged(weather2)
+
+        verifyNoMoreInteractions(loadingObserver)
+        verifyNoMoreInteractions(weatherObserver)
+        verifyZeroInteractions(errorObserver)
     }
 
     @Test
-    fun testError() {
-        weatherViewModel.error.captureValues {
-            weatherRepository.error = true
+    fun testRefresh() {
+        weatherViewModel.refresh()
+        verify(loadingObserver).onChanged(Event(false))
+        verifyNoMoreInteractions(loadingObserver)
 
-            weatherViewModel.handleUserQuery("London")
+        weatherViewModel.handleUserLocation(location.first, location.second)
+        verify(weatherRepository).fetchCurrentWeather(location.first, location.second)
 
-            assertEquals(1, values.size)
-            assertEquals(Event(R.string.error_current_weather_fetch), values[0])
-        }
+        weatherViewModel.refresh()
+        verify(weatherRepository, times(2)).fetchCurrentWeather(location.first, location.second)
+
+        weatherViewModel.handleUserQuery(cityName)
+        verify(weatherRepository).fetchCurrentWeather(cityName)
+
+        weatherViewModel.refresh()
+        verify(weatherRepository, times(2)).fetchCurrentWeather(cityName)
     }
 }
 
-internal class MockWeatherRepository : WeatherRepository {
-
-    var error = false
-
-    private val weatherPusherMap = mutableMapOf<String, MutableLiveData<Weather>>()
-
-    fun mockWeather(
-        cityName: String,
-        id: Long = cityName.hashCode().toLong(),
-        main: String = "Clear",
-        icon: String = "0445",
-        cityId: Long = cityName.hashCode().toLong(),
-        temp: Float = 38.3f,
-        maxTemp: Float = 30.3f,
-        minTemp: Float = 43.1f,
-        country: String = "US"
-    ) = Weather(id, main, icon, cityId, cityName, temp, maxTemp, minTemp, country)
-
-    fun getWeatherPusher(cityName: String): MutableLiveData<Weather> {
-        var weatherPusher = weatherPusherMap[cityName]
-        if (weatherPusher == null) {
-            weatherPusher = MutableLiveData()
-            weatherPusherMap[cityName] = weatherPusher
-        }
-
-        return weatherPusher
-    }
-
-    override fun fetchCurrentWeather(cityName: String): Single<Weather> = if (error) {
-        Single.error(NetworkErrorException("Failed to fetch network error"))
-    } else {
-        Single.just(mockWeather(cityName))
-    }
-
-    override fun fetchCurrentWeather(lat: Double, lng: Double): Single<Weather> = if (error) {
-        Single.error(NetworkErrorException("Failed to fetch network error"))
-    } else {
-        Single.just(mockWeather("London"))
-    }
-
-    override fun getCurrentWeatherListener(cityName: String): MutableLiveData<Weather> =
-        getWeatherPusher(cityName)
-}
+fun mockWeather(
+    cityName: String = "Montreal",
+    id: Long = cityName.hashCode().toLong(),
+    main: String = "Clear",
+    icon: String = "0445",
+    cityId: Long = cityName.hashCode().toLong(),
+    temp: Float = 38.3f,
+    maxTemp: Float = 30.3f,
+    minTemp: Float = 43.1f,
+    country: String = "US"
+) = Weather(id, main, icon, cityId, cityName, temp, maxTemp, minTemp, country)
