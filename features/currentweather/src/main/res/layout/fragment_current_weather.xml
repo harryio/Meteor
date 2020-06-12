@@ -13,6 +13,9 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_l"
+        android:layout_marginStart="@dimen/size_l"
+        android:layout_marginEnd="@dimen/size_l"
         app:contentPadding="@dimen/size_l">
 
         <androidx.constraintlayout.widget.ConstraintLayout

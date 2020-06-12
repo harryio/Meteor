@@ -32,7 +32,7 @@ class NetworkInteractor(val scheduler: Scheduler) {
                 .addInterceptor(HttpLoggingInterceptor().apply { setLevel(HttpLoggingInterceptor.Level.BODY) })
                 .build()
             val apiMoshi = api.buildMoshi(baseMoshi.newBuilder()).build()
-            val apiRetrofit = api.buildRetrofit(baseRetrofit.newBuilder())
+            val apiRetrofit = api.buildRetrofit()
                 .client(apiOkHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(scheduler))
                 .addConverterFactory(MoshiConverterFactory.create(apiMoshi))
@@ -42,10 +42,6 @@ class NetworkInteractor(val scheduler: Scheduler) {
         } else {
             retrofit
         }
-    }
-
-    private val baseRetrofit by lazy {
-        Retrofit.Builder().build()
     }
 
     private val baseOkHttpClient by lazy {
@@ -59,7 +55,7 @@ class NetworkInteractor(val scheduler: Scheduler) {
 
 interface Api {
 
-    fun buildRetrofit(retrofitBuilder: Retrofit.Builder): Retrofit.Builder
+    fun buildRetrofit(): Retrofit.Builder
 
     fun buildOkHttpClient(okHttpBuilder: OkHttpClient.Builder): OkHttpClient.Builder = okHttpBuilder
 

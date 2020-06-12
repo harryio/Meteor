@@ -5,13 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.currentweather.databinding.FragmentCurrentWeatherBinding
+import io.github.sainiharry.meteor.currentweatherrepository.getWeatherRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class CurrentWeatherFragment : BaseFragment() {
 
-    // TODO: 11/06/20 Get this from factory
-    val viewModel by viewModels<CurrentWeatherViewModel>()
+    private val viewModel by viewModels<CurrentWeatherViewModel>(factoryProducer = {
+        object: ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return CurrentWeatherViewModel(
+                    getWeatherRepository(Schedulers.io(), requireContext().applicationContext),
+                    AndroidSchedulers.mainThread()) as T
+            }
+        }
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,
