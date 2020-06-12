@@ -18,8 +18,8 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_l"
             android:layout_marginStart="@dimen/size_l"
+            android:layout_marginTop="@dimen/size_l"
             android:layout_marginEnd="@dimen/size_l"
             app:contentPadding="@dimen/size_l">
 
@@ -44,6 +44,7 @@
                     android:layout_height="@dimen/current_weather_icon_size"
                     android:layout_marginTop="@dimen/size_m"
                     android:importantForAccessibility="no"
+                    android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/weather_description"
                     app:layout_constraintHorizontal_chainStyle="packed"

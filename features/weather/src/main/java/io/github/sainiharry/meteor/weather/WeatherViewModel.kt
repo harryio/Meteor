@@ -22,10 +22,13 @@ internal class WeatherViewModel(
         get() = !userQuery.isNullOrEmpty() && !userQuery.isNullOrBlank()
 
     val weather: LiveData<Weather>
-        get() = Transformations.switchMap(
+
+    init {
+        weather = Transformations.switchMap(
             cityNameLiveData,
             weatherRepository::getCurrentWeatherListener
         )
+    }
 
     fun refresh() {
         if (hasUserQuery) {

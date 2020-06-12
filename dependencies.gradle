@@ -2,6 +2,7 @@ ext {
     def kotlinVersion = '1.3.72'
     def rxJavaVersion = "2.2.19"
     def rxAndroidVersion = '2.1.1'
+    def coilVersion = '0.11.0'
 
     def retrofitVersion = '2.8.1'
     def moshiVersion = '1.9.2'
@@ -25,7 +26,8 @@ ext {
     libraries = [
             kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             rxJava : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
-            rxAndroid: "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+            rxAndroid: "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
+            coil: "io.coil-kt:coil:$coilVersion"
     ]
 
     tools = [
