@@ -45,4 +45,6 @@ open class Event<out T>(private val content: T) {
         result = 31 * result + consumed.hashCode()
         return result
     }
+
+    override fun toString(): String = content.toString()
 }

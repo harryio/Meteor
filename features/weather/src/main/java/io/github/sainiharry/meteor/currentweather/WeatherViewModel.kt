@@ -2,50 +2,54 @@ package io.github.sainiharry.meteor.currentweather
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import io.github.sainiharry.meteor.common.Weather
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.currentweatherrepository.WeatherRepository
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Scheduler
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 
 internal class WeatherViewModel(
     private val weatherRepository: WeatherRepository,
     private val observableScheduler: Scheduler
 ) : BaseViewModel() {
 
-    private val cityNameObserver: Subject<String> = PublishSubject.create()
+    private var userQuery: String? = null
+
+    private val cityNameLiveData = MutableLiveData<String>()
+
+    private val hasUserQuery
+        get() = !userQuery.isNullOrEmpty() && !userQuery.isNullOrBlank()
 
     val weather: LiveData<Weather>
-        get() = _weather
+        get() = Transformations.switchMap(
+            cityNameLiveData,
+            weatherRepository::getCurrentWeatherListener
+        )
 
-    private val _weather = MutableLiveData<Weather>()
-
-    init {
-        val weatherObservableSubscription = cityNameObserver.toFlowable(BackpressureStrategy.LATEST)
-            .distinctUntilChanged()
-            .switchMap { weatherRepository.getCurrentWeatherListener(it) }
-            .subscribe {
-                _weather.value = it
-            }
-        disposables.add(weatherObservableSubscription)
+    fun refresh() {
+        if (hasUserQuery) {
+            loadWeatherData(userQuery)
+        }
     }
 
-    fun loadWeatherData(cityName: String?) {
-        if (cityName.isNullOrEmpty() || cityName.isBlank()) {
-            return
-        }
+    fun handleUserQuery(userQuery: String?) {
+        this@WeatherViewModel.userQuery = userQuery
+        loadWeatherData(userQuery)
+    }
 
-        _loading.value = Event(true)
-        disposables.add(
-            weatherRepository.fetchCurrentWeather(cityName)
-                .observeOn(observableScheduler)
-                .ignoreElement()
-                .subscribe({
-                    cityNameObserver.onNext(cityName)
-                }, getErrorHandler(R.string.error_current_weather_fetch))
-        )
+    private fun loadWeatherData(cityName: String?) {
+        if (hasUserQuery) {
+            _loading.value = Event(true)
+            disposables.add(
+                weatherRepository.fetchCurrentWeather(cityName!!)
+                    .observeOn(observableScheduler)
+                    .ignoreElement()
+                    .doOnEvent { _loading.value = Event(false) }
+                    .subscribe({
+                        cityNameLiveData.value = cityName
+                    }, getErrorHandler(R.string.error_current_weather_fetch))
+            )
+        }
     }
 }

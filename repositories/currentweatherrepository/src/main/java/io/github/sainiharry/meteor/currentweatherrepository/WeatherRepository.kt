@@ -1,6 +1,8 @@
 package io.github.sainiharry.meteor.currentweatherrepository
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.room.Room
 import io.github.sainiharry.meteor.common.Weather
 import io.github.sainiharry.meteor.currentweatherrepository.database.CurrentWeatherModel
@@ -11,7 +13,6 @@ import io.github.sainiharry.meteor.currentweatherrepository.network.OpenWeatherS
 import io.github.sainiharry.meteor.currentweatherrepository.network.WeatherApi
 import io.github.sainiharry.meteor.currentweatherrepository.network.flatten
 import io.github.sainiharry.meteor.network.NetworkInteractor
-import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 
@@ -55,7 +56,7 @@ interface WeatherRepository {
 
     fun fetchCurrentWeather(cityName: String): Single<Weather>
 
-    fun getCurrentWeatherListener(cityName: String): Flowable<Weather>
+    fun getCurrentWeatherListener(cityName: String): LiveData<Weather>
 }
 
 internal class WeatherRepositoryImpl(
@@ -71,7 +72,9 @@ internal class WeatherRepositoryImpl(
                 weatherDatabase.weatherDao().insertCurrentWeather(CurrentWeatherModel(weather))
             }
 
-    override fun getCurrentWeatherListener(cityName: String): Flowable<Weather> =
-        weatherDatabase.weatherDao().getCurrentWeather(cityName)
-            .map(CurrentWeatherModel::flatten)
+    override fun getCurrentWeatherListener(cityName: String): LiveData<Weather> =
+        Transformations.map(
+            weatherDatabase.weatherDao().getCurrentWeatherListener(cityName),
+            CurrentWeatherModel::flatten
+        )
 }
