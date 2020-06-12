@@ -56,6 +56,8 @@ interface WeatherRepository {
 
     fun fetchCurrentWeather(cityName: String): Single<Weather>
 
+    fun fetchCurrentWeather(lat: Double, lng: Double): Single<Weather>
+
     fun getCurrentWeatherListener(cityName: String): LiveData<Weather>
 }
 
@@ -67,6 +69,13 @@ internal class WeatherRepositoryImpl(
 
     override fun fetchCurrentWeather(cityName: String): Single<Weather> =
         openWeatherService.getCurrentWeather(cityName)
+            .map(CurrentWeatherResponse::flatten)
+            .doOnSuccess { weather ->
+                weatherDatabase.weatherDao().insertCurrentWeather(CurrentWeatherModel(weather))
+            }
+
+    override fun fetchCurrentWeather(lat: Double, lng: Double): Single<Weather> =
+        openWeatherService.getCurrentWeather(lat, lng)
             .map(CurrentWeatherResponse::flatten)
             .doOnSuccess { weather ->
                 weatherDatabase.weatherDao().insertCurrentWeather(CurrentWeatherModel(weather))

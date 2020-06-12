@@ -44,7 +44,7 @@ dependencies {
     implementation libraries.kotlinStdLib
     implementation libraries.rxJava
     api libraries.coil
-    
+
     api androidLibraries
     api lifecycleLibraries
     api uiLibraries

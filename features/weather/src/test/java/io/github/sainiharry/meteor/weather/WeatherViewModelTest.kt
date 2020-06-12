@@ -168,6 +168,12 @@ internal class MockWeatherRepository : WeatherRepository {
         Single.just(mockWeather(cityName))
     }
 
+    override fun fetchCurrentWeather(lat: Double, lng: Double): Single<Weather> = if (error) {
+        Single.error(NetworkErrorException("Failed to fetch network error"))
+    } else {
+        Single.just(mockWeather("London"))
+    }
+
     override fun getCurrentWeatherListener(cityName: String): MutableLiveData<Weather> =
         getWeatherPusher(cityName)
 }

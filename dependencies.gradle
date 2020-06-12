@@ -3,6 +3,8 @@ ext {
     def rxJavaVersion = "2.2.19"
     def rxAndroidVersion = '2.1.1'
     def coilVersion = '0.11.0'
+    def locationVersion = '17.0.0'
+    def preferenceVersion = "1.1.0"
 
     def retrofitVersion = '2.8.1'
     def moshiVersion = '1.9.2'
@@ -27,7 +29,9 @@ ext {
             kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             rxJava : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
             rxAndroid: "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
-            coil: "io.coil-kt:coil:$coilVersion"
+            coil: "io.coil-kt:coil:$coilVersion",
+            location: "com.google.android.gms:play-services-location:$locationVersion",
+            sharedPref: "androidx.preference:preference-ktx:$preferenceVersion",
     ]
 
     tools = [

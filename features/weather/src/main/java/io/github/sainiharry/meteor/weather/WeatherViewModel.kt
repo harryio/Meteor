@@ -8,6 +8,8 @@ import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.currentweatherrepository.WeatherRepository
 import io.reactivex.Scheduler
+import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 
 internal class WeatherViewModel(
     private val weatherRepository: WeatherRepository,
@@ -30,9 +32,29 @@ internal class WeatherViewModel(
         )
     }
 
+    var location: Pair<Double, Double>? = null
+
+    fun handleUserLocation(lat: Double, lng: Double) {
+        location = lat to lng
+        _loading.value = Event(true)
+        disposables.add(
+            weatherRepository.fetchCurrentWeather(lat, lng).handleWeatherResponse()
+        )
+    }
+
     fun refresh() {
-        if (hasUserQuery) {
-            loadWeatherData(userQuery)
+        when {
+            hasUserQuery -> {
+                loadWeatherData(userQuery)
+            }
+
+            location != null -> {
+                location?.let { handleUserLocation(it.first, it.second) }
+            }
+
+            else -> {
+                _loading.value = Event(false)
+            }
         }
     }
 
@@ -45,14 +67,17 @@ internal class WeatherViewModel(
         if (hasUserQuery) {
             _loading.value = Event(true)
             disposables.add(
-                weatherRepository.fetchCurrentWeather(cityName!!)
-                    .observeOn(observableScheduler)
-                    .ignoreElement()
-                    .doOnEvent { _loading.value = Event(false) }
-                    .subscribe({
-                        cityNameLiveData.value = cityName
-                    }, getErrorHandler(R.string.error_current_weather_fetch))
+                weatherRepository.fetchCurrentWeather(cityName!!).handleWeatherResponse()
             )
         }
     }
+
+    private fun Single<Weather>.handleWeatherResponse(): Disposable = observeOn(observableScheduler)
+        .map(Weather::cityName)
+        .doOnEvent { _, _ ->
+            _loading.value = Event(false)
+        }
+        .subscribe({
+            cityNameLiveData.value = it
+        }, getErrorHandler(R.string.error_current_weather_fetch))
 }
