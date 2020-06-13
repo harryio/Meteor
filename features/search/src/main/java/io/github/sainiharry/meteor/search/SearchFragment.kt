@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.search.databinding.FragmentSearchBinding
 
-class SearchFragment : Fragment() {
+class SearchFragment : BaseFragment() {
 
     private val model by activityViewModels<SearchViewModel>()
 
@@ -26,7 +27,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         binding.searchInputLayout.setEndIconOnClickListener {
             model.handleSearchDone()
         }

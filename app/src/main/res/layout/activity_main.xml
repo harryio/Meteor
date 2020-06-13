@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_container_view"
     android:name="io.github.sainiharry.meteor.MainFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?colorPrimary"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/current_weather_fragment"
-        android:name="io.github.sainiharry.meteor.weather.WeatherFragment"
+        android:id="@+id/search_fragment"
+        android:name="io.github.sainiharry.meteor.search.SearchBarFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_l"
+        app:cardCornerRadius="@dimen/size_xxl">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/current_weather_fragment"
+            android:name="io.github.sainiharry.meteor.weather.WeatherFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>
