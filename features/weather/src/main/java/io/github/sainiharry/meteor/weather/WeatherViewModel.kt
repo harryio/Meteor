@@ -25,11 +25,17 @@ internal class WeatherViewModel(
 
     val weather: LiveData<Weather>
 
+    val isCurrentWeatherVisible: LiveData<Boolean>
+
     init {
         weather = Transformations.switchMap(
             cityNameLiveData,
             weatherRepository::getCurrentWeatherListener
         )
+
+        isCurrentWeatherVisible = Transformations.map(weather) {
+            it != null
+        }
     }
 
     var location: Pair<Double, Double>? = null

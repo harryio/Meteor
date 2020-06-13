@@ -33,6 +33,9 @@ class WeatherViewModelTest {
     @Mock
     lateinit var errorObserver: Observer<Event<Int>>
 
+    @Mock
+    lateinit var weatherViewVisiblityObserver: Observer<Boolean>
+
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -50,6 +53,7 @@ class WeatherViewModelTest {
         weatherViewModel.weather.observeForever(weatherObserver)
         weatherViewModel.loading.observeForever(loadingObserver)
         weatherViewModel.error.observeForever(errorObserver)
+        weatherViewModel.isCurrentWeatherVisible.observeForever(weatherViewVisiblityObserver)
 
         `when`(weatherRepository.fetchCurrentWeather(cityName)).thenReturn(Single.just(mockWeather()))
         `when`(weatherRepository.fetchCurrentWeather(cityName)).thenReturn(Single.just(mockWeather()))
@@ -65,6 +69,7 @@ class WeatherViewModelTest {
         weatherViewModel.weather.removeObserver(weatherObserver)
         weatherViewModel.loading.removeObserver(loadingObserver)
         weatherViewModel.error.removeObserver(errorObserver)
+        weatherViewModel.isCurrentWeatherVisible.removeObserver(weatherViewVisiblityObserver)
     }
 
     @Test
@@ -76,6 +81,7 @@ class WeatherViewModelTest {
         verifyZeroInteractions(weatherObserver)
         verifyZeroInteractions(loadingObserver)
         verifyZeroInteractions(errorObserver)
+        verifyZeroInteractions(weatherViewVisiblityObserver)
     }
 
     @Test
@@ -85,14 +91,17 @@ class WeatherViewModelTest {
         verify(loadingObserver).onChanged(Event(true))
         verify(loadingObserver).onChanged(Event(false))
         verifyZeroInteractions(weatherObserver)
+        verifyZeroInteractions(weatherViewVisiblityObserver)
 
         val weather1 = mockWeather()
         weatherLiveData.value = weather1
         verify(weatherObserver).onChanged(weather1)
+        verify(weatherViewVisiblityObserver).onChanged(true)
 
         val weather2 = mockWeather(temp = 383.4f)
         weatherLiveData.value = weather2
         verify(weatherObserver).onChanged(weather2)
+        verify(weatherViewVisiblityObserver, times(2)).onChanged(true)
 
         verifyNoMoreInteractions(loadingObserver)
         verifyNoMoreInteractions(weatherObserver)
@@ -114,6 +123,7 @@ class WeatherViewModelTest {
         verify(loadingObserver).onChanged(Event(true))
         verify(loadingObserver).onChanged(Event(false))
         verifyZeroInteractions(weatherObserver)
+        verifyZeroInteractions(weatherViewVisiblityObserver)
 
         val weather1 = mockWeather()
         weatherLiveData.value = weather1
@@ -156,14 +166,17 @@ class WeatherViewModelTest {
         verify(loadingObserver).onChanged(Event(true))
         verify(loadingObserver).onChanged(Event(false))
         verifyZeroInteractions(weatherObserver)
+        verifyZeroInteractions(weatherViewVisiblityObserver)
 
         val weather1 = mockWeather()
         weatherLiveData.value = weather1
         verify(weatherObserver).onChanged(weather1)
+        verify(weatherViewVisiblityObserver).onChanged(true)
 
         val weather2 = mockWeather(temp = 383.4f)
         weatherLiveData.value = weather2
         verify(weatherObserver).onChanged(weather2)
+        verify(weatherViewVisiblityObserver, times(2)).onChanged(true)
 
         verifyNoMoreInteractions(loadingObserver)
         verifyNoMoreInteractions(weatherObserver)
