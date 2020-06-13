@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -22,6 +23,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {
@@ -30,6 +44,7 @@ dependencies {
     implementation project(":features:commonfeature")
 
     implementation libraries.kotlinStdLib
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries
