@@ -1,3 +1,4 @@
+include ':features:search'
 include ':features:weather'
 include ':features:commonfeature'
 include ':common'
