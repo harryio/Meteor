@@ -1,5 +1,5 @@
 include ':features:weather'
-include ':commonfeature'
+include ':features:commonfeature'
 include ':common'
 include ':repositories:weatherrepository'
 include ':network'

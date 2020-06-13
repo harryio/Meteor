@@ -24,8 +24,8 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 
     compileOptions {
@@ -47,7 +47,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":common")
-    implementation project(":commonfeature")
+    implementation project(":features:commonfeature")
     implementation project(":repositories:weatherrepository")
 
     implementation libraries.kotlinStdLib
