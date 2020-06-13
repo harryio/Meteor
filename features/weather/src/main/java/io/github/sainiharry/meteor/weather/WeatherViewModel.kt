@@ -6,7 +6,7 @@ import androidx.lifecycle.Transformations
 import io.github.sainiharry.meteor.common.Weather
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
-import io.github.sainiharry.meteor.currentweatherrepository.WeatherRepository
+import io.github.sainiharry.meteor.weatherrepository.WeatherRepository
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable

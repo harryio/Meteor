@@ -1,7 +1,7 @@
 include ':features:weather'
 include ':commonfeature'
 include ':common'
-include ':repositories:currentweatherrepository'
+include ':repositories:weatherrepository'
 include ':network'
 include ':app'
 rootProject.name = "Meteor"

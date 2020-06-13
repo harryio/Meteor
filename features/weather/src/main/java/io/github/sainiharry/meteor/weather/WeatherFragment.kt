@@ -17,7 +17,7 @@ import coil.api.load
 import com.google.android.gms.location.LocationServices
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.commonfeature.EventObserver
-import io.github.sainiharry.meteor.currentweatherrepository.getWeatherRepository
+import io.github.sainiharry.meteor.weatherrepository.getWeatherRepository
 import io.github.sainiharry.meteor.weather.databinding.FragmentWeatherBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

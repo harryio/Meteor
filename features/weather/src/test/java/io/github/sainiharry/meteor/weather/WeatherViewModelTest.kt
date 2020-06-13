@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import io.github.sainiharry.meteor.common.Weather
 import io.github.sainiharry.meteor.commonfeature.Event
-import io.github.sainiharry.meteor.currentweatherrepository.WeatherRepository
+import io.github.sainiharry.meteor.weatherrepository.WeatherRepository
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.junit.After

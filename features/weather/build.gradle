@@ -48,7 +48,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":common")
     implementation project(":commonfeature")
-    implementation project(":repositories:currentweatherrepository")
+    implementation project(":repositories:weatherrepository")
 
     implementation libraries.kotlinStdLib
     implementation libraries.rxJava
