@@ -92,6 +92,5 @@ ext {
             "androidx.navigation:navigation-runtime-ktx:$navigationVersion",
             "androidx.navigation:navigation-fragment-ktx:$navigationVersion",
             "androidx.navigation:navigation-ui-ktx:$navigationVersion"
-
     ]
 }

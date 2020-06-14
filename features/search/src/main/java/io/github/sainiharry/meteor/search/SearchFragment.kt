@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialFadeThrough
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.commonfeature.EventObserver
+import io.github.sainiharry.meteor.commonfeature.showKeyboard
 import io.github.sainiharry.meteor.search.databinding.FragmentSearchBinding
 
 class SearchFragment : BaseFragment() {
@@ -36,6 +37,8 @@ class SearchFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.searchText.showKeyboard()
 
         binding.searchText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
