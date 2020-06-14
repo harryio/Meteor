@@ -1,9 +1,9 @@
 package io.github.sainiharry.meteor.weatherrepository
 
 import io.github.sainiharry.meteor.common.Weather
-import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherDao
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherDatabase
+import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.network.*
 import io.reactivex.Single
 import org.junit.Before
@@ -27,7 +27,9 @@ class WeatherRepositoryTest {
 
     private lateinit var weatherRepository: WeatherRepository
 
-    val cityName = "London"
+    private val cityName = "London"
+
+    private val location = 23.3 to 48.3
 
     @Before
     fun setup() {
@@ -58,7 +60,6 @@ class WeatherRepositoryTest {
 
     @Test
     fun testFetchWeatherForLocation() {
-        val location = 23.3 to 48.3
         val mockWeatherResponse = mockWeatherResponse()
         val weather = mockWeatherResponse.flatten()
         val currentWeatherModel = WeatherModel(weather)
@@ -68,12 +69,45 @@ class WeatherRepositoryTest {
             )
         )
 
-        val subscription = weatherRepository.fetchCurrentWeather(location.first, location.second).test()
+        val subscription =
+            weatherRepository.fetchCurrentWeather(location.first, location.second).test()
         subscription.assertNoErrors()
         subscription.assertValue(weather)
 
         verify(openWeatherService).getCurrentWeather(location.first, location.second)
         verify(weatherDao).insertWeather(currentWeatherModel)
+        verifyNoMoreInteractions(openWeatherService)
+        verifyNoMoreInteractions(weatherDao)
+    }
+
+    @Test
+    fun testFetchForecastForCity() {
+        val mockForecastResponse = mockForecastResponse()
+        val weatherList = mockForecastResponse.flatten()
+        `when`(openWeatherService.getForecast(cityName)).thenReturn(Single.just(mockForecastResponse))
+
+        val subscription = weatherRepository.fetchForecast(cityName).test()
+        subscription.assertNoErrors()
+        subscription.assertValue(weatherList)
+
+        verify(openWeatherService).getForecast(cityName)
+        verify(weatherDao).insertForecast(weatherList.toForecastModelList())
+        verifyNoMoreInteractions(openWeatherService)
+        verifyNoMoreInteractions(weatherDao)
+    }
+
+    @Test
+    fun testFetchForecastForLocation() {
+        val mockForecastResponse = mockForecastResponse()
+        val weatherList = mockForecastResponse.flatten()
+        `when`(openWeatherService.getForecast(location.first, location.second)).thenReturn(Single.just(mockForecastResponse))
+
+        val subscription = weatherRepository.fetchForecast(location.first, location.second).test()
+        subscription.assertNoErrors()
+        subscription.assertValue(weatherList)
+
+        verify(openWeatherService).getForecast(location.first, location.second)
+        verify(weatherDao).insertForecast(weatherList.toForecastModelList())
         verifyNoMoreInteractions(openWeatherService)
         verifyNoMoreInteractions(weatherDao)
     }
@@ -84,6 +118,18 @@ class WeatherRepositoryTest {
         listOf(WeatherConditionResponse(cityName.hashCode().toLong(), "Clear", "04d")),
         WeatherInfoResponse(23.2f, 43.2f, 85.3f),
         WeatherSysResponse("US")
+    )
+
+    private fun mockForecastResponse() = ForecastResponse(
+        listOf(
+            ForecastWeather(
+                WeatherInfoResponse(
+                    23.2f, 43.2f, 85.3f
+                ),
+                WeatherConditionResponse(cityName.hashCode().toLong(), "Clear", "04d"),
+                ForecastWeatherLocation(cityName.hashCode().toLong(), cityName, "GB")
+            )
+        )
     )
 
     private fun mockWeather(

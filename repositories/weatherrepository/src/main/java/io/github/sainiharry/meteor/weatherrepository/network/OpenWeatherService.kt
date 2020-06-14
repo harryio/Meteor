@@ -14,4 +14,10 @@ internal interface OpenWeatherService {
         @Query("lat") lat: Double,
         @Query("lon") lon: Double
     ): Single<WeatherResponse>
+
+    @GET("2.5/forecast")
+    fun getForecast(@Query("q") cityName: String): Single<ForecastResponse>
+
+    @GET("2.5/forecast")
+    fun getForecast(@Query("lat") lat: Double, @Query("lon") lon: Double): Single<ForecastResponse>
 }
