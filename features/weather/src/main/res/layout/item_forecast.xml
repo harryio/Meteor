@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="weather"
+            type="io.github.sainiharry.meteor.common.Weather" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_m"
+        android:layout_marginEnd="@dimen/size_m"
+        android:layout_marginBottom="@dimen/size_l"
+        app:contentPadding="@dimen/size_l">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/forecast_weather_icon"
+                android:layout_width="@dimen/forecast_icon_size"
+                android:layout_height="0dp"
+                android:importantForAccessibility="no"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/forecast_weather_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_l"
+                android:text="@{weather.main}"
+                android:textAppearance="?textAppearanceBody1"
+                app:layout_constraintBottom_toTopOf="@id/forecast_max_min_temp"
+                app:layout_constraintStart_toEndOf="@id/forecast_weather_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Cloudy" />
+
+            <TextView
+                android:id="@+id/forecast_max_min_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_s"
+                android:text="@{@string/max_min_temp(weather.maxTemp, weather.minTemp)}"
+                android:textAppearance="?textAppearanceSubtitle1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/forecast_weather_description"
+                app:layout_constraintTop_toBottomOf="@id/forecast_weather_description"
+                tools:text="23 / 34" />
+
+            <TextView
+                android:id="@+id/forecast_weather_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceCaption"
+                app:layout_constraintBaseline_toBaselineOf="@id/forecast_weather_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Monday, 12 Jun 2020" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

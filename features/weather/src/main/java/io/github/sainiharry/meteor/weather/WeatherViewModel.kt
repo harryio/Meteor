@@ -25,12 +25,19 @@ internal class WeatherViewModel(
 
     val weather: LiveData<Weather>
 
+    val forecast: LiveData<List<Weather>>
+
     val isCurrentWeatherVisible: LiveData<Boolean>
 
     init {
         weather = Transformations.switchMap(
             cityNameLiveData,
             weatherRepository::getCurrentWeatherListener
+        )
+
+        forecast = Transformations.switchMap(
+            cityNameLiveData,
+            weatherRepository::getForecastListener
         )
 
         isCurrentWeatherVisible = Transformations.map(weather) {
@@ -78,8 +85,14 @@ internal class WeatherViewModel(
         }
     }
 
-    private fun Single<Weather>.handleWeatherResponse(): Disposable = observeOn(observableScheduler)
-        .map(Weather::cityName)
+    private fun Single<Weather>.handleWeatherResponse(): Disposable = map(Weather::cityName)
+        .flatMap { cityName ->
+            weatherRepository.fetchForecast(cityName)
+                .map {
+                    cityName
+                }
+        }
+        .observeOn(observableScheduler)
         .doOnEvent { _, _ ->
             _loading.value = Event(false)
         }

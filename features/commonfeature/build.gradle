@@ -41,6 +41,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    implementation project (':common')
+
     implementation libraries.kotlinStdLib
     implementation libraries.rxJava
     api libraries.coil

@@ -9,5 +9,8 @@ data class Weather(
     val temp: Float,
     val maxTemp: Float,
     val minTemp: Float,
-    val country: String
-)
+    val country: String,
+    val timestamp: Long
+) : UniqueId {
+    override fun getUniqueId(): Long = id
+}

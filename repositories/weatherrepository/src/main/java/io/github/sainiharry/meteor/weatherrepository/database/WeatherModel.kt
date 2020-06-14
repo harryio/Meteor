@@ -16,5 +16,6 @@ internal fun WeatherModel.flatten() = Weather(
     weather.temp,
     weather.minTemp,
     weather.maxTemp,
-    weather.country
+    weather.country,
+    weather.timestamp
 )

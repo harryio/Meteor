@@ -18,7 +18,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/current_weather_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="@dimen/size_l"
             android:layout_marginTop="@dimen/size_l"
             android:layout_marginEnd="@dimen/size_l"
@@ -28,7 +28,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/today_forecast_label"
@@ -106,6 +106,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/city_name"
                     tools:text="16\u00b0 / 12\u00b0" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/size_m"
+                    android:clipToPadding="false"
+                    android:paddingTop="@dimen/size_l"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/max_min_temp"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/item_forecast" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

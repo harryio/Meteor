@@ -7,7 +7,7 @@ open class BaseFragment : Fragment() {
 
     protected fun defaultErrorHandler(): EventObserver<Int> = EventObserver { errorResId ->
         view?.let { view ->
-            Snackbar.make(view, errorResId, Snackbar.LENGTH_LONG)
+            Snackbar.make(view, errorResId, Snackbar.LENGTH_LONG).show()
         }
     }
 }

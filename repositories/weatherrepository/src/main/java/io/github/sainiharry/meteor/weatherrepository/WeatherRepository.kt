@@ -10,7 +10,7 @@ import io.github.sainiharry.meteor.weatherrepository.database.WeatherDatabase
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.database.flatten
 import io.github.sainiharry.meteor.weatherrepository.network.*
-import io.github.sainiharry.meteor.weatherrepository.network.flatten
+import io.github.sainiharry.meteor.weatherrepository.network.toWeather
 import io.reactivex.Scheduler
 import io.reactivex.Single
 
@@ -73,14 +73,14 @@ internal class WeatherRepositoryImpl(
 
     override fun fetchCurrentWeather(cityName: String): Single<Weather> =
         openWeatherService.getCurrentWeather(cityName)
-            .map(WeatherResponse::flatten)
+            .map(WeatherResponse::toWeather)
             .doOnSuccess { weather ->
                 weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
             }
 
     override fun fetchCurrentWeather(lat: Double, lng: Double): Single<Weather> =
         openWeatherService.getCurrentWeather(lat, lng)
-            .map(WeatherResponse::flatten)
+            .map(WeatherResponse::toWeather)
             .doOnSuccess { weather ->
                 weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
             }
@@ -93,14 +93,14 @@ internal class WeatherRepositoryImpl(
 
     override fun fetchForecast(cityName: String): Single<List<Weather>> =
         openWeatherService.getForecast(cityName)
-            .map(ForecastResponse::flatten)
+            .map(ForecastResponse::toWeatherList)
             .doOnSuccess { forecastList ->
                 weatherDatabase.weatherDao().insertForecast(forecastList.toForecastModelList())
             }
 
     override fun fetchForecast(lat: Double, lng: Double): Single<List<Weather>> =
         openWeatherService.getForecast(lat, lng)
-            .map(ForecastResponse::flatten)
+            .map(ForecastResponse::toWeatherList)
             .doOnSuccess { forecastList ->
                 weatherDatabase.weatherDao().insertForecast(forecastList.toForecastModelList())
             }

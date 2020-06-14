@@ -19,8 +19,9 @@ import com.google.android.gms.location.LocationServices
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.commonfeature.EventObserver
 import io.github.sainiharry.meteor.search.SearchViewModel
-import io.github.sainiharry.meteor.weatherrepository.getWeatherRepository
 import io.github.sainiharry.meteor.weather.databinding.FragmentWeatherBinding
+import io.github.sainiharry.meteor.weather.forecast.ForecastAdapter
+import io.github.sainiharry.meteor.weatherrepository.getWeatherRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -78,6 +79,10 @@ class WeatherFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val adapter = ForecastAdapter()
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.adapter = adapter
+
         binding.refresher.setOnRefreshListener {
             model.refresh()
         }
@@ -92,7 +97,12 @@ class WeatherFragment : BaseFragment() {
         model.weather.observe(viewLifecycleOwner, Observer {
             binding.weatherIcon.load(
                 getString(R.string.weather_icon_url, it.icon)
-            )
+            ) {
+                crossfade(true)
+            }
+        })
+        model.forecast.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
         })
 
         searchViewModel.searchText.observe(viewLifecycleOwner, Observer {

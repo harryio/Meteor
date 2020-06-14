@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ad8f1212a02d08f7934add32e18b52ab",
+    "identityHash": "9fdba594100af8f9a800b8d3859fbda0",
     "entities": [
       {
         "tableName": "WeatherModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `main` TEXT NOT NULL, `icon` TEXT NOT NULL, `cityId` INTEGER NOT NULL, `cityName` TEXT NOT NULL, `temp` REAL NOT NULL, `maxTemp` REAL NOT NULL, `minTemp` REAL NOT NULL, `country` TEXT NOT NULL, PRIMARY KEY(`cityName`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `main` TEXT NOT NULL, `icon` TEXT NOT NULL, `cityId` INTEGER NOT NULL, `cityName` TEXT NOT NULL, `temp` REAL NOT NULL, `maxTemp` REAL NOT NULL, `minTemp` REAL NOT NULL, `country` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, PRIMARY KEY(`cityName`))",
         "fields": [
           {
             "fieldPath": "weather.id",
@@ -60,6 +60,12 @@
             "fieldPath": "weather.country",
             "columnName": "country",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weather.timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -74,7 +80,7 @@
       },
       {
         "tableName": "ForecastModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `main` TEXT NOT NULL, `icon` TEXT NOT NULL, `cityId` INTEGER NOT NULL, `cityName` TEXT NOT NULL, `temp` REAL NOT NULL, `maxTemp` REAL NOT NULL, `minTemp` REAL NOT NULL, `country` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `main` TEXT NOT NULL, `icon` TEXT NOT NULL, `cityId` INTEGER NOT NULL, `cityName` TEXT NOT NULL, `temp` REAL NOT NULL, `maxTemp` REAL NOT NULL, `minTemp` REAL NOT NULL, `country` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "weather.id",
@@ -128,6 +134,12 @@
             "fieldPath": "weather.country",
             "columnName": "country",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weather.timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -144,7 +156,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ad8f1212a02d08f7934add32e18b52ab')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9fdba594100af8f9a800b8d3859fbda0')"
     ]
   }
 }

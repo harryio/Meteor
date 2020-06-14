@@ -12,7 +12,8 @@ internal data class WeatherResponse(
     @Json(name = "main")
     val weatherInfo: WeatherInfoResponse,
     @Json(name = "sys")
-    val weatherSys: WeatherSysResponse
+    val weatherSys: WeatherSysResponse,
+    val dt: Long
 )
 
 @JsonClass(generateAdapter = true)
@@ -32,7 +33,7 @@ internal data class WeatherSysResponse(
     val country: String
 )
 
-internal fun WeatherResponse.flatten(): Weather = Weather(
+internal fun WeatherResponse.toWeather(): Weather = Weather(
     weather[0].id,
     weather[0].main,
     weather[0].icon,
@@ -41,5 +42,6 @@ internal fun WeatherResponse.flatten(): Weather = Weather(
     weatherInfo.temp,
     weatherInfo.minTemp,
     weatherInfo.maxTemp,
-    weatherSys.country
+    weatherSys.country,
+    dt
 )

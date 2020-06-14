@@ -212,5 +212,6 @@ fun mockWeather(
     temp: Float = 38.3f,
     maxTemp: Float = 30.3f,
     minTemp: Float = 43.1f,
-    country: String = "US"
-) = Weather(id, main, icon, cityId, cityName, temp, maxTemp, minTemp, country)
+    country: String = "US",
+    timestamp: Long = System.currentTimeMillis()
+) = Weather(id, main, icon, cityId, cityName, temp, maxTemp, minTemp, country, timestamp)
