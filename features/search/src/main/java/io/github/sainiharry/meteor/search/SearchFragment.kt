@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialFadeThrough
-import com.google.android.material.transition.MaterialSharedAxis
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
+import io.github.sainiharry.meteor.commonfeature.EventObserver
 import io.github.sainiharry.meteor.search.databinding.FragmentSearchBinding
 
 class SearchFragment : BaseFragment() {
@@ -43,8 +45,13 @@ class SearchFragment : BaseFragment() {
                 false
             }
         }
+
         binding.searchInputLayout.setEndIconOnClickListener {
             model.handleSearchDone()
         }
+
+        model.navigateBackEvent.observe(viewLifecycleOwner, EventObserver {
+            findNavController().popBackStack()
+        })
     }
 }

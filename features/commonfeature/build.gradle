@@ -48,6 +48,7 @@ dependencies {
     api androidLibraries
     api lifecycleLibraries
     api uiLibraries
+    api navigationLibraries
 
     kapt compilerLibraries.lifecycle
 

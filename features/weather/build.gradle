@@ -49,6 +49,7 @@ dependencies {
     implementation project(":common")
     implementation project(":features:commonfeature")
     implementation project(":repositories:weatherrepository")
+    implementation project(":features:search")
 
     implementation libraries.kotlinStdLib
     implementation libraries.rxJava

@@ -13,15 +13,13 @@ class SearchViewModel : BaseViewModel() {
     val searchText: LiveData<String>
         get() = _searchText
 
-    private val _searchBarClickedEvent = MutableLiveData<Event<Any>>()
-    val searchBarClickedEvent: LiveData<Event<Any>>
-        get() = _searchBarClickedEvent
+    private val _navigateBackEvent = MutableLiveData<Event<Any?>>()
+    internal val navigateBackEvent: LiveData<Event<Any?>>
+        get() = _navigateBackEvent
 
     internal fun handleSearchDone() {
         _searchText.value = searchTextInput.value
-    }
-
-    internal fun handleSearchBarClick() {
-        _searchBarClickedEvent.value = Event(Any())
+        _navigateBackEvent.value = Event(Any())
+        searchTextInput.value = ""
     }
 }

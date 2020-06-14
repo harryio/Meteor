@@ -47,7 +47,6 @@ dependencies {
     implementation project(":features:search")
 
     implementation libraries.kotlinStdLib
-    implementation navigationLibraries
 
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries

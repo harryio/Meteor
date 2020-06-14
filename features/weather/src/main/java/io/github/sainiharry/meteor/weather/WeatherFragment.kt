@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -17,6 +18,7 @@ import coil.api.load
 import com.google.android.gms.location.LocationServices
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.commonfeature.EventObserver
+import io.github.sainiharry.meteor.search.SearchViewModel
 import io.github.sainiharry.meteor.weatherrepository.getWeatherRepository
 import io.github.sainiharry.meteor.weather.databinding.FragmentWeatherBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,6 +39,8 @@ class WeatherFragment : BaseFragment() {
             }
         }
     })
+
+    private val searchViewModel by activityViewModels<SearchViewModel>()
 
     private lateinit var binding: FragmentWeatherBinding
 
@@ -89,6 +93,10 @@ class WeatherFragment : BaseFragment() {
             binding.weatherIcon.load(
                 getString(R.string.weather_icon_url, it.icon)
             )
+        })
+
+        searchViewModel.searchText.observe(viewLifecycleOwner, Observer {
+            model.handleUserQuery(it)
         })
     }
 
