@@ -2,7 +2,7 @@ package io.github.sainiharry.meteor.repositories.news.network
 
 import io.github.sainiharry.meteor.repositories.news.News
 
-data class NewsResponse(
+internal data class NewsResponse(
     val author: String,
     val title: String,
     val description: String,

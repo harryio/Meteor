@@ -41,8 +41,13 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":common")
     implementation project(":features:commonfeature")
+    implementation project(":repositories:news")
+    implementation project(":features:search")
 
     implementation libraries.kotlinStdLib
+    implementation libraries.rxJava
+    implementation libraries.rxAndroid
+    implementation libraries.location
 
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries
