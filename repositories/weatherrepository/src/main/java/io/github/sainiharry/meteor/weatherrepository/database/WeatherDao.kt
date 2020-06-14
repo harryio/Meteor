@@ -12,6 +12,6 @@ internal interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertWeather(weatherModel: WeatherModel)
 
-    @Query("SELECT * FROM WeatherModel WHERE WeatherModel.cityName = :cityName AND WeatherModel.isCurrent = 1")
+    @Query("SELECT * FROM WeatherModel WHERE WeatherModel.cityName = :cityName")
     fun getCurrentWeatherListener(cityName: String): LiveData<WeatherModel>
 }
