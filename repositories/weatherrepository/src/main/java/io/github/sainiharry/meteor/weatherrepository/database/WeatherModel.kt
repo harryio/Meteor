@@ -4,8 +4,8 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import io.github.sainiharry.meteor.common.Weather
 
-@Entity(primaryKeys = ["cityName"])
-internal data class WeatherModel(@Embedded val weather: Weather)
+@Entity(primaryKeys = ["cityName", "isCurrent"])
+internal data class WeatherModel(@Embedded val weather: Weather, val isCurrent: Boolean = false)
 
 internal fun WeatherModel.flatten() = Weather(
     weather.id,

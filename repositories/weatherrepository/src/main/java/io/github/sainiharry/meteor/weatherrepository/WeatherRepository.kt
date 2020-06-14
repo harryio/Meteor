@@ -71,19 +71,19 @@ internal class WeatherRepositoryImpl(
         openWeatherService.getCurrentWeather(cityName)
             .map(WeatherResponse::flatten)
             .doOnSuccess { weather ->
-                weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
+                weatherDatabase.weatherDao().insertWeather(WeatherModel(weather, true))
             }
 
     override fun fetchCurrentWeather(lat: Double, lng: Double): Single<Weather> =
         openWeatherService.getCurrentWeather(lat, lng)
             .map(WeatherResponse::flatten)
             .doOnSuccess { weather ->
-                weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
+                weatherDatabase.weatherDao().insertWeather(WeatherModel(weather, true))
             }
 
     override fun getCurrentWeatherListener(cityName: String): LiveData<Weather> =
         Transformations.map(
-            weatherDatabase.weatherDao().getWeatherListener(cityName),
+            weatherDatabase.weatherDao().getCurrentWeatherListener(cityName),
             WeatherModel::flatten
         )
 }
