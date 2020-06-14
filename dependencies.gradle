@@ -17,6 +17,7 @@ ext {
     def lifecycleVersion = '2.2.0'
     def constraintLayoutVersion = '2.0.0-beta6'
     def materialVersion = '1.3.0-alpha01'
+    def navigationVersion = '2.3.0-rc01'
 
     def junitVersion = '4.13'
     def coreTestingVersion = '2.1.0'
@@ -85,5 +86,12 @@ ext {
     androidTestLibraries = [
             "androidx.test.ext:junit:$androidXTest",
             "androidx.test.espresso:espresso-core:$espressoTest"
+    ]
+
+    navigationLibraries = [
+            "androidx.navigation:navigation-runtime-ktx:$navigationVersion",
+            "androidx.navigation:navigation-fragment-ktx:$navigationVersion",
+            "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
     ]
 }

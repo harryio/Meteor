@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorPrimary"
+    android:orientation="vertical"
+    tools:context=".HomeFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="0dp"
+        app:contentPadding="@dimen/size_l"
+        tools:context=".SearchBarFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_xs"
+            android:layout_marginBottom="@dimen/size_xs"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="@dimen/size_l"
+            android:gravity="center_vertical"
+            android:text="@string/search_city"
+            android:textAppearance="?textAppearanceSubtitle1" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/current_weather_fragment"
+        android:name="io.github.sainiharry.meteor.weather.WeatherFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

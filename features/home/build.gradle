@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -8,13 +8,13 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "io.github.sainiharry.meteor"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -40,11 +40,13 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":features:home")
+
+    implementation project(":common")
+    implementation project(":features:commonfeature")
+    implementation project(":features:weather")
+    implementation project(":features:search")
 
     implementation libraries.kotlinStdLib
-    implementation androidLibraries
-    implementation uiLibraries
     implementation navigationLibraries
 
     testImplementation testLibraries

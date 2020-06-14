@@ -44,7 +44,6 @@ dependencies {
     implementation project(":features:commonfeature")
 
     implementation libraries.kotlinStdLib
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries
