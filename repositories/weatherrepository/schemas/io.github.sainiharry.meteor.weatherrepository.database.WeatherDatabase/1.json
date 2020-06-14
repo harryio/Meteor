@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "86e8435a496649dae9435f3d933b904b",
+    "identityHash": "eb621867cd01246ea737d25cbed4a010",
     "entities": [
       {
-        "tableName": "CurrentWeatherModel",
+        "tableName": "WeatherModel",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `main` TEXT NOT NULL, `icon` TEXT NOT NULL, `cityId` INTEGER NOT NULL, `cityName` TEXT NOT NULL, `temp` REAL NOT NULL, `maxTemp` REAL NOT NULL, `minTemp` REAL NOT NULL, `country` TEXT NOT NULL, PRIMARY KEY(`cityName`))",
         "fields": [
           {
@@ -76,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '86e8435a496649dae9435f3d933b904b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eb621867cd01246ea737d25cbed4a010')"
     ]
   }
 }

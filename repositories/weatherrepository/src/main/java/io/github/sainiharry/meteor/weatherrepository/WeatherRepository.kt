@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.room.Room
 import io.github.sainiharry.meteor.common.Weather
-import io.github.sainiharry.meteor.weatherrepository.database.CurrentWeatherModel
+import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherDatabase
 import io.github.sainiharry.meteor.weatherrepository.database.flatten
-import io.github.sainiharry.meteor.weatherrepository.network.CurrentWeatherResponse
+import io.github.sainiharry.meteor.weatherrepository.network.WeatherResponse
 import io.github.sainiharry.meteor.weatherrepository.network.OpenWeatherService
 import io.github.sainiharry.meteor.weatherrepository.network.WeatherApi
 import io.github.sainiharry.meteor.weatherrepository.network.flatten
@@ -69,21 +69,21 @@ internal class WeatherRepositoryImpl(
 
     override fun fetchCurrentWeather(cityName: String): Single<Weather> =
         openWeatherService.getCurrentWeather(cityName)
-            .map(CurrentWeatherResponse::flatten)
+            .map(WeatherResponse::flatten)
             .doOnSuccess { weather ->
-                weatherDatabase.weatherDao().insertCurrentWeather(CurrentWeatherModel(weather))
+                weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
             }
 
     override fun fetchCurrentWeather(lat: Double, lng: Double): Single<Weather> =
         openWeatherService.getCurrentWeather(lat, lng)
-            .map(CurrentWeatherResponse::flatten)
+            .map(WeatherResponse::flatten)
             .doOnSuccess { weather ->
-                weatherDatabase.weatherDao().insertCurrentWeather(CurrentWeatherModel(weather))
+                weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
             }
 
     override fun getCurrentWeatherListener(cityName: String): LiveData<Weather> =
         Transformations.map(
-            weatherDatabase.weatherDao().getCurrentWeatherListener(cityName),
-            CurrentWeatherModel::flatten
+            weatherDatabase.weatherDao().getWeatherListener(cityName),
+            WeatherModel::flatten
         )
 }

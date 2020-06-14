@@ -1,7 +1,7 @@
 package io.github.sainiharry.meteor.weatherrepository
 
 import io.github.sainiharry.meteor.common.Weather
-import io.github.sainiharry.meteor.weatherrepository.database.CurrentWeatherModel
+import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherDao
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherDatabase
 import io.github.sainiharry.meteor.weatherrepository.network.*
@@ -39,7 +39,7 @@ class WeatherRepositoryTest {
     fun testFetchCurrentWeatherForCity() {
         val mockWeatherResponse = mockWeatherResponse()
         val weather = mockWeatherResponse.flatten()
-        val currentWeatherModel = CurrentWeatherModel(weather)
+        val currentWeatherModel = WeatherModel(weather)
         `when`(openWeatherService.getCurrentWeather(cityName)).thenReturn(
             Single.just(
                 mockWeatherResponse
@@ -51,7 +51,7 @@ class WeatherRepositoryTest {
         subscription.assertValue(weather)
 
         verify(openWeatherService).getCurrentWeather(cityName)
-        verify(weatherDao).insertCurrentWeather(currentWeatherModel)
+        verify(weatherDao).insertWeather(currentWeatherModel)
         verifyNoMoreInteractions(openWeatherService)
         verifyNoMoreInteractions(weatherDao)
     }
@@ -61,7 +61,7 @@ class WeatherRepositoryTest {
         val location = 23.3 to 48.3
         val mockWeatherResponse = mockWeatherResponse()
         val weather = mockWeatherResponse.flatten()
-        val currentWeatherModel = CurrentWeatherModel(weather)
+        val currentWeatherModel = WeatherModel(weather)
         `when`(openWeatherService.getCurrentWeather(location.first, location.second)).thenReturn(
             Single.just(
                 mockWeatherResponse
@@ -73,15 +73,15 @@ class WeatherRepositoryTest {
         subscription.assertValue(weather)
 
         verify(openWeatherService).getCurrentWeather(location.first, location.second)
-        verify(weatherDao).insertCurrentWeather(currentWeatherModel)
+        verify(weatherDao).insertWeather(currentWeatherModel)
         verifyNoMoreInteractions(openWeatherService)
         verifyNoMoreInteractions(weatherDao)
     }
 
-    private fun mockWeatherResponse() = CurrentWeatherResponse(
+    private fun mockWeatherResponse() = WeatherResponse(
         cityName.hashCode().toLong(),
         cityName,
-        listOf(WeatherResponse(cityName.hashCode().toLong(), "Clear", "04d")),
+        listOf(WeatherConditionResponse(cityName.hashCode().toLong(), "Clear", "04d")),
         WeatherInfoResponse(23.2f, 43.2f, 85.3f),
         WeatherSysResponse("US")
     )

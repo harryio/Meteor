@@ -5,10 +5,10 @@ import com.squareup.moshi.JsonClass
 import io.github.sainiharry.meteor.common.Weather
 
 @JsonClass(generateAdapter = true)
-internal data class CurrentWeatherResponse(
+internal data class WeatherResponse(
     @Json(name = "id") val cityId: Long,
     @Json(name = "name") val cityName: String,
-    val weather: List<WeatherResponse>,
+    val weather: List<WeatherConditionResponse>,
     @Json(name = "main")
     val weatherInfo: WeatherInfoResponse,
     @Json(name = "sys")
@@ -16,7 +16,7 @@ internal data class CurrentWeatherResponse(
 )
 
 @JsonClass(generateAdapter = true)
-internal data class WeatherResponse(val id: Long, val main: String, val icon: String)
+internal data class WeatherConditionResponse(val id: Long, val main: String, val icon: String)
 
 @JsonClass(generateAdapter = true)
 internal data class WeatherInfoResponse(
@@ -32,7 +32,7 @@ internal data class WeatherSysResponse(
     val country: String
 )
 
-internal fun CurrentWeatherResponse.flatten(): Weather = Weather(
+internal fun WeatherResponse.flatten(): Weather = Weather(
     weather[0].id,
     weather[0].main,
     weather[0].icon,
