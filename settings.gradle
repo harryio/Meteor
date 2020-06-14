@@ -1,3 +1,4 @@
+include ':repositories:news'
 include ':features:home'
 include ':features:search'
 include ':features:weather'
