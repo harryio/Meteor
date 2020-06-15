@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialFadeThrough
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.commonfeature.EventObserver
+import io.github.sainiharry.meteor.commonfeature.hideKeyboard
 import io.github.sainiharry.meteor.commonfeature.showKeyboard
 import io.github.sainiharry.meteor.search.databinding.FragmentSearchBinding
 
@@ -56,5 +57,10 @@ class SearchFragment : BaseFragment() {
         model.navigateBackEvent.observe(viewLifecycleOwner, EventObserver {
             findNavController().popBackStack()
         })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        hideKeyboard()
     }
 }
