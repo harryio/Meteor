@@ -59,7 +59,6 @@ class NewsFragment : BaseFragment() {
         model.error.observe(viewLifecycleOwner, defaultErrorHandler())
 
         val adapter = NewsAdapter(model)
-        binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
 
         binding.refresher.setOnRefreshListener {

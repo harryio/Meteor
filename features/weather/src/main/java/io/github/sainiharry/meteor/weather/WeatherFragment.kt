@@ -82,7 +82,6 @@ class WeatherFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = ForecastAdapter()
-        binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
 
         binding.refresher.setOnRefreshListener {
