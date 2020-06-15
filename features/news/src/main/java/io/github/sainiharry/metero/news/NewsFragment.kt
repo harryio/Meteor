@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
+import io.github.sainiharry.meteor.commonfeature.EventObserver
 import io.github.sainiharry.meteor.repositories.news.getNewsRepository
 import io.github.sainiharry.meteor.weather.WeatherInfoViewModel
 import io.github.sainiharry.metero.news.databinding.FragmentNewsBinding
@@ -48,9 +49,20 @@ class NewsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        model.loading.observe(viewLifecycleOwner, EventObserver { loading ->
+            if (binding.refresher.isRefreshing != loading) {
+                binding.refresher.isRefreshing = loading
+            }
+        })
+        model.error.observe(viewLifecycleOwner, defaultErrorHandler())
+
         val adapter = NewsAdapter()
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
+
+        binding.refresher.setOnRefreshListener {
+            model.refresh()
+        }
 
         model.news.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
