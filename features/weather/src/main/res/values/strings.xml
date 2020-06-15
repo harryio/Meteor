@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="today_forecast">Today\'s Forecast</string>
-    <string name="current_temp">%.1f\u00b0</string>
-    <string name="max_min_temp">%1$.1f\u00b0 / %2$.1f\u00b0</string>
+    <string name="current_temp">%.1f\u2103</string>
+    <string name="max_min_temp">%1$.1f\u2103 / %2$.1f\u2103</string>
 
     <string name="weather_icon_url" translatable="false">https://openweathermap.org/img/w/%s.png</string>
 
     <string name="error_current_weather_fetch">Oops! Something went wrong while fetching current weather</string>
+    <string name="weather_temperature_note">*All temperatures are in celsius</string>
 </resources>

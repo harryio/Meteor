@@ -16,6 +16,8 @@ import io.reactivex.Single
 
 private const val DATABASE_NAME = "WeatherDb"
 
+private const val UNIT_METRIC = "metric"
+
 /**
  * Returns cached version of [WeatherRepository] implementation
  * @param scheduler [Scheduler] on which data should be gathered on
@@ -104,14 +106,14 @@ internal class WeatherRepositoryImpl(
     WeatherRepository {
 
     override fun fetchCurrentWeather(cityName: String): Single<Weather> =
-        openWeatherService.getCurrentWeather(cityName)
+        openWeatherService.getCurrentWeather(cityName, UNIT_METRIC)
             .map(WeatherResponse::toWeather)
             .doOnSuccess { weather ->
                 weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
             }
 
     override fun fetchCurrentWeather(lat: Double, lon: Double): Single<Weather> =
-        openWeatherService.getCurrentWeather(lat, lon)
+        openWeatherService.getCurrentWeather(lat, lon, UNIT_METRIC)
             .map(WeatherResponse::toWeather)
             .doOnSuccess { weather ->
                 weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
@@ -124,7 +126,7 @@ internal class WeatherRepositoryImpl(
         )
 
     override fun fetchForecast(cityName: String): Single<List<Weather>> =
-        openWeatherService.getForecast(cityName, 3)
+        openWeatherService.getForecast(cityName, 3, UNIT_METRIC)
             .map(ForecastResponse::toWeatherList)
             .doOnSuccess { forecastList ->
                 weatherDatabase.weatherDao().insertForecast(forecastList.toForecastModelList())

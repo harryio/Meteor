@@ -12,32 +12,40 @@ internal interface OpenWeatherService {
     /**
      * Get current weather data for a city from network
      * @param cityName city for which weather data is required
+     * @param units unit system for temperature data
      * @return a [Single] that emits network response when subscribed
      */
     @GET("2.5/weather")
-    fun getCurrentWeather(@Query("q") cityName: String): Single<WeatherResponse>
+    fun getCurrentWeather(
+        @Query("q") cityName: String,
+        @Query("units") units: String
+    ): Single<WeatherResponse>
 
     /**
      * Get current weather data for a city from network
      * @param lat latitude of city for which weather data is required
      * @param lon longitude of city for which weather data is required
+     * @param units unit system for temperature data
      * @return a [Single] that emits network response when subscribed
      */
     @GET("2.5/weather")
     fun getCurrentWeather(
         @Query("lat") lat: Double,
-        @Query("lon") lon: Double
+        @Query("lon") lon: Double,
+        @Query("units") units: String
     ): Single<WeatherResponse>
 
     /**
      * Get forecast weather data for a city from network
      * @param cityName city for which forecast data is required
      * @param count number of results to be requested from api
+     * @param units unit system for temperature data
      * @return a [Single] that emits network response when subscribed
      */
     @GET("2.5/forecast")
     fun getForecast(
         @Query("q") cityName: String,
-        @Query("cnt") count: Int
+        @Query("cnt") count: Int,
+        @Query("units") units: String
     ): Single<ForecastResponse>
 }
