@@ -7,6 +7,8 @@ import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 
 class WeatherInfoViewModel : BaseViewModel() {
 
+    internal val resultsFetchedForLocation = MutableLiveData(false)
+
     val weather: LiveData<Weather>
         get() = _weather
     private val _weather = MutableLiveData<Weather>()

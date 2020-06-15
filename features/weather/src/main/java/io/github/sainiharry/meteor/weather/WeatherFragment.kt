@@ -138,7 +138,10 @@ class WeatherFragment : BaseFragment() {
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
         LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation.addOnSuccessListener {
-            model.handleUserLocation(it.latitude, it.longitude)
+            if (weatherInfoViewModel.resultsFetchedForLocation.value == false) {
+                weatherInfoViewModel.resultsFetchedForLocation.value = true
+                model.handleUserLocation(it.latitude, it.longitude)
+            }
         }
     }
 }
