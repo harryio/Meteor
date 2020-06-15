@@ -36,5 +36,12 @@ class HomeFragment : Fragment() {
         val navController =
             Navigation.findNavController(view.findViewById(R.id.home_nav_host_fragment))
         bottom_nav.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.newsFragment -> search_bar.visibility = View.GONE
+                R.id.weatherFragment -> search_bar.visibility = View.VISIBLE
+            }
+        }
     }
 }
