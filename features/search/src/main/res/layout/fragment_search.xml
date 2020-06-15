@@ -23,6 +23,7 @@
             android:hint="@string/search_city"
             app:endIconDrawable="@drawable/ic_done"
             app:endIconMode="custom"
+            app:boxBackgroundColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:startIconDrawable="@drawable/ic_search">
