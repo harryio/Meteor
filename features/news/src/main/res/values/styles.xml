@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NewsCard" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardElevation">@dimen/size_s</item>
+        <item name="shapeAppearance">@style/NewsCardShapeAppearance</item>
+    </style>
+
+
+    <style name="NewsCardShapeAppearance" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamilyTopRight">cut</item>
+        <item name="cornerFamilyBottomRight">cut</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerSizeTopRight">@dimen/size_m</item>
+        <item name="cornerSizeBottomRight">@dimen/size_m</item>
+    </style>
+
+</resources>

@@ -12,6 +12,7 @@
     <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/NewsCard"
         android:layout_marginStart="@dimen/size_m"
         android:layout_marginEnd="@dimen/size_m"
         android:layout_marginBottom="@dimen/size_l">
