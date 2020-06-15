@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="WeatherCard" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardElevation">0dp</item>
+        <item name="shapeAppearance">@style/WeatherCardShapeAppearance</item>
+    </style>
+
+    <style name="WeatherCardShapeAppearance" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/size_xl</item>
+        <item name="cornerSizeTopRight">@dimen/size_xl</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="ForecastCard" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardElevation">@dimen/size_s</item>
+        <item name="shapeAppearance">@style/ForecastCardShapeAppearance</item>
+    </style>
+
+    <style name="ForecastCardShapeAppearance" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">@dimen/size_m</item>
+    </style>
+
+</resources>
