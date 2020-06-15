@@ -3,6 +3,9 @@ package io.github.sainiharry.meteor.repositories.news.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Room representation of News
+ */
 @Entity
 internal data class NewsModel(
     @PrimaryKey(autoGenerate = true)

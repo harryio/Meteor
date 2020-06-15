@@ -13,6 +13,11 @@ import io.reactivex.Single
 
 private const val DATABASE_NAME = "NewsDb"
 
+/**
+ * Returns cached version of [NewsRepository] implementation
+ * @param scheduler [Scheduler] on which data should be gathered on
+ * @param applicationContext applicationContext
+ */
 fun getNewsRepository(
     scheduler: Scheduler,
     applicationContext: Context
@@ -30,7 +35,9 @@ fun getNewsRepository(
         ).build()
     })
 
-
+/**
+ * Repository for accessing data related to news
+ */
 interface NewsRepository {
 
     companion object {
@@ -50,6 +57,11 @@ interface NewsRepository {
         }
     }
 
+    /**
+     * Get top headlines for a country
+     * @param countryCode country code for which news data is required
+     * @return a [Single] which will emit news data when subscribed
+     */
     fun fetchNews(countryCode: String): Single<List<News>>
 }
 

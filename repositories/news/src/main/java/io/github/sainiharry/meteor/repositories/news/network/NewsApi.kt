@@ -6,6 +6,9 @@ import retrofit2.Retrofit
 
 private const val NEWS_BASE_API_URL = "https://newsapi.org/v2/"
 
+/**
+ * Implementation of [Api] for news data
+ */
 internal class NewsApi(private val apiKey: String) : Api {
 
     private val retrofitBuilder by lazy {
