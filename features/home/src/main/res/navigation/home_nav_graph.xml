@@ -10,7 +10,7 @@
         android:name="io.github.sainiharry.meteor.home.HomeFragment"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_home_to_search"
+            android:id="@id/action_home_to_search"
             app:destination="@id/search" />
     </fragment>
 

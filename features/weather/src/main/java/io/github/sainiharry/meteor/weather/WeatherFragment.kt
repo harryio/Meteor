@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import coil.api.load
 import com.google.android.gms.location.LocationServices
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
@@ -24,6 +25,7 @@ import io.github.sainiharry.meteor.weather.forecast.ForecastAdapter
 import io.github.sainiharry.meteor.weatherrepository.getWeatherRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_weather.*
 
 const val REQUEST_LOCATION_CODE = 923
 
@@ -80,6 +82,11 @@ class WeatherFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        search_bar.setOnClickListener {
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                .navigate(R.id.action_home_to_search)
+        }
 
         val adapter = ForecastAdapter()
         binding.recyclerView.adapter = adapter

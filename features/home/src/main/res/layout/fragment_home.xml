@@ -8,29 +8,6 @@
     android:orientation="vertical"
     tools:context=".HomeFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardCornerRadius="0dp"
-        app:contentPadding="@dimen/size_l"
-        tools:context=".SearchBarFragment">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_xs"
-            android:layout_marginBottom="@dimen/size_xs"
-            android:drawableStart="@drawable/ic_search"
-            android:drawablePadding="@dimen/size_l"
-            android:gravity="center_vertical"
-            android:text="@string/search_city"
-            android:textAppearance="?textAppearanceSubtitle1" />
-
-    </com.google.android.material.card.MaterialCardView>
-
     <fragment
         android:id="@+id/home_nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"

@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.transition.MaterialFadeThrough
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
@@ -30,19 +28,8 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        search_bar.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_search)
-        }
-
         val navController =
             Navigation.findNavController(view.findViewById(R.id.home_nav_host_fragment))
         bottom_nav.setupWithNavController(navController)
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.newsFragment -> search_bar.visibility = View.GONE
-                R.id.weatherFragment -> search_bar.visibility = View.VISIBLE
-            }
-        }
     }
 }
