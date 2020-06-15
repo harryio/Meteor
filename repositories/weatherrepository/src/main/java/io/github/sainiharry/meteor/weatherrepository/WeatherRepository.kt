@@ -8,7 +8,7 @@ import io.github.sainiharry.meteor.common.Weather
 import io.github.sainiharry.meteor.network.NetworkInteractor
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherDatabase
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
-import io.github.sainiharry.meteor.weatherrepository.database.flatten
+import io.github.sainiharry.meteor.weatherrepository.database.toWeather
 import io.github.sainiharry.meteor.weatherrepository.network.*
 import io.github.sainiharry.meteor.weatherrepository.network.toWeather
 import io.reactivex.Scheduler
@@ -16,6 +16,11 @@ import io.reactivex.Single
 
 private const val DATABASE_NAME = "WeatherDb"
 
+/**
+ * Returns cached version of [WeatherRepository] implementation
+ * @param scheduler [Scheduler] on which data should be gathered on
+ * @param applicationContext applicationContext
+ */
 fun getWeatherRepository(
     scheduler: Scheduler,
     applicationContext: Context
@@ -33,6 +38,9 @@ fun getWeatherRepository(
         ).build()
     })
 
+/**
+ * Repository for accessing data related to weather
+ */
 interface WeatherRepository {
 
     companion object {
@@ -52,14 +60,40 @@ interface WeatherRepository {
         }
     }
 
+    /**
+     * Get current weather data for a city
+     * @param cityName city for which weather data is required
+     * @return a [Single] that emits the weather data for the specified city when subscribed
+     */
     fun fetchCurrentWeather(cityName: String): Single<Weather>
 
-    fun fetchCurrentWeather(lat: Double, lng: Double): Single<Weather>
+    /**
+     * Get current weather data for a city
+     * @param lat latitude of city for which weather data is required
+     * @param lon longitude of city for which weather data is required
+     * @return a [Single] that emits weather data for the specified location when subscribed
+     */
+    fun fetchCurrentWeather(lat: Double, lon: Double): Single<Weather>
 
+    /**
+     * Get listener for changes in current weather data for a city
+     * @param cityName city for which weather data needs to be observed
+     * @return a [LiveData] that starts emitting latest current weather data when observed
+     */
     fun getCurrentWeatherListener(cityName: String): LiveData<Weather>
 
+    /**
+     * Get forecast weather data for a city
+     * @param cityName city for which forecast data is required
+     * @return a [Single] that emits forecast data when subscribed
+     */
     fun fetchForecast(cityName: String): Single<List<Weather>>
 
+    /**
+     * Get listener for changes in forecast data for a city
+     * @param cityName city for which forecast data needs to be observed
+     * @return a [LiveData] that starts emitting latest forecast data changes when observed
+     */
     fun getForecastListener(cityName: String): LiveData<List<Weather>>
 }
 
@@ -76,8 +110,8 @@ internal class WeatherRepositoryImpl(
                 weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
             }
 
-    override fun fetchCurrentWeather(lat: Double, lng: Double): Single<Weather> =
-        openWeatherService.getCurrentWeather(lat, lng)
+    override fun fetchCurrentWeather(lat: Double, lon: Double): Single<Weather> =
+        openWeatherService.getCurrentWeather(lat, lon)
             .map(WeatherResponse::toWeather)
             .doOnSuccess { weather ->
                 weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
@@ -86,7 +120,7 @@ internal class WeatherRepositoryImpl(
     override fun getCurrentWeatherListener(cityName: String): LiveData<Weather> =
         Transformations.map(
             weatherDatabase.weatherDao().getCurrentWeatherListener(cityName),
-            WeatherModel::flatten
+            WeatherModel::toWeather
         )
 
     override fun fetchForecast(cityName: String): Single<List<Weather>> =
@@ -100,6 +134,6 @@ internal class WeatherRepositoryImpl(
         Transformations.map(
             weatherDatabase.weatherDao().getForecastListener(cityName)
         ) { forecastModelList ->
-            forecastModelList.map { it.flatten() }
+            forecastModelList.map { it.toWeather() }
         }
 }

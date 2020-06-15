@@ -6,6 +6,9 @@ import retrofit2.Retrofit
 
 private const val WEATHER_BASE_API_URL = "https://api.openweathermap.org/data/"
 
+/**
+ * Implementation of [Api] for weather data
+ */
 internal class WeatherApi(private val apiKey: String) : Api {
 
     private val retrofitBuilder by lazy {
