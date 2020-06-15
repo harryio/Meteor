@@ -138,8 +138,8 @@ class WeatherFragment : BaseFragment() {
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
         LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation.addOnSuccessListener {
-            if (weatherInfoViewModel.resultsFetchedForLocation.value == false) {
-                weatherInfoViewModel.resultsFetchedForLocation.value = true
+            val searchQuery = searchViewModel.searchText.value
+            if (searchQuery.isNullOrEmpty() || searchQuery.isBlank()) {
                 model.handleUserLocation(it.latitude, it.longitude)
             }
         }
