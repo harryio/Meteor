@@ -1,24 +1,90 @@
 <resources>
+
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
-        <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
-        <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3</item>
-        <item name="textAppearanceHeadline4">@style/TextAppearance.MaterialComponents.Headline4</item>
-        <item name="textAppearanceHeadline5">@style/TextAppearance.MaterialComponents.Headline5</item>
-        <item name="textAppearanceHeadline6">@style/TextAppearance.MaterialComponents.Headline6</item>
-        <item name="textAppearanceBody1">@style/TextAppearance.MaterialComponents.Body1</item>
-        <item name="textAppearanceBody2">@style/TextAppearance.MaterialComponents.Body2</item>
-        <item name="textAppearanceSubtitle1">@style/TextAppearance.MaterialComponents.Subtitle1</item>
-        <item name="textAppearanceSubtitle2">@style/TextAppearance.MaterialComponents.Subtitle2</item>
-        <item name="textAppearanceButton">@style/TextAppearance.MaterialComponents.Button</item>
-        <item name="textAppearanceCaption">@style/TextAppearance.MaterialComponents.Caption</item>
-        <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
+        <item name="textAppearanceHeadline1">@style/TextAppearance.Meteor.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.Meteor.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.Meteor.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.Meteor.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.Meteor.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.Meteor.Headline6</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.Meteor.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.Meteor.Body2</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Meteor.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.Meteor.Subtitle2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Meteor.Button</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.Meteor.Caption</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.Meteor.Overline</item>
 
         <item name="materialCardViewStyle">@style/Widget.MaterialComponents.CardView</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Headline1" parent="@style/TextAppearance.MaterialComponents.Headline1">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed_light</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed_light</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Headline2" parent="@style/TextAppearance.MaterialComponents.Headline2">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed_light</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed_light</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Headline3" parent="@style/TextAppearance.MaterialComponents.Headline3">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Headline4" parent="@style/TextAppearance.MaterialComponents.Headline4">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Headline5" parent="@style/TextAppearance.MaterialComponents.Headline5">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Headline6" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed_medium</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed_medium</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Subtitle1" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Subtitle2" parent="@style/TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed_medium</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed_medium</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Body1" parent="@style/TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Body2" parent="@style/TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Caption" parent="@style/TextAppearance.MaterialComponents.Caption">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Button" parent="@style/TextAppearance.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed_medium</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed_medium</item>
+    </style>
+
+    <style name="TextAppearance.Meteor.Overline" parent="@style/TextAppearance.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/fira_sans_extra_condensed</item>
+        <item name="fontFamily">@font/fira_sans_extra_condensed</item>
     </style>
 
 </resources>
