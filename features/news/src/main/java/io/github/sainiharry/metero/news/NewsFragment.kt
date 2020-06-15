@@ -1,5 +1,7 @@
 package io.github.sainiharry.metero.news
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +58,7 @@ class NewsFragment : BaseFragment() {
         })
         model.error.observe(viewLifecycleOwner, defaultErrorHandler())
 
-        val adapter = NewsAdapter()
+        val adapter = NewsAdapter(model)
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
 
@@ -66,6 +68,11 @@ class NewsFragment : BaseFragment() {
 
         model.news.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+        })
+
+        model.viewNewsEvent.observe(viewLifecycleOwner, EventObserver {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.url))
+            requireActivity().startActivity(intent)
         })
 
         weatherInfoViewModel.weather.observe(viewLifecycleOwner, Observer {
