@@ -143,7 +143,7 @@
                         android:id="@+id/recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginTop="@dimen/size_m"
+                        android:layout_marginTop="@dimen/size_s"
                         android:clipToPadding="false"
                         android:paddingTop="@dimen/size_l"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
