@@ -1,13 +1,13 @@
 package io.github.sainiharry.meteor.repositories.news
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.room.Room
+import io.github.sainiharry.meteor.common.News
 import io.github.sainiharry.meteor.network.NetworkInteractor
 import io.github.sainiharry.meteor.repositories.news.database.NewsDatabase
 import io.github.sainiharry.meteor.repositories.news.network.NewsApi
 import io.github.sainiharry.meteor.repositories.news.network.NewsService
-import io.github.sainiharry.meteor.repositories.news.network.toNews
+import io.github.sainiharry.meteor.repositories.news.network.toNewsModelList
 import io.reactivex.Scheduler
 import io.reactivex.Single
 
@@ -51,8 +51,6 @@ interface NewsRepository {
     }
 
     fun fetchNews(countryCode: String): Single<List<News>>
-
-    fun getNewsListener(): LiveData<List<News>>
 }
 
 internal class NewsRepositoryImpl(
@@ -61,14 +59,10 @@ internal class NewsRepositoryImpl(
 ) : NewsRepository {
 
     override fun fetchNews(countryCode: String): Single<List<News>> =
-        newsService.fetchNews()
+        newsService.fetchNews(countryCode)
+            .map { it.articles }
             .doOnSuccess {
-                newsDatabase.newsDao().clear()
+                newsDatabase.newsDao().clearAndInsertNews(it.toNewsModelList())
             }
-            .map {
-                it.toNews()
-            }
-            .doOnSuccess(newsDatabase.newsDao()::insertNews)
-
-    override fun getNewsListener(): LiveData<List<News>> = newsDatabase.newsDao().getNewsListener()
+            .flatMap { newsDatabase.newsDao().getAllNews() }
 }

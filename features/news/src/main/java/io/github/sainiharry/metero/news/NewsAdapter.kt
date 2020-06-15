@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import io.github.sainiharry.meteor.commonfeature.MeteorDiffUtil
-import io.github.sainiharry.meteor.repositories.news.News
+import io.github.sainiharry.meteor.common.News
 import io.github.sainiharry.metero.news.databinding.ItemNewsBinding
 
 internal class NewsAdapter : ListAdapter<News, NewsViewHolder>(MeteorDiffUtil<News>()) {

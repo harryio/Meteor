@@ -1,8 +1,17 @@
 package io.github.sainiharry.meteor.repositories.news.database
 
-import androidx.room.Embedded
 import androidx.room.Entity
-import io.github.sainiharry.meteor.repositories.news.News
+import androidx.room.PrimaryKey
 
 @Entity
-internal data class NewsModel(@Embedded val news: News)
+internal data class NewsModel(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
+    val author: String,
+    val title: String,
+    val description: String,
+    val url: String,
+    val urlToImage: String,
+    val publishedAt: String,
+    val content: String
+)

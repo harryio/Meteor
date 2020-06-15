@@ -20,6 +20,16 @@ android {
         consumerProguardFiles "consumer-rules.pro"
 
         buildConfigField "String", "NEWS_API_KEY", localProperties['newsApiKey']
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.schemaLocation":"$projectDir/schemas/news".toString(),
+                        "room.incremental":"true",
+                        "room.expandProjection":"true"
+                ]
+            }
+        }
     }
 
     buildTypes {

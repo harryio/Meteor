@@ -6,12 +6,14 @@
 
         <variable
             name="news"
-            type="io.github.sainiharry.meteor.repositories.news.News" />
+            type="io.github.sainiharry.meteor.common.News" />
     </data>
 
     <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_m"
+        android:layout_marginEnd="@dimen/size_m"
         android:layout_marginBottom="@dimen/size_l">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +26,7 @@
                 android:layout_height="0dp"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                app:layout_constraintDimensionRatio="16:10"
+                app:layout_constraintDimensionRatio="16:12"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/backgrounds/scenic" />
@@ -34,14 +36,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_m"
+                android:layout_marginTop="@dimen/size_m"
                 android:layout_marginEnd="@dimen/size_l"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="@{news.title}"
                 android:textAppearance="?textAppearanceBody1"
+                app:layout_constraintBottom_toTopOf="@id/news_author"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/news_icon"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintVertical_chainStyle="packed"
                 tools:text="U.S. needs to stop being offended about everything, Ben Carson says - POLITICO" />
 
             <TextView
@@ -53,6 +59,7 @@
                 android:maxLines="1"
                 android:text="@{news.author}"
                 android:textAppearance="?textAppearanceSubtitle2"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/news_title"
                 app:layout_constraintTop_toBottomOf="@id/news_title"

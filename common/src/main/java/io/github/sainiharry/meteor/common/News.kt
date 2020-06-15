@@ -1,10 +1,6 @@
-package io.github.sainiharry.meteor.repositories.news
-
-import androidx.room.PrimaryKey
-import io.github.sainiharry.meteor.common.UniqueId
+package io.github.sainiharry.meteor.common
 
 data class News(
-    @PrimaryKey(autoGenerate = true)
     val id: Long,
     val author: String,
     val title: String,

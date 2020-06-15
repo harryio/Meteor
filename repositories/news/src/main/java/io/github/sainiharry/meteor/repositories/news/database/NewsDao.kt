@@ -1,21 +1,24 @@
 package io.github.sainiharry.meteor.repositories.news.database
 
-import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import io.github.sainiharry.meteor.repositories.news.News
+import androidx.room.*
+import io.github.sainiharry.meteor.common.News
+import io.reactivex.Single
 
 @Dao
-interface NewsDao {
+internal interface NewsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNews(news: List<News>)
+    fun insertNews(news: List<NewsModel>)
 
     @Query("SELECT * FROM NewsModel")
-    fun getNewsListener(): LiveData<List<News>>
+    fun getAllNews(): Single<List<News>>
 
     @Query("DELETE FROM NewsModel")
     fun clear()
+
+    @Transaction
+    fun clearAndInsertNews(news: List<NewsModel>) {
+        clear()
+        insertNews(news)
+    }
 }
