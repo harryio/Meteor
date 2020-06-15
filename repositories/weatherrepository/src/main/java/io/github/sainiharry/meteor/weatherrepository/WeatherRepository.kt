@@ -90,7 +90,7 @@ internal class WeatherRepositoryImpl(
         )
 
     override fun fetchForecast(cityName: String): Single<List<Weather>> =
-        openWeatherService.getForecast(cityName)
+        openWeatherService.getForecast(cityName, 3)
             .map(ForecastResponse::toWeatherList)
             .doOnSuccess { forecastList ->
                 weatherDatabase.weatherDao().insertForecast(forecastList.toForecastModelList())
