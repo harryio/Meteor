@@ -40,7 +40,6 @@ internal class NewsViewModel(
 
         countryCodeLiveData.value = countryCode
         _loading.value = Event(true)
-        _news.value = emptyList()
         disposables.add(
             newsRepository.fetchNews(countryCode)
                 .observeOn(observableScheduler)
