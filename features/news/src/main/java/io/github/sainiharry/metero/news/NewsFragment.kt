@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.repositories.news.getNewsRepository
+import io.github.sainiharry.meteor.weather.WeatherInfoViewModel
 import io.github.sainiharry.metero.news.databinding.FragmentNewsBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -27,6 +30,8 @@ class NewsFragment : BaseFragment() {
         }
     })
 
+    private val weatherInfoViewModel by activityViewModels<WeatherInfoViewModel>()
+
     private lateinit var binding: FragmentNewsBinding
 
     override fun onCreateView(
@@ -38,5 +43,21 @@ class NewsFragment : BaseFragment() {
         binding.model = model
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val adapter = NewsAdapter()
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.adapter = adapter
+
+        model.news.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+        })
+
+        weatherInfoViewModel.weather.observe(viewLifecycleOwner, Observer {
+            model.handleCountry(it.country)
+        })
     }
 }

@@ -43,6 +43,8 @@ class WeatherFragment : BaseFragment() {
 
     private val searchViewModel by activityViewModels<SearchViewModel>()
 
+    private val weatherInfoViewModel by activityViewModels<WeatherInfoViewModel>()
+
     private lateinit var binding: FragmentWeatherBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,8 +103,13 @@ class WeatherFragment : BaseFragment() {
                 crossfade(true)
             }
         })
+
         model.forecast.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+        })
+
+        model.weather.observe(viewLifecycleOwner, Observer {
+            weatherInfoViewModel.handleWeatherInfo(it)
         })
 
         searchViewModel.searchText.observe(viewLifecycleOwner, Observer {

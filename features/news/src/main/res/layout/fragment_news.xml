@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -8,11 +8,14 @@
             type="io.github.sainiharry.metero.news.NewsViewModel" />
     </data>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".NewsFragment">
-
-    </FrameLayout>
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/size_l"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:context=".NewsFragment"
+        tools:listitem="@layout/item_news" />
 </layout>

@@ -42,7 +42,7 @@ dependencies {
     implementation project(":common")
     implementation project(":features:commonfeature")
     implementation project(":repositories:news")
-    implementation project(":features:search")
+    implementation project(":features:weather")
 
     implementation libraries.kotlinStdLib
     implementation libraries.rxJava
