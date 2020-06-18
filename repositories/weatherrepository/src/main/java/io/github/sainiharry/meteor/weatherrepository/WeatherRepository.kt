@@ -52,13 +52,11 @@ interface WeatherRepository {
         internal fun getInstance(
             openWeatherServiceProvider: () -> OpenWeatherService,
             weatherDatabaseProvider: () -> WeatherDatabase
-        ): WeatherRepository {
-            if (weatherRepository == null) {
-                weatherRepository =
-                    WeatherRepositoryImpl(openWeatherServiceProvider(), weatherDatabaseProvider())
-            }
-
-            return weatherRepository!!
+        ): WeatherRepository = weatherRepository ?: WeatherRepositoryImpl(
+            openWeatherServiceProvider(),
+            weatherDatabaseProvider()
+        ).also {
+            weatherRepository = it
         }
     }
 

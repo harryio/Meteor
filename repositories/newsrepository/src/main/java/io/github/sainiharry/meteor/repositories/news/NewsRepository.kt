@@ -47,13 +47,11 @@ interface NewsRepository {
         internal fun getInstance(
             newsServiceProvider: () -> NewsService,
             newsDatabaseProvider: () -> NewsDatabase
-        ): NewsRepository {
-            if (newsRepository == null) {
-                newsRepository =
-                    NewsRepositoryImpl(newsServiceProvider(), newsDatabaseProvider())
-            }
-
-            return newsRepository!!
+        ): NewsRepository = newsRepository ?: NewsRepositoryImpl(
+            newsServiceProvider(),
+            newsDatabaseProvider()
+        ).also {
+            newsRepository = it
         }
     }
 
