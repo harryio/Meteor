@@ -1,5 +1,6 @@
+include ':repositories:searchrepository'
 include ':features:news'
-include ':repositories:news'
+include ':repositories:newsrepository'
 include ':features:home'
 include ':features:search'
 include ':features:weather'
