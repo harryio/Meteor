@@ -2,7 +2,7 @@ package io.github.sainiharry.meteor.weather
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.github.sainiharry.meteor.common.Weather
+import io.github.sainiharry.meteor.common.model.Weather
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 
 class WeatherInfoViewModel : BaseViewModel() {

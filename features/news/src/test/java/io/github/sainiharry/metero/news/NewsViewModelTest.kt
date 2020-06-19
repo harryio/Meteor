@@ -3,7 +3,7 @@ package io.github.sainiharry.metero.news
 import android.accounts.NetworkErrorException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import io.github.sainiharry.meteor.common.News
+import io.github.sainiharry.meteor.common.model.News
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.repositories.news.NewsRepository
 import io.reactivex.Single

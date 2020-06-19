@@ -5,7 +5,7 @@
 
         <variable
             name="weather"
-            type="io.github.sainiharry.meteor.common.Weather" />
+            type="io.github.sainiharry.meteor.common.model.Weather" />
     </data>
 
     <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"

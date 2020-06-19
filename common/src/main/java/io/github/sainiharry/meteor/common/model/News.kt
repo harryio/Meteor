@@ -1,4 +1,6 @@
-package io.github.sainiharry.meteor.common
+package io.github.sainiharry.meteor.common.model
+
+import io.github.sainiharry.meteor.common.UniqueId
 
 data class News(
     val id: Long,

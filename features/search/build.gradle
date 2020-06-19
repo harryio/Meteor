@@ -42,6 +42,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":common")
     implementation project(":features:commonfeature")
+    implementation project(":repositories:searchrepository")
 
     implementation libraries.kotlinStdLib
 

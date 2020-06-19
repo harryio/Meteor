@@ -3,7 +3,7 @@ package io.github.sainiharry.metero.news
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.github.sainiharry.meteor.common.ItemClickListener
-import io.github.sainiharry.meteor.common.News
+import io.github.sainiharry.meteor.common.model.News
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.repositories.news.NewsRepository

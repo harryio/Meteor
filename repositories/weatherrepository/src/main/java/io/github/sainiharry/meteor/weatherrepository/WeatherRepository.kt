@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.room.Room
-import io.github.sainiharry.meteor.common.Weather
+import io.github.sainiharry.meteor.common.model.Weather
 import io.github.sainiharry.meteor.network.NetworkInteractor
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherDatabase
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel

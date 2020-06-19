@@ -3,7 +3,7 @@ package io.github.sainiharry.meteor.weather.forecast
 import android.text.format.DateFormat
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
-import io.github.sainiharry.meteor.common.Weather
+import io.github.sainiharry.meteor.common.model.Weather
 import io.github.sainiharry.meteor.weather.R
 import io.github.sainiharry.meteor.weather.databinding.ItemForecastBinding
 

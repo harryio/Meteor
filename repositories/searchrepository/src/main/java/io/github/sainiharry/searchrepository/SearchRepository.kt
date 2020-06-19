@@ -2,11 +2,11 @@ package io.github.sainiharry.searchrepository
 
 import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.squareup.sqldelight.runtime.rx.asObservable
-import com.squareup.sqldelight.runtime.rx.mapToList
 import io.github.sainiharry.meteor.common.DATABASE_NAME
+import io.github.sainiharry.meteor.common.model.Search
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 fun getSearchRepository(
     applicationContext: Context
@@ -26,18 +26,19 @@ interface SearchRepository {
         }
     }
 
-    fun getSearchQueries(): Single<List<String>>
+    fun getSearchQueries(): Single<List<Search>>
 }
 
 internal class SearchRepositoryImpl(private val database: Database) : SearchRepository {
 
-    override fun getSearchQueries(): Single<List<String>> {
-        return database.searchQueries.selectQueries().asObservable().mapToList()
-            .flatMapSingle { searchQueries ->
-                Observable.fromIterable(searchQueries)
-                    .map(Search::searchQuery)
+    override fun getSearchQueries(): Single<List<Search>> =
+        Single.fromCallable { database.searchQueries.selectSearchQueries().executeAsList() }
+            .subscribeOn(Schedulers.io())
+            .flatMap {
+                Observable.fromIterable(it)
+                    .map(SearchModel::toSearch)
                     .toList()
             }
-            .single(emptyList<String>())
-    }
 }
+
+internal fun SearchModel.toSearch() = Search(id, searchQuery)

@@ -1,7 +1,7 @@
 package io.github.sainiharry.meteor.repositories.news.network
 
 import com.squareup.moshi.JsonClass
-import io.github.sainiharry.meteor.common.News
+import io.github.sainiharry.meteor.common.model.News
 import io.github.sainiharry.meteor.repositories.news.database.NewsModel
 
 @JsonClass(generateAdapter = true)

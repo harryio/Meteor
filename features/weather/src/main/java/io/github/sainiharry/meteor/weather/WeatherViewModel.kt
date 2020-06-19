@@ -3,7 +3,7 @@ package io.github.sainiharry.meteor.weather
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import io.github.sainiharry.meteor.common.Weather
+import io.github.sainiharry.meteor.common.model.Weather
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.weatherrepository.WeatherRepository
@@ -85,7 +85,8 @@ internal class WeatherViewModel(
         }
     }
 
-    private fun Single<Weather>.handleWeatherResponse(): Disposable = map(Weather::cityName)
+    private fun Single<Weather>.handleWeatherResponse(): Disposable = map(
+        Weather::cityName)
         .flatMap { cityName ->
             weatherRepository.fetchForecast(cityName)
                 .map {

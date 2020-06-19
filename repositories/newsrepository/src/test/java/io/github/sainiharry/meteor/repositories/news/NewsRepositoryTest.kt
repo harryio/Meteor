@@ -1,6 +1,6 @@
 package io.github.sainiharry.meteor.repositories.news
 
-import io.github.sainiharry.meteor.common.News
+import io.github.sainiharry.meteor.common.model.News
 import io.github.sainiharry.meteor.repositories.news.database.NewsDao
 import io.github.sainiharry.meteor.repositories.news.database.NewsDatabase
 import io.github.sainiharry.meteor.repositories.news.network.NewsResponse

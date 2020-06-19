@@ -1,7 +1,7 @@
 package io.github.sainiharry.meteor.repositories.news.database
 
 import androidx.room.*
-import io.github.sainiharry.meteor.common.News
+import io.github.sainiharry.meteor.common.model.News
 import io.reactivex.Single
 
 @Dao

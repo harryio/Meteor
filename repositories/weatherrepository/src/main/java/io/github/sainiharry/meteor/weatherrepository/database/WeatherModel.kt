@@ -2,7 +2,7 @@ package io.github.sainiharry.meteor.weatherrepository.database
 
 import androidx.room.Embedded
 import androidx.room.Entity
-import io.github.sainiharry.meteor.common.Weather
+import io.github.sainiharry.meteor.common.model.Weather
 
 /**
  * Room representation of Weather

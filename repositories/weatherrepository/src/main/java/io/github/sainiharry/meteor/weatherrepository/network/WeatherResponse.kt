@@ -2,7 +2,7 @@ package io.github.sainiharry.meteor.weatherrepository.network
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import io.github.sainiharry.meteor.common.Weather
+import io.github.sainiharry.meteor.common.model.Weather
 
 @JsonClass(generateAdapter = true)
 internal data class WeatherResponse(
@@ -33,15 +33,16 @@ internal data class WeatherSysResponse(
     val country: String
 )
 
-internal fun WeatherResponse.toWeather(): Weather = Weather(
-    weather[0].id,
-    weather[0].main,
-    weather[0].icon,
-    cityId,
-    cityName,
-    weatherInfo.temp,
-    weatherInfo.minTemp,
-    weatherInfo.maxTemp,
-    weatherSys.country,
-    dt
-)
+internal fun WeatherResponse.toWeather(): Weather =
+    Weather(
+        weather[0].id,
+        weather[0].main,
+        weather[0].icon,
+        cityId,
+        cityName,
+        weatherInfo.temp,
+        weatherInfo.minTemp,
+        weatherInfo.maxTemp,
+        weatherSys.country,
+        dt
+    )

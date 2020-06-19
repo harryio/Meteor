@@ -3,7 +3,7 @@ package io.github.sainiharry.meteor.weather
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import io.github.sainiharry.meteor.common.Weather
+import io.github.sainiharry.meteor.common.model.Weather
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.weatherrepository.WeatherRepository
 import io.reactivex.Single
@@ -247,4 +247,15 @@ fun mockWeather(
     minTemp: Float = 43.1f,
     country: String = "US",
     timestamp: Long = System.currentTimeMillis()
-) = Weather(id, main, icon, cityId, cityName, temp, maxTemp, minTemp, country, timestamp)
+) = Weather(
+    id,
+    main,
+    icon,
+    cityId,
+    cityName,
+    temp,
+    maxTemp,
+    minTemp,
+    country,
+    timestamp
+)

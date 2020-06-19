@@ -2,7 +2,7 @@ package io.github.sainiharry.meteor.repositories.news
 
 import android.content.Context
 import androidx.room.Room
-import io.github.sainiharry.meteor.common.News
+import io.github.sainiharry.meteor.common.model.News
 import io.github.sainiharry.meteor.network.NetworkInteractor
 import io.github.sainiharry.meteor.repositories.news.database.NewsDatabase
 import io.github.sainiharry.meteor.repositories.news.network.NewsApi

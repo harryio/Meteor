@@ -2,7 +2,7 @@ package io.github.sainiharry.meteor.weatherrepository.network
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import io.github.sainiharry.meteor.common.Weather
+import io.github.sainiharry.meteor.common.model.Weather
 import io.github.sainiharry.meteor.weatherrepository.database.ForecastModel
 
 @JsonClass(generateAdapter = true)
