@@ -5,6 +5,7 @@ ext {
     def coilVersion = '0.11.0'
     def locationVersion = '17.0.0'
     def preferenceVersion = "1.1.0"
+    def sqlDelightVersion = "1.3.0"
 
     def retrofitVersion = '2.8.1'
     def moshiVersion = '1.9.2'
@@ -69,6 +70,11 @@ ext {
     room = [
             "androidx.room:room-runtime:$roomVersion",
             "androidx.room:room-rxjava2:$roomVersion"
+    ]
+
+    sqlDelight = [
+            "com.squareup.sqldelight:android-driver:$sqlDelightVersion",
+            "com.squareup.sqldelight:rxjava2-extensions:$sqlDelightVersion"
     ]
 
     compilerLibraries = [
