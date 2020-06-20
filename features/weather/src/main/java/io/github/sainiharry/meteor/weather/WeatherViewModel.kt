@@ -49,10 +49,7 @@ internal class WeatherViewModel(
 
     fun handleUserLocation(lat: Double, lng: Double) {
         location = lat to lng
-        _loading.value = Event(true)
-        disposables.add(
-            weatherRepository.fetchCurrentWeather(lat, lng).handleWeatherResponse()
-        )
+        refresh()
     }
 
     fun refresh() {
@@ -86,7 +83,8 @@ internal class WeatherViewModel(
     }
 
     private fun Single<Weather>.handleWeatherResponse(): Disposable = map(
-        Weather::cityName)
+        Weather::cityName
+    )
         .flatMap { cityName ->
             weatherRepository.fetchForecast(cityName)
                 .map {

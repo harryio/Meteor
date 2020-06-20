@@ -1,11 +1,11 @@
 CREATE TABLE SearchModel(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    searchQuery TEXT NOT NULL
+    searchQuery TEXT UNIQUE NOT NULL
 );
 
 selectSearchQueries:
-SELECT * FROM SearchModel ORDER BY id LIMIT 5;
+SELECT * FROM SearchModel ORDER BY id DESC LIMIT 5;
 
 insert:
-INSERT INTO SearchModel(searchQuery)
+INSERT OR IGNORE INTO SearchModel(searchQuery)
 VALUES(?);

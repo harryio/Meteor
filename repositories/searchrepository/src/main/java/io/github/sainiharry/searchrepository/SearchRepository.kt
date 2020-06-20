@@ -19,14 +19,15 @@ interface SearchRepository {
     companion object {
         private var searchRepository: SearchRepository? = null
 
-        internal fun getInstance(databaseProvider: () -> Database) {
+        internal fun getInstance(databaseProvider: () -> Database): SearchRepository =
             searchRepository ?: SearchRepositoryImpl(databaseProvider()).also {
                 searchRepository = it
             }
-        }
     }
 
     fun getSearchQueries(): Single<List<Search>>
+
+    fun handleSearchQuery(searchQuery: String)
 }
 
 internal class SearchRepositoryImpl(private val database: Database) : SearchRepository {
@@ -39,6 +40,9 @@ internal class SearchRepositoryImpl(private val database: Database) : SearchRepo
                     .map(SearchModel::toSearch)
                     .toList()
             }
+
+    override fun handleSearchQuery(searchQuery: String) = database.searchQueries.insert(searchQuery)
+
 }
 
 internal fun SearchModel.toSearch() = Search(id, searchQuery)

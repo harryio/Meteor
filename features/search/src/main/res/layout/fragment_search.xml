@@ -10,7 +10,7 @@
             type="io.github.sainiharry.meteor.search.SearchViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SearchFragment">
@@ -21,9 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/search_city"
+            app:boxBackgroundColor="@android:color/white"
             app:endIconDrawable="@drawable/ic_done"
             app:endIconMode="custom"
-            app:boxBackgroundColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:startIconDrawable="@drawable/ic_search">
@@ -33,16 +33,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionSearch"
-                android:inputType="text"
+                android:inputType="textCapWords"
                 android:text="@={model.searchTextInput}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/recent_searches_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_m"
+            android:layout_marginTop="@dimen/size_l"
+            android:text="@string/recent_searches"
+            android:textAppearance="?textAppearanceSubtitle2"
+            app:isVisible="@{safeUnbox(model.recentSearchLabelVisible)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_input_layout" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/size_xs"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recent_searches_label"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_search" />
 
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

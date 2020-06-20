@@ -53,6 +53,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(":network")
     implementation project(":common")
+    implementation project(":repositories:searchrepository")
 
     implementation libraries.kotlinStdLib
     implementation libraries.rxJava

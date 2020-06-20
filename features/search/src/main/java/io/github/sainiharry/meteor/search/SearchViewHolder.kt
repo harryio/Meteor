@@ -2,8 +2,8 @@ package io.github.sainiharry.meteor.search
 
 import androidx.recyclerview.widget.RecyclerView
 import io.github.sainiharry.meteor.common.ItemClickListener
+import io.github.sainiharry.meteor.common.model.Search
 import io.github.sainiharry.meteor.search.databinding.ItemSearchBinding
-import io.github.sainiharry.searchrepository.Search
 
 internal class SearchViewHolder(
     private val itemSearchBinding: ItemSearchBinding,
@@ -22,6 +22,8 @@ internal class SearchViewHolder(
     }
 
     fun bind(query: Search) {
-        itemSearchBinding.searchQuery.text = query.searchQuery
+        this@SearchViewHolder.search = query
+        itemSearchBinding.search = query
+        itemSearchBinding.executePendingBindings()
     }
 }

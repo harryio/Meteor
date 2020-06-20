@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,15 +9,23 @@
             type="io.github.sainiharry.meteor.common.model.Search" />
     </data>
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/searchQuery"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:minHeight="?listPreferredItemHeight"
-        android:paddingStart="@dimen/size_m"
-        android:paddingEnd="@dimen/size_m"
-        android:text="@{search.searchQuery}"
-        android:textAppearance="?textAppearanceBody1"
-        tools:text="@tools:sample/full_names" />
+        android:foreground="?selectableItemBackground">
+
+        <TextView
+            android:id="@+id/searchQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="?listPreferredItemHeight"
+            android:paddingStart="@dimen/size_m"
+            android:paddingEnd="@dimen/size_m"
+            android:text="@{search.searchQuery}"
+            android:textAppearance="?textAppearanceBody1"
+            tools:text="@tools:sample/full_names" />
+
+    </FrameLayout>
+
 </layout>

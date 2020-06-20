@@ -19,7 +19,7 @@ import coil.api.load
 import com.google.android.gms.location.LocationServices
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.commonfeature.EventObserver
-import io.github.sainiharry.meteor.search.SearchViewModel
+import io.github.sainiharry.meteor.search.searchViewModel
 import io.github.sainiharry.meteor.weather.databinding.FragmentWeatherBinding
 import io.github.sainiharry.meteor.weather.forecast.ForecastAdapter
 import io.github.sainiharry.meteor.weatherrepository.getWeatherRepository
@@ -43,7 +43,7 @@ class WeatherFragment : BaseFragment() {
         }
     })
 
-    private val searchViewModel by activityViewModels<SearchViewModel>()
+    private val searchViewModel by searchViewModel()
 
     private val weatherInfoViewModel by activityViewModels<WeatherInfoViewModel>()
 
@@ -138,8 +138,7 @@ class WeatherFragment : BaseFragment() {
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
         LocationServices.getFusedLocationProviderClient(requireContext()).lastLocation.addOnSuccessListener {
-            val searchQuery = searchViewModel.searchText.value
-            if (searchQuery.isNullOrEmpty() || searchQuery.isBlank()) {
+            if (it != null) {
                 model.handleUserLocation(it.latitude, it.longitude)
             }
         }

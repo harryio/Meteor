@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.transition.MaterialFadeThrough
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.commonfeature.EventObserver
 import io.github.sainiharry.meteor.commonfeature.hideKeyboard
@@ -17,13 +15,14 @@ import io.github.sainiharry.meteor.search.databinding.FragmentSearchBinding
 
 class SearchFragment : BaseFragment() {
 
-    private val model by activityViewModels<SearchViewModel>()
+    private val model by searchViewModel()
 
     private lateinit var binding: FragmentSearchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enterTransition = MaterialFadeThrough()
+
+        model.loadSearchData()
     }
 
     override fun onCreateView(
@@ -40,7 +39,6 @@ class SearchFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.searchText.showKeyboard()
-
         binding.searchText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 model.handleSearchDone()
@@ -49,13 +47,19 @@ class SearchFragment : BaseFragment() {
                 false
             }
         }
-
         binding.searchInputLayout.setEndIconOnClickListener {
             model.handleSearchDone()
         }
 
+        val adapter = SearchAdapter(model)
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.adapter = adapter
+
         model.navigateBackEvent.observe(viewLifecycleOwner, EventObserver {
             findNavController().popBackStack()
+        })
+        model.recentSearchQueries.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
         })
     }
 

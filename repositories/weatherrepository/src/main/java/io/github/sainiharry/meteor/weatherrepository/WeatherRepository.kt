@@ -11,6 +11,8 @@ import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.database.toWeather
 import io.github.sainiharry.meteor.weatherrepository.network.*
 import io.github.sainiharry.meteor.weatherrepository.network.toWeather
+import io.github.sainiharry.searchrepository.SearchRepository
+import io.github.sainiharry.searchrepository.getSearchRepository
 import io.reactivex.Scheduler
 import io.reactivex.Single
 
@@ -38,7 +40,11 @@ fun getWeatherRepository(
             WeatherDatabase::class.java,
             DATABASE_NAME
         ).build()
-    })
+    },
+    searchRepositoryProvider = {
+        getSearchRepository(applicationContext)
+    }
+)
 
 /**
  * Repository for accessing data related to weather
@@ -51,10 +57,12 @@ interface WeatherRepository {
 
         internal fun getInstance(
             openWeatherServiceProvider: () -> OpenWeatherService,
-            weatherDatabaseProvider: () -> WeatherDatabase
+            weatherDatabaseProvider: () -> WeatherDatabase,
+            searchRepositoryProvider: () -> SearchRepository
         ): WeatherRepository = weatherRepository ?: WeatherRepositoryImpl(
             openWeatherServiceProvider(),
-            weatherDatabaseProvider()
+            weatherDatabaseProvider(),
+            searchRepositoryProvider()
         ).also {
             weatherRepository = it
         }
@@ -99,7 +107,8 @@ interface WeatherRepository {
 
 internal class WeatherRepositoryImpl(
     private val openWeatherService: OpenWeatherService,
-    private val weatherDatabase: WeatherDatabase
+    private val weatherDatabase: WeatherDatabase,
+    private val searchRepository: SearchRepository
 ) :
     WeatherRepository {
 
@@ -108,6 +117,9 @@ internal class WeatherRepositoryImpl(
             .map(WeatherResponse::toWeather)
             .doOnSuccess { weather ->
                 weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
+            }
+            .doOnSuccess {
+                searchRepository.handleSearchQuery(cityName)
             }
 
     override fun fetchCurrentWeather(lat: Double, lon: Double): Single<Weather> =
