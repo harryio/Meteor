@@ -70,6 +70,11 @@ internal class WeatherViewModel(
 
     fun handleUserQuery(userQuery: String?) {
         this@WeatherViewModel.userQuery = userQuery
+
+        if (userQuery == cityNameLiveData.value) {
+            return
+        }
+
         loadWeatherData(userQuery)
     }
 
