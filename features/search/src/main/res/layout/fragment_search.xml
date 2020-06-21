@@ -26,7 +26,7 @@
             app:endIconMode="custom"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:startIconDrawable="@drawable/ic_search">
+            app:startIconDrawable="@drawable/ic_back">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/search_text"

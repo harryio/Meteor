@@ -50,6 +50,9 @@ class SearchFragment : BaseFragment() {
         binding.searchInputLayout.setEndIconOnClickListener {
             model.handleSearchDone()
         }
+        binding.searchInputLayout.setStartIconOnClickListener {
+            findNavController().popBackStack()
+        }
 
         val adapter = SearchAdapter(model)
         binding.recyclerView.setHasFixedSize(true)
