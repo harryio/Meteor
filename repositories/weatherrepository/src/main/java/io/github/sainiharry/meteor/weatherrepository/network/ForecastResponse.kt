@@ -20,11 +20,27 @@ internal data class ForecastWeather(
 @JsonClass(generateAdapter = true)
 internal data class ForecastWeatherLocation(val id: Long, val name: String, val country: String)
 
+internal fun ForecastResponse.toForecastModelList(): List<ForecastModel> = list.map {
+    it.toForecastModel(city)
+}
+
+private fun ForecastWeather.toForecastModel(forecastWeatherLocation: ForecastWeatherLocation): ForecastModel =
+    ForecastModel(
+        0,
+        weatherConditions[0].main,
+        weatherConditions[0].icon,
+        forecastWeatherLocation.id,
+        forecastWeatherLocation.name,
+        weatherInfoResponse.temp,
+        weatherInfoResponse.maxTemp,
+        weatherInfoResponse.minTemp,
+        forecastWeatherLocation.country,
+        dt
+    )
+
 internal fun ForecastResponse.toWeatherList(): List<Weather> = list.map {
     it.toWeather(city)
 }
-
-internal fun List<Weather>.toForecastModelList() = map { ForecastModel(it) }
 
 private fun ForecastWeather.toWeather(forecastWeatherLocation: ForecastWeatherLocation): Weather =
     Weather(

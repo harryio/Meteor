@@ -1,25 +1,21 @@
 package io.github.sainiharry.meteor.weatherrepository.database
 
-import androidx.room.Embedded
 import androidx.room.Entity
-import io.github.sainiharry.meteor.common.model.Weather
+import androidx.room.PrimaryKey
 
 /**
  * Room representation of Weather Forecast
  */
-@Entity(primaryKeys = ["id"])
-internal data class ForecastModel(@Embedded val weather: Weather)
-
-internal fun ForecastModel.toWeather() =
-    Weather(
-        weather.id,
-        weather.main,
-        weather.icon,
-        weather.cityId,
-        weather.cityName,
-        weather.temp,
-        weather.minTemp,
-        weather.maxTemp,
-        weather.country,
-        weather.timestamp
-    )
+@Entity
+internal data class ForecastModel(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val main: String,
+    val icon: String,
+    val cityId: Long,
+    val cityName: String,
+    val temp: Float,
+    val maxTemp: Float,
+    val minTemp: Float,
+    val country: String,
+    val timestamp: Long
+)

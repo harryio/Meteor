@@ -23,7 +23,8 @@ internal class ForecastViewHolder(private val binding: ItemForecastBinding) :
             crossfade(true)
         }
 
-        binding.forecastWeatherTime.text = DateFormat.format(TIMESTAMP_FORMAT, weather.timestamp * 1000)
+        binding.forecastWeatherTime.text =
+            DateFormat.format(TIMESTAMP_FORMAT, weather.timestamp * 1000)
         binding.executePendingBindings()
     }
 }

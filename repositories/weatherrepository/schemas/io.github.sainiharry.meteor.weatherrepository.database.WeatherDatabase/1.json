@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9fdba594100af8f9a800b8d3859fbda0",
+    "identityHash": "6e9ffee323e9cc279d32b0ac56996233",
     "entities": [
       {
         "tableName": "WeatherModel",
@@ -80,64 +80,64 @@
       },
       {
         "tableName": "ForecastModel",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `main` TEXT NOT NULL, `icon` TEXT NOT NULL, `cityId` INTEGER NOT NULL, `cityName` TEXT NOT NULL, `temp` REAL NOT NULL, `maxTemp` REAL NOT NULL, `minTemp` REAL NOT NULL, `country` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `main` TEXT NOT NULL, `icon` TEXT NOT NULL, `cityId` INTEGER NOT NULL, `cityName` TEXT NOT NULL, `temp` REAL NOT NULL, `maxTemp` REAL NOT NULL, `minTemp` REAL NOT NULL, `country` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)",
         "fields": [
           {
-            "fieldPath": "weather.id",
+            "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "weather.main",
+            "fieldPath": "main",
             "columnName": "main",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "weather.icon",
+            "fieldPath": "icon",
             "columnName": "icon",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "weather.cityId",
+            "fieldPath": "cityId",
             "columnName": "cityId",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "weather.cityName",
+            "fieldPath": "cityName",
             "columnName": "cityName",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "weather.temp",
+            "fieldPath": "temp",
             "columnName": "temp",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "weather.maxTemp",
+            "fieldPath": "maxTemp",
             "columnName": "maxTemp",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "weather.minTemp",
+            "fieldPath": "minTemp",
             "columnName": "minTemp",
             "affinity": "REAL",
             "notNull": true
           },
           {
-            "fieldPath": "weather.country",
+            "fieldPath": "country",
             "columnName": "country",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "weather.timestamp",
+            "fieldPath": "timestamp",
             "columnName": "timestamp",
             "affinity": "INTEGER",
             "notNull": true
@@ -147,7 +147,7 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -156,7 +156,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9fdba594100af8f9a800b8d3859fbda0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6e9ffee323e9cc279d32b0ac56996233')"
     ]
   }
 }

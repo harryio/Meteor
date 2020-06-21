@@ -137,15 +137,12 @@ internal class WeatherRepositoryImpl(
 
     override fun fetchForecast(cityName: String): Single<List<Weather>> =
         openWeatherService.getForecast(cityName, 3, UNIT_METRIC)
-            .map(ForecastResponse::toWeatherList)
-            .doOnSuccess { forecastList ->
-                weatherDatabase.weatherDao().insertForecast(forecastList.toForecastModelList())
+            .doOnSuccess { forecastResponseList ->
+                weatherDatabase.weatherDao()
+                    .insertForecast(forecastResponseList.toForecastModelList())
             }
+            .map { it.toWeatherList() }
 
     override fun getForecastListener(cityName: String): LiveData<List<Weather>> =
-        Transformations.map(
-            weatherDatabase.weatherDao().getForecastListener(cityName)
-        ) { forecastModelList ->
-            forecastModelList.map { it.toWeather() }
-        }
+        weatherDatabase.weatherDao().getForecastListener(cityName)
 }
