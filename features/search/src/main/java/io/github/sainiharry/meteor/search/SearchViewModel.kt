@@ -48,9 +48,7 @@ class SearchViewModel(
     }
 
     internal fun handleSearchDone() {
-        searchTextInput.value?.let {
-            onSearchQueryAvailable(it)
-        }
+        onSearchQueryAvailable(searchTextInput.value)
     }
 
     internal fun loadSearchData() {
@@ -66,7 +64,7 @@ class SearchViewModel(
         onSearchQueryAvailable(item.searchQuery)
     }
 
-    private fun onSearchQueryAvailable(searchQuery: String) {
+    private fun onSearchQueryAvailable(searchQuery: String?) {
         _searchText.value = searchQuery
         _navigateBackEvent.value = Event(Any())
         searchTextInput.value = ""

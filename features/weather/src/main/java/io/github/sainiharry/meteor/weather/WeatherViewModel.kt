@@ -59,7 +59,7 @@ internal class WeatherViewModel(
             }
 
             location != null -> {
-                location?.let { handleUserLocation(it.first, it.second) }
+                location?.let { loadWeatherData(it.first, it.second) }
             }
 
             else -> {
@@ -71,20 +71,25 @@ internal class WeatherViewModel(
     fun handleUserQuery(userQuery: String?) {
         this@WeatherViewModel.userQuery = userQuery
 
-        if (userQuery == cityNameLiveData.value) {
+        if (userQuery.isNullOrEmpty() || userQuery.isBlank() || userQuery == cityNameLiveData.value) {
             return
         }
 
         loadWeatherData(userQuery)
     }
 
+    private fun loadWeatherData(lat: Double, lng: Double) {
+        _loading.value = Event(true)
+        disposables.add(
+            weatherRepository.fetchCurrentWeather(lat, lng).handleWeatherResponse()
+        )
+    }
+
     private fun loadWeatherData(cityName: String?) {
-        if (hasUserQuery) {
-            _loading.value = Event(true)
-            disposables.add(
-                weatherRepository.fetchCurrentWeather(cityName!!).handleWeatherResponse()
-            )
-        }
+        _loading.value = Event(true)
+        disposables.add(
+            weatherRepository.fetchCurrentWeather(cityName!!).handleWeatherResponse()
+        )
     }
 
     private fun Single<Weather>.handleWeatherResponse(): Disposable = map(
