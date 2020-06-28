@@ -47,6 +47,7 @@ dependencies {
 
     implementation libraries.kotlinStdLib
     implementation libraries.rxJava
+    implementation coroutines
 
     implementation androidLibraries
     implementation room

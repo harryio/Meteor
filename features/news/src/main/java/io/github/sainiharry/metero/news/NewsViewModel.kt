@@ -2,12 +2,14 @@ package io.github.sainiharry.metero.news
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import io.github.sainiharry.meteor.common.ItemClickListener
 import io.github.sainiharry.meteor.common.model.News
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.repositories.news.NewsRepository
 import io.reactivex.Scheduler
+import kotlinx.coroutines.launch
 
 internal class NewsViewModel(
     private val newsRepository: NewsRepository,
@@ -38,15 +40,12 @@ internal class NewsViewModel(
             return
         }
 
+        // TODO: 28/06/20 How to handle errors here?
         countryCodeLiveData.value = countryCode
-        _loading.value = Event(true)
-        disposables.add(
-            newsRepository.fetchNews(countryCode)
-                .observeOn(observableScheduler)
-                .doOnEvent { _, _ -> _loading.value = Event(false) }
-                .subscribe({
-                    _news.value = it
-                }, getErrorHandler(R.string.error_fetch_news))
-        )
+        viewModelScope.launch {
+            _loading.value = Event(true)
+            _news.value = newsRepository.fetchNews(countryCode)
+            _loading.value = Event(false)
+        }
     }
 }

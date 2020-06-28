@@ -15,5 +15,5 @@ internal interface NewsService {
      * @return a [Single] which will emit network response when subscribed
      */
     @GET("top-headlines")
-    fun fetchNews(@Query("country") country: String): Single<NewsResponseWrapper>
+    suspend fun fetchNews(@Query("country") country: String): NewsResponseWrapper
 }

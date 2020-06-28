@@ -49,6 +49,7 @@ dependencies {
     implementation libraries.rxJava
     implementation libraries.rxAndroid
     implementation libraries.location
+    implementation coroutines
 
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries

@@ -60,19 +60,20 @@ interface NewsRepository {
      * @param countryCode country code for which news data is required
      * @return a [Single] which will emit news data when subscribed
      */
-    fun fetchNews(countryCode: String): Single<List<News>>
+    suspend fun fetchNews(countryCode: String): List<News>
 }
 
 internal class NewsRepositoryImpl(
     private val newsService: NewsService,
-    private val newsDatabase: NewsDatabase
+    newsDatabase: NewsDatabase
 ) : NewsRepository {
 
-    override fun fetchNews(countryCode: String): Single<List<News>> =
-        newsService.fetchNews(countryCode)
-            .map { it.articles }
-            .doOnSuccess {
-                newsDatabase.newsDao().clearAndInsertNews(it.toNewsModelList())
-            }
-            .flatMap { newsDatabase.newsDao().getAllNews() }
+    private val newsDao = newsDatabase.newsDao()
+
+    override suspend fun fetchNews(countryCode: String): List<News> {
+        val networkResponse = newsService.fetchNews(countryCode)
+        val articles = networkResponse.articles
+        newsDao.clearAndInsertNews(articles.toNewsModelList())
+        return newsDao.getAllNews()
+    }
 }

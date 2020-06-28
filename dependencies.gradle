@@ -1,5 +1,6 @@
 ext {
     def kotlinVersion = '1.3.72'
+    def coroutinesVersion = '1.3.7'
     def rxJavaVersion = "2.2.19"
     def rxAndroidVersion = '2.1.1'
     def coilVersion = '0.11.0'
@@ -69,7 +70,8 @@ ext {
 
     room = [
             "androidx.room:room-runtime:$roomVersion",
-            "androidx.room:room-rxjava2:$roomVersion"
+            "androidx.room:room-rxjava2:$roomVersion",
+            "androidx.room:room-ktx:$roomVersion"
     ]
 
     sqlDelight = [
@@ -98,5 +100,10 @@ ext {
             "androidx.navigation:navigation-runtime-ktx:$navigationVersion",
             "androidx.navigation:navigation-fragment-ktx:$navigationVersion",
             "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    ]
+
+    coroutines = [
+            "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion",
+            "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7"
     ]
 }
