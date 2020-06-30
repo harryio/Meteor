@@ -8,12 +8,12 @@ import io.github.sainiharry.meteor.common.model.News
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.repositories.news.NewsRepository
-import io.reactivex.Scheduler
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 internal class NewsViewModel(
     private val newsRepository: NewsRepository,
-    private val observableScheduler: Scheduler
+    private val defaultDispatcher: CoroutineDispatcher
 ) : BaseViewModel(), ItemClickListener<News> {
 
     private val countryCodeLiveData = MutableLiveData<String>()
@@ -40,12 +40,16 @@ internal class NewsViewModel(
             return
         }
 
-        // TODO: 28/06/20 How to handle errors here?
         countryCodeLiveData.value = countryCode
-        viewModelScope.launch {
-            _loading.value = Event(true)
-            _news.value = newsRepository.fetchNews(countryCode)
-            _loading.value = Event(false)
+        viewModelScope.launch(defaultDispatcher) {
+            try {
+                _loading.value = Event(true)
+                _news.value = newsRepository.fetchNews(countryCode)
+            } catch (e: Exception) {
+                handleError(e, R.string.error_fetch_news)
+            } finally {
+                _loading.value = Event(false)
+            }
         }
     }
 }

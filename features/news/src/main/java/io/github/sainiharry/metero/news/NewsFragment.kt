@@ -16,8 +16,8 @@ import io.github.sainiharry.meteor.commonfeature.EventObserver
 import io.github.sainiharry.meteor.repositories.news.getNewsRepository
 import io.github.sainiharry.meteor.weather.WeatherInfoViewModel
 import io.github.sainiharry.metero.news.databinding.FragmentNewsBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 
 class NewsFragment : BaseFragment() {
 
@@ -27,7 +27,7 @@ class NewsFragment : BaseFragment() {
                 @Suppress("UNCHECKED_CAST")
                 return NewsViewModel(
                     getNewsRepository(Schedulers.io(), requireContext().applicationContext),
-                    AndroidSchedulers.mainThread()
+                    Dispatchers.Main.immediate
                 ) as T
             }
         }

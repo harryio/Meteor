@@ -1,13 +1,12 @@
 package io.github.sainiharry.metero.news
 
-import android.accounts.NetworkErrorException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import io.github.sainiharry.meteor.common.model.News
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.repositories.news.NewsRepository
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -38,19 +37,19 @@ class NewsViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+
     private lateinit var model: NewsViewModel
 
     private val countryCode = "GB"
 
     @Before
     fun setup() {
-        model = NewsViewModel(newsRepository, Schedulers.trampoline())
+        model = NewsViewModel(newsRepository, testCoroutineDispatcher)
         model.news.observeForever(newsObserver)
         model.viewNewsEvent.observeForever(viewNewsEventObserver)
         model.loading.observeForever(loadingObserver)
         model.error.observeForever(errorObserver)
-        `when`(newsRepository.fetchNews(countryCode))
-            .thenReturn(Single.just(listOf(mockNews())))
     }
 
     @After
@@ -62,7 +61,9 @@ class NewsViewModelTest {
     }
 
     @Test
-    fun testSuccessNewsFetch() {
+    fun testSuccessNewsFetch() = runBlockingTest {
+        `when`(newsRepository.fetchNews(countryCode)).thenReturn(listOf(mockNews()))
+
         model.handleCountry(countryCode)
         verify(loadingObserver).onChanged(Event(true))
         verify(newsObserver).onChanged(listOf(mockNews()))
@@ -73,8 +74,8 @@ class NewsViewModelTest {
     }
 
     @Test
-    fun testNewsFetchError() {
-        `when`(newsRepository.fetchNews(countryCode)).thenReturn(Single.error(NetworkErrorException()))
+    fun testNewsFetchError() = runBlockingTest {
+        `when`(newsRepository.fetchNews(countryCode)).thenThrow(RuntimeException())
         model.handleCountry(countryCode)
         verify(loadingObserver).onChanged(Event(true))
         verify(loadingObserver).onChanged(Event(false))
@@ -96,7 +97,8 @@ class NewsViewModelTest {
     }
 
     @Test
-    fun testRefresh() {
+    fun testRefresh() = runBlockingTest {
+        `when`(newsRepository.fetchNews(countryCode)).thenReturn(listOf(mockNews()))
         model.refresh()
         verify(loadingObserver).onChanged(Event(false))
 

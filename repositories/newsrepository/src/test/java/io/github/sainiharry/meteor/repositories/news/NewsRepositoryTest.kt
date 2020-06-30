@@ -7,7 +7,8 @@ import io.github.sainiharry.meteor.repositories.news.network.NewsResponse
 import io.github.sainiharry.meteor.repositories.news.network.NewsResponseWrapper
 import io.github.sainiharry.meteor.repositories.news.network.NewsService
 import io.github.sainiharry.meteor.repositories.news.network.toNewsModelList
-import io.reactivex.Single
+import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -39,16 +40,14 @@ class NewsRepositoryTest {
     }
 
     @Test
-    fun testFetchNews() {
+    fun testFetchNews() = runBlockingTest {
         val mockNewsResponse = mockNewsResponse()
         val mockNews = listOf(mockNews())
-        `when`(newsService.fetchNews(countryCode)).thenReturn(Single.just(mockNewsResponse))
-        `when`(newsDao.getAllNews()).thenReturn(Single.just(mockNews))
+        `when`(newsService.fetchNews(countryCode)).thenReturn(mockNewsResponse)
+        `when`(newsDao.getAllNews()).thenReturn(mockNews)
 
-        val subscription = newsRepository.fetchNews(countryCode).test()
-        subscription.assertNoErrors()
-        subscription.assertValue(mockNews)
-
+        val news = newsRepository.fetchNews(countryCode)
+        assertTrue(news == mockNews)
         verify(newsService).fetchNews(countryCode)
         verify(newsDao).clearAndInsertNews(mockNewsResponse.articles.toNewsModelList())
         verify(newsDao).getAllNews()

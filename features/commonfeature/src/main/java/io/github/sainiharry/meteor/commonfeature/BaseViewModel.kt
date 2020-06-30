@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlin.coroutines.CoroutineContext
 
 open class BaseViewModel : ViewModel() {
 
@@ -32,4 +34,12 @@ open class BaseViewModel : ViewModel() {
 
             _error.value = Event(errorMsgId)
         }
+
+    protected fun handleError(throwable: Throwable, errorMsgId: Int = R.string.error_generic) {
+        if (BuildConfig.DEBUG) {
+            throwable.printStackTrace()
+        }
+
+        _error.value = Event(errorMsgId)
+    }
 }
