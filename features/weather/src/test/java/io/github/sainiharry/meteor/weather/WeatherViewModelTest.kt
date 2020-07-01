@@ -6,8 +6,9 @@ import androidx.lifecycle.Observer
 import io.github.sainiharry.meteor.common.model.Weather
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.weatherrepository.WeatherRepository
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -42,6 +43,8 @@ class WeatherViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+
     private lateinit var model: WeatherViewModel
 
     private val weatherLiveData = MutableLiveData<Weather>()
@@ -54,7 +57,7 @@ class WeatherViewModelTest {
 
     @Before
     fun setup() {
-        model = WeatherViewModel(weatherRepository, Schedulers.trampoline())
+        model = WeatherViewModel(weatherRepository, testCoroutineDispatcher)
         model.weather.observeForever(weatherObserver)
         model.forecast.observeForever(forecastObserver)
         model.loading.observeForever(loadingObserver)
@@ -62,13 +65,18 @@ class WeatherViewModelTest {
         model.isCurrentWeatherVisible.observeForever(weatherViewVisibilityObserver)
 
         val mockWeather = mockWeather()
-        `when`(weatherRepository.fetchCurrentWeather(cityName)).thenReturn(Single.just(mockWeather))
-        `when`(weatherRepository.fetchCurrentWeather(location.first, location.second)).thenReturn(
-            Single.just(mockWeather)
-        )
-        `when`(weatherRepository.fetchForecast(cityName)).thenReturn(Single.just(listOf(mockWeather)))
-        `when`(weatherRepository.getCurrentWeatherListener(cityName)).thenReturn(weatherLiveData)
-        `when`(weatherRepository.getForecastListener(cityName)).thenReturn(forecastLiveData)
+        runBlocking {
+            `when`(weatherRepository.fetchCurrentWeather(cityName)).thenReturn(mockWeather)
+            `when`(
+                weatherRepository.fetchCurrentWeather(
+                    location.first,
+                    location.second
+                )
+            ).thenReturn(mockWeather)
+            `when`(weatherRepository.fetchForecast(cityName)).thenReturn(listOf(mockWeather))
+            `when`(weatherRepository.getCurrentWeatherListener(cityName)).thenReturn(weatherLiveData)
+            `when`(weatherRepository.getForecastListener(cityName)).thenReturn(forecastLiveData)
+        }
     }
 
     @After
@@ -93,7 +101,7 @@ class WeatherViewModelTest {
     }
 
     @Test
-    fun testWeatherEvents() {
+    fun testWeatherEvents() = runBlockingTest {
         model.handleUserQuery(cityName)
 
         verify(loadingObserver).onChanged(Event(true))
@@ -117,7 +125,7 @@ class WeatherViewModelTest {
     }
 
     @Test
-    fun testThatOnlyLatestWeatherWillBeShown() {
+    fun testThatOnlyLatestWeatherWillBeShown() = runBlockingTest {
         model.handleUserQuery(cityName)
         weatherLiveData.value = mockWeather()
         val weather2 = mockWeather(temp = 383.4f)
@@ -126,7 +134,7 @@ class WeatherViewModelTest {
     }
 
     @Test
-    fun testCityChange() {
+    fun testCityChange() = runBlockingTest {
         model.handleUserQuery(cityName)
         verify(loadingObserver).onChanged(Event(true))
         verify(loadingObserver).onChanged(Event(false))
@@ -142,15 +150,11 @@ class WeatherViewModelTest {
         val mockWeather = mockWeather(
             newCity
         )
-        `when`(weatherRepository.fetchCurrentWeather(newCity)).thenReturn(
-            Single.just(
-                mockWeather
-            )
-        )
+        `when`(weatherRepository.fetchCurrentWeather(newCity)).thenReturn(mockWeather)
         `when`(weatherRepository.getCurrentWeatherListener(newCity)).thenReturn(
             newCityWeatherLiveData
         )
-        `when`(weatherRepository.fetchForecast(newCity)).thenReturn(Single.just(listOf(mockWeather)))
+        `when`(weatherRepository.fetchForecast(newCity)).thenReturn(listOf(mockWeather))
 
         model.handleUserQuery(newCity)
         verify(loadingObserver, times(2)).onChanged(Event(true))
@@ -169,7 +173,7 @@ class WeatherViewModelTest {
     }
 
     @Test
-    fun testWeatherResultsWithCoordinates() {
+    fun testWeatherResultsWithCoordinates() = runBlockingTest {
         model.handleUserLocation(location.first, location.second)
 
         verify(loadingObserver).onChanged(Event(true))
@@ -193,7 +197,7 @@ class WeatherViewModelTest {
     }
 
     @Test
-    fun testRefresh() {
+    fun testRefresh() = runBlockingTest {
         model.refresh()
         verify(loadingObserver).onChanged(Event(false))
         verifyNoMoreInteractions(loadingObserver)
@@ -211,8 +215,8 @@ class WeatherViewModelTest {
 
         val cityName = "New York"
         val mockWeather = mockWeather(cityName = cityName)
-        `when`(weatherRepository.fetchCurrentWeather(cityName)).thenReturn(Single.just(mockWeather))
-        `when`(weatherRepository.fetchForecast(cityName)).thenReturn(Single.just(listOf(mockWeather)))
+        `when`(weatherRepository.fetchCurrentWeather(cityName)).thenReturn(mockWeather)
+        `when`(weatherRepository.fetchForecast(cityName)).thenReturn(listOf(mockWeather))
         model.handleUserQuery(cityName)
         verify(weatherRepository).fetchCurrentWeather(cityName)
         verify(weatherRepository).fetchForecast(cityName)

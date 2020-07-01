@@ -4,7 +4,9 @@ import io.github.sainiharry.meteor.weatherrepository.database.WeatherDao
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherDatabase
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.network.*
-import io.reactivex.Single
+import io.github.sainiharry.searchrepository.SearchRepository
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,73 +26,83 @@ class WeatherRepositoryTest {
     @Mock
     private lateinit var weatherDao: WeatherDao
 
+    @Mock
+    private lateinit var searchRepository: SearchRepository
+
     private lateinit var weatherRepository: WeatherRepository
 
+    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+
     private val cityName = "London"
+
+    private val metric = "metric"
 
     private val location = 23.3 to 48.3
 
     @Before
     fun setup() {
         `when`(weatherDatabase.weatherDao()).thenReturn(weatherDao)
-        weatherRepository = WeatherRepositoryImpl(openWeatherService, weatherDatabase)
+        weatherRepository =
+            WeatherRepositoryImpl(
+                openWeatherService,
+                weatherDatabase,
+                searchRepository,
+                testCoroutineDispatcher
+            )
     }
 
     @Test
-    fun testFetchCurrentWeatherForCity() {
+    fun testFetchCurrentWeatherForCity() = runBlockingTest {
         val mockWeatherResponse = mockWeatherResponse()
         val weather = mockWeatherResponse.toWeather()
         val currentWeatherModel = WeatherModel(weather)
-        `when`(openWeatherService.getCurrentWeather(cityName)).thenReturn(
-            Single.just(
-                mockWeatherResponse
-            )
+        `when`(openWeatherService.getCurrentWeather(cityName, metric)).thenReturn(
+            mockWeatherResponse
         )
 
-        val subscription = weatherRepository.fetchCurrentWeather(cityName).test()
-        subscription.assertNoErrors()
-        subscription.assertValue(weather)
-
-        verify(openWeatherService).getCurrentWeather(cityName)
+        val responseWeather = weatherRepository.fetchCurrentWeather(cityName)
+        assert(responseWeather == weather)
+        verify(openWeatherService).getCurrentWeather(cityName, metric)
         verify(weatherDao).insertWeather(currentWeatherModel)
         verifyNoMoreInteractions(openWeatherService)
         verifyNoMoreInteractions(weatherDao)
     }
 
     @Test
-    fun testFetchWeatherForLocation() {
+    fun testFetchWeatherForLocation() = runBlockingTest {
         val mockWeatherResponse = mockWeatherResponse()
         val weather = mockWeatherResponse.toWeather()
         val currentWeatherModel = WeatherModel(weather)
-        `when`(openWeatherService.getCurrentWeather(location.first, location.second)).thenReturn(
-            Single.just(
-                mockWeatherResponse
+        `when`(
+            openWeatherService.getCurrentWeather(
+                location.first,
+                location.second,
+                metric
             )
-        )
+        ).thenReturn(mockWeatherResponse)
 
-        val subscription =
-            weatherRepository.fetchCurrentWeather(location.first, location.second).test()
-        subscription.assertNoErrors()
-        subscription.assertValue(weather)
+        val responseWeather = weatherRepository.fetchCurrentWeather(location.first, location.second)
+        assert(responseWeather == weather)
 
-        verify(openWeatherService).getCurrentWeather(location.first, location.second)
+        verify(openWeatherService).getCurrentWeather(location.first, location.second, metric)
         verify(weatherDao).insertWeather(currentWeatherModel)
         verifyNoMoreInteractions(openWeatherService)
         verifyNoMoreInteractions(weatherDao)
     }
 
     @Test
-    fun testFetchForecastForCity() {
+    fun testFetchForecastForCity() = runBlockingTest {
         val mockForecastResponse = mockForecastResponse()
         val weatherList = mockForecastResponse.toWeatherList()
-        `when`(openWeatherService.getForecast(cityName)).thenReturn(Single.just(mockForecastResponse))
+        val count = 3
+        `when`(openWeatherService.getForecast(cityName, count, metric)).thenReturn(
+            mockForecastResponse
+        )
 
-        val subscription = weatherRepository.fetchForecast(cityName).test()
-        subscription.assertNoErrors()
-        subscription.assertValue(weatherList)
-
-        verify(openWeatherService).getForecast(cityName)
-        verify(weatherDao).insertForecast(weatherList.toForecastModelList())
+        val forecastWeather = weatherRepository.fetchForecast(cityName)
+        assert(forecastWeather == weatherList)
+        verify(openWeatherService).getForecast(cityName, count, metric)
+        verify(weatherDao).insertForecast(mockForecastResponse.toForecastModelList())
         verifyNoMoreInteractions(openWeatherService)
         verifyNoMoreInteractions(weatherDao)
     }

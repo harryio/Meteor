@@ -76,7 +76,8 @@ ext {
 
     sqlDelight = [
             "com.squareup.sqldelight:android-driver:$sqlDelightVersion",
-            "com.squareup.sqldelight:rxjava2-extensions:$sqlDelightVersion"
+            "com.squareup.sqldelight:rxjava2-extensions:$sqlDelightVersion",
+            "com.squareup.sqldelight:coroutines-extensions:$sqlDelightVersion"
     ]
 
     compilerLibraries = [

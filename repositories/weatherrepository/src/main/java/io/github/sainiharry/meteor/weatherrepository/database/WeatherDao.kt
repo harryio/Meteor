@@ -11,13 +11,13 @@ import io.github.sainiharry.meteor.common.model.Weather
 internal interface WeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWeather(weatherModel: WeatherModel)
+    suspend fun insertWeather(weatherModel: WeatherModel)
 
     @Query("SELECT * FROM WeatherModel WHERE WeatherModel.cityName = :cityName")
     fun getCurrentWeatherListener(cityName: String): LiveData<WeatherModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertForecast(forecasts: List<ForecastModel>)
+    suspend fun insertForecast(forecasts: List<ForecastModel>)
 
     @Query("SELECT * FROM ForecastModel WHERE ForecastModel.cityName = :cityName GROUP BY ForecastModel.timestamp ORDER BY ForecastModel.timestamp DESC LIMIT 3")
     fun getForecastListener(cityName: String): LiveData<List<Weather>>

@@ -3,17 +3,17 @@ package io.github.sainiharry.meteor.weather
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import io.github.sainiharry.meteor.common.model.Weather
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.meteor.weatherrepository.WeatherRepository
-import io.reactivex.Scheduler
-import io.reactivex.Single
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
 
 internal class WeatherViewModel(
     private val weatherRepository: WeatherRepository,
-    private val observableScheduler: Scheduler
+    private val defaultDispatcher: CoroutineDispatcher
 ) : BaseViewModel() {
 
     private var userQuery: String? = null
@@ -45,7 +45,7 @@ internal class WeatherViewModel(
         }
     }
 
-    var location: Pair<Double, Double>? = null
+    private var location: Pair<Double, Double>? = null
 
     fun handleUserLocation(lat: Double, lng: Double) {
         location = lat to lng
@@ -78,34 +78,28 @@ internal class WeatherViewModel(
         loadWeatherData(userQuery)
     }
 
-    private fun loadWeatherData(lat: Double, lng: Double) {
-        _loading.value = Event(true)
-        disposables.add(
-            weatherRepository.fetchCurrentWeather(lat, lng).handleWeatherResponse()
-        )
+    private fun loadWeatherData(lat: Double, lng: Double) = loadWeatherData {
+        weatherRepository.fetchCurrentWeather(lat, lng)
     }
 
-    private fun loadWeatherData(cityName: String?) {
-        _loading.value = Event(true)
-        disposables.add(
-            weatherRepository.fetchCurrentWeather(cityName!!).handleWeatherResponse()
-        )
+    private fun loadWeatherData(cityName: String?) = cityName?.let {
+        loadWeatherData {
+            weatherRepository.fetchCurrentWeather(cityName)
+        }
     }
 
-    private fun Single<Weather>.handleWeatherResponse(): Disposable = map(
-        Weather::cityName
-    )
-        .flatMap { cityName ->
-            weatherRepository.fetchForecast(cityName)
-                .map {
-                    cityName
-                }
+    private fun loadWeatherData(weatherFetcher: suspend () -> Weather) {
+        viewModelScope.launch(defaultDispatcher) {
+            try {
+                _loading.value = Event(true)
+                val weather = weatherFetcher()
+                weatherRepository.fetchForecast(weather.cityName)
+                cityNameLiveData.value = weather.cityName
+            } catch (e: Exception) {
+                handleError(e, R.string.error_current_weather_fetch)
+            } finally {
+                _loading.value = Event(false)
+            }
         }
-        .observeOn(observableScheduler)
-        .doOnEvent { _, _ ->
-            _loading.value = Event(false)
-        }
-        .subscribe({
-            cityNameLiveData.value = it
-        }, getErrorHandler(R.string.error_current_weather_fetch))
+    }
 }

@@ -10,11 +10,13 @@ import io.github.sainiharry.meteor.weatherrepository.database.WeatherDatabase
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.database.toWeather
 import io.github.sainiharry.meteor.weatherrepository.network.*
-import io.github.sainiharry.meteor.weatherrepository.network.toWeather
 import io.github.sainiharry.searchrepository.SearchRepository
 import io.github.sainiharry.searchrepository.getSearchRepository
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 private const val DATABASE_NAME = "WeatherDb"
 
@@ -73,7 +75,7 @@ interface WeatherRepository {
      * @param cityName city for which weather data is required
      * @return a [Single] that emits the weather data for the specified city when subscribed
      */
-    fun fetchCurrentWeather(cityName: String): Single<Weather>
+    suspend fun fetchCurrentWeather(cityName: String): Weather
 
     /**
      * Get current weather data for a city
@@ -81,7 +83,7 @@ interface WeatherRepository {
      * @param lon longitude of city for which weather data is required
      * @return a [Single] that emits weather data for the specified location when subscribed
      */
-    fun fetchCurrentWeather(lat: Double, lon: Double): Single<Weather>
+    suspend fun fetchCurrentWeather(lat: Double, lon: Double): Weather
 
     /**
      * Get listener for changes in current weather data for a city
@@ -95,7 +97,7 @@ interface WeatherRepository {
      * @param cityName city for which forecast data is required
      * @return a [Single] that emits forecast data when subscribed
      */
-    fun fetchForecast(cityName: String): Single<List<Weather>>
+    suspend fun fetchForecast(cityName: String): List<Weather>
 
     /**
      * Get listener for changes in forecast data for a city
@@ -108,26 +110,16 @@ interface WeatherRepository {
 internal class WeatherRepositoryImpl(
     private val openWeatherService: OpenWeatherService,
     private val weatherDatabase: WeatherDatabase,
-    private val searchRepository: SearchRepository
+    private val searchRepository: SearchRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) :
     WeatherRepository {
 
-    override fun fetchCurrentWeather(cityName: String): Single<Weather> =
-        openWeatherService.getCurrentWeather(cityName, UNIT_METRIC)
-            .map(WeatherResponse::toWeather)
-            .doOnSuccess { weather ->
-                weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
-            }
-            .doOnSuccess {
-                searchRepository.handleSearchQuery(cityName)
-            }
+    override suspend fun fetchCurrentWeather(cityName: String): Weather =
+        handleWeatherResponse(openWeatherService.getCurrentWeather(cityName, UNIT_METRIC), cityName)
 
-    override fun fetchCurrentWeather(lat: Double, lon: Double): Single<Weather> =
-        openWeatherService.getCurrentWeather(lat, lon, UNIT_METRIC)
-            .map(WeatherResponse::toWeather)
-            .doOnSuccess { weather ->
-                weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
-            }
+    override suspend fun fetchCurrentWeather(lat: Double, lon: Double): Weather =
+        handleWeatherResponse(openWeatherService.getCurrentWeather(lat, lon, UNIT_METRIC))
 
     override fun getCurrentWeatherListener(cityName: String): LiveData<Weather> =
         Transformations.map(
@@ -135,14 +127,27 @@ internal class WeatherRepositoryImpl(
             WeatherModel::toWeather
         )
 
-    override fun fetchForecast(cityName: String): Single<List<Weather>> =
-        openWeatherService.getForecast(cityName, 3, UNIT_METRIC)
-            .doOnSuccess { forecastResponseList ->
-                weatherDatabase.weatherDao()
-                    .insertForecast(forecastResponseList.toForecastModelList())
-            }
-            .map { it.toWeatherList() }
+    override suspend fun fetchForecast(cityName: String): List<Weather> {
+        val forecastResponse = openWeatherService.getForecast(cityName, 3, UNIT_METRIC)
+        weatherDatabase.weatherDao().insertForecast(forecastResponse.toForecastModelList())
+        return forecastResponse.toWeatherList()
+    }
 
     override fun getForecastListener(cityName: String): LiveData<List<Weather>> =
         weatherDatabase.weatherDao().getForecastListener(cityName)
+
+    private suspend fun handleWeatherResponse(
+        weatherResponse: WeatherResponse,
+        cityName: String? = null
+    ): Weather {
+        val weather = weatherResponse.toWeather()
+        weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
+        cityName?.let {
+            withContext(dispatcher) {
+                searchRepository.handleSearchQuery(cityName)
+            }
+        }
+
+        return weather
+    }
 }

@@ -16,10 +16,10 @@ internal interface OpenWeatherService {
      * @return a [Single] that emits network response when subscribed
      */
     @GET("2.5/weather")
-    fun getCurrentWeather(
+    suspend fun getCurrentWeather(
         @Query("q") cityName: String,
         @Query("units") units: String
-    ): Single<WeatherResponse>
+    ): WeatherResponse
 
     /**
      * Get current weather data for a city from network
@@ -29,11 +29,11 @@ internal interface OpenWeatherService {
      * @return a [Single] that emits network response when subscribed
      */
     @GET("2.5/weather")
-    fun getCurrentWeather(
+    suspend fun getCurrentWeather(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
         @Query("units") units: String
-    ): Single<WeatherResponse>
+    ): WeatherResponse
 
     /**
      * Get forecast weather data for a city from network
@@ -43,9 +43,9 @@ internal interface OpenWeatherService {
      * @return a [Single] that emits network response when subscribed
      */
     @GET("2.5/forecast")
-    fun getForecast(
+    suspend fun getForecast(
         @Query("q") cityName: String,
         @Query("cnt") count: Int,
         @Query("units") units: String
-    ): Single<ForecastResponse>
+    ): ForecastResponse
 }
