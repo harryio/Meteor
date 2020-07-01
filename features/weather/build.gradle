@@ -52,8 +52,6 @@ dependencies {
     implementation project(":features:search")
 
     implementation libraries.kotlinStdLib
-    implementation libraries.rxJava
-    implementation libraries.rxAndroid
     implementation libraries.location
 
     testImplementation testLibraries

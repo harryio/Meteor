@@ -4,9 +4,9 @@ import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import io.github.sainiharry.meteor.common.DATABASE_NAME
 import io.github.sainiharry.meteor.common.model.Search
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 fun getSearchRepository(
     applicationContext: Context
@@ -25,24 +25,24 @@ interface SearchRepository {
             }
     }
 
-    fun getSearchQueries(): Single<List<Search>>
+    suspend fun getSearchQueries(): List<Search>
 
-    fun handleSearchQuery(searchQuery: String)
+    suspend fun handleSearchQuery(searchQuery: String)
 }
 
-internal class SearchRepositoryImpl(private val database: Database) : SearchRepository {
+internal class SearchRepositoryImpl(
+    private val database: Database,
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : SearchRepository {
 
-    override fun getSearchQueries(): Single<List<Search>> =
-        Single.fromCallable { database.searchQueries.selectSearchQueries().executeAsList() }
-            .subscribeOn(Schedulers.io())
-            .flatMap {
-                Observable.fromIterable(it)
-                    .map(SearchModel::toSearch)
-                    .toList()
-            }
+    override suspend fun getSearchQueries(): List<Search> = withContext(defaultDispatcher) {
+        database.searchQueries.selectSearchQueries().executeAsList()
+            .map(SearchModel::toSearch)
+    }
 
-    override fun handleSearchQuery(searchQuery: String) = database.searchQueries.insert(searchQuery)
-
+    override suspend fun handleSearchQuery(searchQuery: String) = withContext(defaultDispatcher) {
+        database.searchQueries.insert(searchQuery)
+    }
 }
 
 internal fun SearchModel.toSearch() = Search(id, searchQuery)

@@ -8,23 +8,19 @@ import io.github.sainiharry.meteor.repositories.news.database.NewsDatabase
 import io.github.sainiharry.meteor.repositories.news.network.NewsApi
 import io.github.sainiharry.meteor.repositories.news.network.NewsService
 import io.github.sainiharry.meteor.repositories.news.network.toNewsModelList
-import io.reactivex.Scheduler
-import io.reactivex.Single
 
 private const val DATABASE_NAME = "NewsDb"
 
 /**
  * Returns cached version of [NewsRepository] implementation
- * @param scheduler [Scheduler] on which data should be gathered on
  * @param applicationContext applicationContext
  */
 fun getNewsRepository(
-    scheduler: Scheduler,
     applicationContext: Context
 ): NewsRepository = NewsRepository.getInstance(
     newsServiceProvider = {
         val weatherApi = NewsApi(BuildConfig.NEWS_API_KEY)
-        val retrofit = NetworkInteractor.getRetrofit(weatherApi, scheduler)
+        val retrofit = NetworkInteractor.getRetrofit(weatherApi)
         retrofit.create(NewsService::class.java)
     },
     newsDatabaseProvider = {
@@ -58,7 +54,7 @@ interface NewsRepository {
     /**
      * Get top headlines for a country
      * @param countryCode country code for which news data is required
-     * @return a [Single] which will emit news data when subscribed
+     * @return news articles list for the specified country
      */
     suspend fun fetchNews(countryCode: String): List<News>
 }

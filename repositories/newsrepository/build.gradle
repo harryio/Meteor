@@ -46,7 +46,6 @@ dependencies {
     implementation project(":common")
 
     implementation libraries.kotlinStdLib
-    implementation libraries.rxJava
     implementation coroutines
 
     implementation androidLibraries

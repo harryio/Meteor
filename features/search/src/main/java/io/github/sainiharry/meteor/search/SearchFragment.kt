@@ -19,12 +19,6 @@ class SearchFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSearchBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        model.loadSearchData()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

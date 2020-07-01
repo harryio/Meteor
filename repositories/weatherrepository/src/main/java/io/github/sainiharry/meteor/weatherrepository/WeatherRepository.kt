@@ -12,11 +12,6 @@ import io.github.sainiharry.meteor.weatherrepository.database.toWeather
 import io.github.sainiharry.meteor.weatherrepository.network.*
 import io.github.sainiharry.searchrepository.SearchRepository
 import io.github.sainiharry.searchrepository.getSearchRepository
-import io.reactivex.Scheduler
-import io.reactivex.Single
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 private const val DATABASE_NAME = "WeatherDb"
 
@@ -24,16 +19,14 @@ private const val UNIT_METRIC = "metric"
 
 /**
  * Returns cached version of [WeatherRepository] implementation
- * @param scheduler [Scheduler] on which data should be gathered on
  * @param applicationContext applicationContext
  */
 fun getWeatherRepository(
-    scheduler: Scheduler,
     applicationContext: Context
 ): WeatherRepository = WeatherRepository.getInstance(
     openWeatherServiceProvider = {
         val weatherApi = WeatherApi(BuildConfig.WEATHER_API_KEY)
-        val retrofit = NetworkInteractor.getRetrofit(weatherApi, scheduler)
+        val retrofit = NetworkInteractor.getRetrofit(weatherApi)
         retrofit.create(OpenWeatherService::class.java)
     },
     weatherDatabaseProvider = {
@@ -73,7 +66,7 @@ interface WeatherRepository {
     /**
      * Get current weather data for a city
      * @param cityName city for which weather data is required
-     * @return a [Single] that emits the weather data for the specified city when subscribed
+     * @return weather data for the specified city
      */
     suspend fun fetchCurrentWeather(cityName: String): Weather
 
@@ -81,21 +74,21 @@ interface WeatherRepository {
      * Get current weather data for a city
      * @param lat latitude of city for which weather data is required
      * @param lon longitude of city for which weather data is required
-     * @return a [Single] that emits weather data for the specified location when subscribed
+     * @return weather data for the specified location
      */
     suspend fun fetchCurrentWeather(lat: Double, lon: Double): Weather
 
     /**
      * Get listener for changes in current weather data for a city
      * @param cityName city for which weather data needs to be observed
-     * @return a [LiveData] that starts emitting latest current weather data when observed
+     * @return a [LiveData] that starts emitting latest current weather data
      */
     fun getCurrentWeatherListener(cityName: String): LiveData<Weather>
 
     /**
      * Get forecast weather data for a city
      * @param cityName city for which forecast data is required
-     * @return a [Single] that emits forecast data when subscribed
+     * @return forecast data
      */
     suspend fun fetchForecast(cityName: String): List<Weather>
 
@@ -110,10 +103,8 @@ interface WeatherRepository {
 internal class WeatherRepositoryImpl(
     private val openWeatherService: OpenWeatherService,
     private val weatherDatabase: WeatherDatabase,
-    private val searchRepository: SearchRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) :
-    WeatherRepository {
+    private val searchRepository: SearchRepository
+) : WeatherRepository {
 
     override suspend fun fetchCurrentWeather(cityName: String): Weather =
         handleWeatherResponse(openWeatherService.getCurrentWeather(cityName, UNIT_METRIC), cityName)
@@ -143,9 +134,7 @@ internal class WeatherRepositoryImpl(
         val weather = weatherResponse.toWeather()
         weatherDatabase.weatherDao().insertWeather(WeatherModel(weather))
         cityName?.let {
-            withContext(dispatcher) {
-                searchRepository.handleSearchQuery(cityName)
-            }
+            searchRepository.handleSearchQuery(cityName)
         }
 
         return weather

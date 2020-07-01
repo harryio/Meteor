@@ -9,8 +9,8 @@ import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.searchrepository.SearchRepository
 import io.github.sainiharry.searchrepository.getSearchRepository
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 fun Fragment.searchViewModel(): Lazy<SearchViewModel> = activityViewModels(factoryProducer = {
     object : ViewModelProvider.Factory {
@@ -18,7 +18,7 @@ fun Fragment.searchViewModel(): Lazy<SearchViewModel> = activityViewModels(facto
             @Suppress("UNCHECKED_CAST")
             return SearchViewModel(
                 getSearchRepository(requireContext().applicationContext),
-                AndroidSchedulers.mainThread()
+                Dispatchers.IO
             ) as T
         }
     }
@@ -26,12 +26,12 @@ fun Fragment.searchViewModel(): Lazy<SearchViewModel> = activityViewModels(facto
 
 class SearchViewModel(
     private val searchRepository: SearchRepository,
-    private val observableScheduler: Scheduler
+    defaultDispatcher: CoroutineDispatcher
 ) : BaseViewModel(), ItemClickListener<Search> {
 
-    private val _recentSearchQueries = MutableLiveData<List<Search>>()
-    internal val recentSearchQueries: LiveData<List<Search>>
-        get() = _recentSearchQueries
+    internal val recentSearchQueries = liveData(defaultDispatcher) {
+        emit(searchRepository.getSearchQueries())
+    }
 
     val searchTextInput = MutableLiveData<String>()
 
@@ -49,15 +49,6 @@ class SearchViewModel(
 
     internal fun handleSearchDone() {
         onSearchQueryAvailable(searchTextInput.value)
-    }
-
-    internal fun loadSearchData() {
-        disposables.add(
-            searchRepository.getSearchQueries().observeOn(observableScheduler)
-                .subscribe({
-                    _recentSearchQueries.value = it
-                }, Throwable::printStackTrace)
-        )
     }
 
     override fun onItemClicked(item: Search, position: Int) {

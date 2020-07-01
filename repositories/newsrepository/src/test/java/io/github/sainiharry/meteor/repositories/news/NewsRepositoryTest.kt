@@ -7,6 +7,7 @@ import io.github.sainiharry.meteor.repositories.news.network.NewsResponse
 import io.github.sainiharry.meteor.repositories.news.network.NewsResponseWrapper
 import io.github.sainiharry.meteor.repositories.news.network.NewsService
 import io.github.sainiharry.meteor.repositories.news.network.toNewsModelList
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -18,6 +19,7 @@ import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
+@ExperimentalCoroutinesApi
 class NewsRepositoryTest {
 
     @Mock
@@ -54,7 +56,6 @@ class NewsRepositoryTest {
     }
 
     private fun mockNewsResponse(
-        id: Long = 12,
         author: String = "Harsimran",
         title: String = "Android Developer make history",
         description: String = "Definitely because he so awesome",

@@ -1,11 +1,9 @@
 package io.github.sainiharry.meteor.network
 
 import com.squareup.moshi.Moshi
-import io.reactivex.Scheduler
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 /**
@@ -13,7 +11,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * which can be used by clients to create network service classes. Uses Moshi as library for
  * serialization/deserialization of network request and responses.
  */
-class NetworkInteractor private constructor(private val scheduler: Scheduler) {
+class NetworkInteractor private constructor() {
 
     private val retrofitMap = mutableMapOf<Api, Retrofit>()
 
@@ -24,13 +22,12 @@ class NetworkInteractor private constructor(private val scheduler: Scheduler) {
         /**
          * Provides cached instance of retrofit per api
          * @param api Implementation of [Api] interface
-         * @param scheduler Default [Scheduler] on which network calls will be performed on. The
          * network calls will be scheduled on this scheduler
          * @return Cached instance of [Retrofit] for this specified [Api]
          */
-        fun getRetrofit(api: Api, scheduler: Scheduler): Retrofit {
+        fun getRetrofit(api: Api): Retrofit {
             if (networkInteractor == null) {
-                networkInteractor = NetworkInteractor(scheduler)
+                networkInteractor = NetworkInteractor()
             }
 
             return networkInteractor!!.getRetrofit(api)
@@ -46,7 +43,6 @@ class NetworkInteractor private constructor(private val scheduler: Scheduler) {
             val apiMoshi = api.buildMoshi(baseMoshi.newBuilder()).build()
             val apiRetrofit = api.buildRetrofit()
                 .client(apiOkHttpClient)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(scheduler))
                 .addConverterFactory(MoshiConverterFactory.create(apiMoshi))
                 .build()
             retrofitMap[api] = apiRetrofit

@@ -46,8 +46,6 @@ dependencies {
     implementation project(":features:weather")
 
     implementation libraries.kotlinStdLib
-    implementation libraries.rxJava
-    implementation libraries.rxAndroid
     implementation libraries.location
 
     testImplementation testLibraries

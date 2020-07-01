@@ -44,8 +44,6 @@ dependencies {
     implementation project(":features:commonfeature")
     implementation project(":repositories:searchrepository")
 
-    implementation libraries.rxJava
-    implementation libraries.rxAndroid
     implementation libraries.kotlinStdLib
 
     testImplementation testLibraries

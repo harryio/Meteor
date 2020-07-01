@@ -23,7 +23,6 @@ import io.github.sainiharry.meteor.search.searchViewModel
 import io.github.sainiharry.meteor.weather.databinding.FragmentWeatherBinding
 import io.github.sainiharry.meteor.weather.forecast.ForecastAdapter
 import io.github.sainiharry.meteor.weatherrepository.getWeatherRepository
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_weather.*
 import kotlinx.coroutines.Dispatchers
 
@@ -36,7 +35,7 @@ class WeatherFragment : BaseFragment() {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
                 return WeatherViewModel(
-                    getWeatherRepository(Schedulers.io(), requireContext().applicationContext),
+                    getWeatherRepository(requireContext().applicationContext),
                     Dispatchers.Main.immediate
                 ) as T
             }

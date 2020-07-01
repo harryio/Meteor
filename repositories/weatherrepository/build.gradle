@@ -56,7 +56,6 @@ dependencies {
     implementation project(":repositories:searchrepository")
 
     implementation libraries.kotlinStdLib
-    implementation libraries.rxJava
 
     implementation androidLibraries
     implementation room

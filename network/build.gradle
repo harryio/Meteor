@@ -11,11 +11,9 @@ ext {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation libraries.kotlinStdLib
-    implementation libraries.rxJava
 
     api networkLibraries.moshi
     api networkLibraries.retrofit
-    implementation networkLibraries.retrofitRxJavaAdapter
     implementation networkLibraries.retrofitMoshiConverter
     implementation networkLibraries.networkLogging
 

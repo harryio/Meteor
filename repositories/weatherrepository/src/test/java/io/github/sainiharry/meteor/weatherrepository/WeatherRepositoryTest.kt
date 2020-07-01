@@ -5,7 +5,7 @@ import io.github.sainiharry.meteor.weatherrepository.database.WeatherDatabase
 import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.network.*
 import io.github.sainiharry.searchrepository.SearchRepository
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
@@ -15,6 +15,7 @@ import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
+@ExperimentalCoroutinesApi
 class WeatherRepositoryTest {
 
     @Mock
@@ -31,8 +32,6 @@ class WeatherRepositoryTest {
 
     private lateinit var weatherRepository: WeatherRepository
 
-    private val testCoroutineDispatcher = TestCoroutineDispatcher()
-
     private val cityName = "London"
 
     private val metric = "metric"
@@ -46,8 +45,7 @@ class WeatherRepositoryTest {
             WeatherRepositoryImpl(
                 openWeatherService,
                 weatherDatabase,
-                searchRepository,
-                testCoroutineDispatcher
+                searchRepository
             )
     }
 
