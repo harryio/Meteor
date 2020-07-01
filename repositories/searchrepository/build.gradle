@@ -34,5 +34,6 @@ dependencies {
     implementation sqlDelight
 
     testImplementation testLibraries
+    testImplementation 'com.squareup.sqldelight:sqlite-driver:1.2.2'
     androidTestImplementation androidTestLibraries
 }
