@@ -3,7 +3,6 @@ package io.github.sainiharry.meteor.common.model
 import io.github.sainiharry.meteor.common.UniqueId
 
 data class News(
-    val id: Long,
     val author: String,
     val title: String,
     val description: String,
@@ -12,5 +11,8 @@ data class News(
     val publishedAt: String,
     val content: String
 ) : UniqueId {
-    override fun getUniqueId(): Long = id
+
+    var id: Long = 0
+
+    override fun getUniqueId(): Long = title.hashCode().toLong()
 }
