@@ -1,6 +1,5 @@
 package io.github.sainiharry.meteor.weatherrepository.network
 
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -45,7 +44,6 @@ internal interface OpenWeatherService {
     @GET("2.5/forecast")
     suspend fun getForecast(
         @Query("q") cityName: String,
-        @Query("cnt") count: Int,
         @Query("units") units: String
     ): ForecastResponse
 }

@@ -19,6 +19,6 @@ internal interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertForecast(forecasts: List<ForecastModel>)
 
-    @Query("SELECT * FROM ForecastModel WHERE ForecastModel.cityName = :cityName GROUP BY ForecastModel.timestamp ORDER BY ForecastModel.timestamp DESC LIMIT 3")
+    @Query("SELECT *, date(timestampStr) AS datetime FROM ForecastModel WHERE ForecastModel.cityName = :cityName AND timestampStr > date('now') GROUP BY date(timestampStr) ORDER BY datetime ASC LIMIT 3")
     fun getForecastListener(cityName: String): LiveData<List<Weather>>
 }

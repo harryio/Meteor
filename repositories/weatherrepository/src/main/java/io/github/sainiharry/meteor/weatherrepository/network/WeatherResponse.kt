@@ -35,7 +35,6 @@ internal data class WeatherSysResponse(
 
 internal fun WeatherResponse.toWeather(): Weather =
     Weather(
-        weather[0].id,
         weather[0].main,
         weather[0].icon,
         cityId,

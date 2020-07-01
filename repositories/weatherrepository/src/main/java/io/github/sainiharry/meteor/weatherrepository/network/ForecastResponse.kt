@@ -14,7 +14,8 @@ internal data class ForecastResponse(
 internal data class ForecastWeather(
     @Json(name = "main") val weatherInfoResponse: WeatherInfoResponse,
     @Json(name = "weather") val weatherConditions: List<WeatherConditionResponse>,
-    val dt: Long
+    val dt: Long,
+    @Json(name = "dt_txt") val dtText: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -35,16 +36,16 @@ private fun ForecastWeather.toForecastModel(forecastWeatherLocation: ForecastWea
         weatherInfoResponse.maxTemp,
         weatherInfoResponse.minTemp,
         forecastWeatherLocation.country,
-        dt
+        dt,
+        dtText
     )
 
 internal fun ForecastResponse.toWeatherList(): List<Weather> = list.map {
     it.toWeather(city)
 }
 
-private fun ForecastWeather.toWeather(forecastWeatherLocation: ForecastWeatherLocation): Weather =
+private fun ForecastWeather.toWeather(forecastWeatherLocation: ForecastWeatherLocation) =
     Weather(
-        weatherConditions[0].id,
         weatherConditions[0].main,
         weatherConditions[0].icon,
         forecastWeatherLocation.id,

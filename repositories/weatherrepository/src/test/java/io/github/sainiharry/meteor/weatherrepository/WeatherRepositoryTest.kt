@@ -93,13 +93,13 @@ class WeatherRepositoryTest {
         val mockForecastResponse = mockForecastResponse()
         val weatherList = mockForecastResponse.toWeatherList()
         val count = 3
-        `when`(openWeatherService.getForecast(cityName, count, metric)).thenReturn(
+        `when`(openWeatherService.getForecast(cityName, metric)).thenReturn(
             mockForecastResponse
         )
 
         val forecastWeather = weatherRepository.fetchForecast(cityName)
         assert(forecastWeather == weatherList)
-        verify(openWeatherService).getForecast(cityName, count, metric)
+        verify(openWeatherService).getForecast(cityName, metric)
         verify(weatherDao).insertForecast(mockForecastResponse.toForecastModelList())
         verifyNoMoreInteractions(openWeatherService)
         verifyNoMoreInteractions(weatherDao)
@@ -123,7 +123,8 @@ class WeatherRepositoryTest {
                 listOf(
                     WeatherConditionResponse(cityName.hashCode().toLong(), "Clear", "04d")
                 ),
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                "2020-07-01"
             )
         ),
         ForecastWeatherLocation(cityName.hashCode().toLong(), cityName, "GB")

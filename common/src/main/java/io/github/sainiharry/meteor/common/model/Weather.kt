@@ -3,7 +3,6 @@ package io.github.sainiharry.meteor.common.model
 import io.github.sainiharry.meteor.common.UniqueId
 
 data class Weather(
-    val id: Long,
     val main: String,
     val icon: String,
     val cityId: Long,
@@ -14,5 +13,8 @@ data class Weather(
     val country: String,
     val timestamp: Long
 ) : UniqueId {
-    override fun getUniqueId(): Long = id
+
+    var id: Long = 0
+
+    override fun getUniqueId(): Long = timestamp
 }

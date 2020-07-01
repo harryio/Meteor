@@ -78,7 +78,6 @@ class NewsRepositoryTest {
     )
 
     private fun mockNews(
-        id: Long = 12,
         author: String = "Harsimran",
         title: String = "Android Developer make history",
         description: String = "Definitely because he so awesome",
@@ -87,7 +86,6 @@ class NewsRepositoryTest {
         publishedAt: String = "2020-06-14T22:20:57Z",
         content: String = "LOS ANGLES"
     ) = News(
-        id,
         author,
         title,
         description,

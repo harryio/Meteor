@@ -119,7 +119,7 @@ internal class WeatherRepositoryImpl(
         )
 
     override suspend fun fetchForecast(cityName: String): List<Weather> {
-        val forecastResponse = openWeatherService.getForecast(cityName, 3, UNIT_METRIC)
+        val forecastResponse = openWeatherService.getForecast(cityName, UNIT_METRIC)
         weatherDatabase.weatherDao().insertForecast(forecastResponse.toForecastModelList())
         return forecastResponse.toWeatherList()
     }

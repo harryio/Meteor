@@ -1,6 +1,7 @@
 package io.github.sainiharry.searchrepository
 
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
+@ExperimentalCoroutinesApi
 class SearchRepositoryTest {
 
     private lateinit var searchRepository: SearchRepository

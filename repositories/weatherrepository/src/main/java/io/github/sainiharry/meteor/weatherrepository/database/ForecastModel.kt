@@ -17,5 +17,6 @@ internal data class ForecastModel(
     val maxTemp: Float,
     val minTemp: Float,
     val country: String,
-    val timestamp: Long
+    val timestamp: Long,
+    val timestampStr: String
 )
