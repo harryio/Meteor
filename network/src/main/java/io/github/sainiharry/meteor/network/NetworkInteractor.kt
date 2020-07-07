@@ -11,30 +11,11 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * which can be used by clients to create network service classes. Uses Moshi as library for
  * serialization/deserialization of network request and responses.
  */
-class NetworkInteractor private constructor() {
+object NetworkInteractor {
 
     private val retrofitMap = mutableMapOf<Api, Retrofit>()
 
-    companion object {
-
-        private var networkInteractor: NetworkInteractor? = null
-
-        /**
-         * Provides cached instance of retrofit per api
-         * @param api Implementation of [Api] interface
-         * network calls will be scheduled on this scheduler
-         * @return Cached instance of [Retrofit] for this specified [Api]
-         */
-        fun getRetrofit(api: Api): Retrofit {
-            if (networkInteractor == null) {
-                networkInteractor = NetworkInteractor()
-            }
-
-            return networkInteractor!!.getRetrofit(api)
-        }
-    }
-
-    private fun getRetrofit(api: Api): Retrofit {
+    fun getRetrofit(api: Api): Retrofit {
         val retrofit = retrofitMap[api]
         return if (retrofit == null) {
             val apiOkHttpClient = api.buildOkHttpClient(baseOkHttpClient.newBuilder())
