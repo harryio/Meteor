@@ -62,8 +62,10 @@ class WeatherRepositoryTest {
         assert(responseWeather == weather)
         verify(openWeatherService).getCurrentWeather(cityName, metric)
         verify(weatherDao).insertWeather(currentWeatherModel)
+        verify(searchRepository).handleSearchQuery(cityName)
         verifyNoMoreInteractions(openWeatherService)
         verifyNoMoreInteractions(weatherDao)
+        verifyNoMoreInteractions(searchRepository)
     }
 
     @Test
@@ -92,7 +94,6 @@ class WeatherRepositoryTest {
     fun testFetchForecastForCity() = runBlockingTest {
         val mockForecastResponse = mockForecastResponse()
         val weatherList = mockForecastResponse.toWeatherList()
-        val count = 3
         `when`(openWeatherService.getForecast(cityName, metric)).thenReturn(
             mockForecastResponse
         )

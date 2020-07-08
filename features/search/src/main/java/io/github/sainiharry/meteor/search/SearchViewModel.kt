@@ -8,18 +8,15 @@ import io.github.sainiharry.meteor.common.model.Search
 import io.github.sainiharry.meteor.commonfeature.BaseViewModel
 import io.github.sainiharry.meteor.commonfeature.Event
 import io.github.sainiharry.searchrepository.SearchRepository
-import io.github.sainiharry.searchrepository.getSearchRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import org.koin.android.ext.android.get
 
 fun Fragment.searchViewModel(): Lazy<SearchViewModel> = activityViewModels(factoryProducer = {
     object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
-            return SearchViewModel(
-                getSearchRepository(requireContext().applicationContext),
-                Dispatchers.IO
-            ) as T
+            return SearchViewModel(get(), Dispatchers.IO) as T
         }
     }
 })

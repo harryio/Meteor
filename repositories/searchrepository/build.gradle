@@ -33,6 +33,8 @@ dependencies {
     implementation libraries.kotlinStdLib
     implementation sqlDelight
 
+    implementation koin
+
     testImplementation testLibraries
     testImplementation 'com.squareup.sqldelight:sqlite-driver:1.2.2'
     androidTestImplementation androidTestLibraries

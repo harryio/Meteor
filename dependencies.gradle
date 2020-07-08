@@ -26,12 +26,13 @@ ext {
     def mockitoVersion = '2.23.0'
 
     def roomVersion = '2.2.5'
+    def koinVersion = '2.1.6'
 
     libraries = [
-            kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
-            coil: "io.coil-kt:coil:$coilVersion",
-            location: "com.google.android.gms:play-services-location:$locationVersion",
-            sharedPref: "androidx.preference:preference-ktx:$preferenceVersion",
+            kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+            coil        : "io.coil-kt:coil:$coilVersion",
+            location    : "com.google.android.gms:play-services-location:$locationVersion",
+            sharedPref  : "androidx.preference:preference-ktx:$preferenceVersion",
     ]
 
     networkLibraries = [
@@ -70,8 +71,8 @@ ext {
     ]
 
     compilerLibraries = [
-            room: "androidx.room:room-compiler:$roomVersion",
-            moshi: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion",
+            room     : "androidx.room:room-compiler:$roomVersion",
+            moshi    : "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion",
             lifecycle: "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
     ]
 
@@ -96,5 +97,11 @@ ext {
     coroutines = [
             "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion",
             "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    ]
+
+    koin = [
+            "org.koin:koin-android:$koinVersion",
+            "org.koin:koin-android-scope:$koinVersion",
+            "org.koin:koin-android-viewmodel:$koinVersion"
     ]
 }

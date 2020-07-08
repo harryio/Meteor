@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.github.sainiharry.meteor.commonfeature.BaseFragment
 import io.github.sainiharry.meteor.commonfeature.EventObserver
-import io.github.sainiharry.meteor.repositories.news.getNewsRepository
 import io.github.sainiharry.meteor.weather.WeatherInfoViewModel
 import io.github.sainiharry.metero.news.databinding.FragmentNewsBinding
 import kotlinx.coroutines.Dispatchers
+import org.koin.android.ext.android.get
 
 class NewsFragment : BaseFragment() {
 
@@ -24,10 +24,7 @@ class NewsFragment : BaseFragment() {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return NewsViewModel(
-                    getNewsRepository(requireContext().applicationContext),
-                    Dispatchers.Main.immediate
-                ) as T
+                return NewsViewModel(get(), Dispatchers.Main.immediate) as T
             }
         }
     })

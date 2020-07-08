@@ -1,35 +1,41 @@
 package io.github.sainiharry.searchrepository
 
-import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
-import io.github.sainiharry.meteor.common.DATABASE_NAME
 import io.github.sainiharry.meteor.common.model.Search
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.dsl.module
 
-fun getSearchRepository(
-    applicationContext: Context
-) = SearchRepository.getInstance {
-    Database(AndroidSqliteDriver(Database.Schema, applicationContext, DATABASE_NAME))
+/**
+ * Koin module for providing single instance of SearchRepository.
+ */
+val searchRepositoryModule = module {
+    single<SearchRepository> {
+        SearchRepositoryImpl(Database(AndroidSqliteDriver(Database.Schema, get())))
+    }
 }
 
+/**
+ * Repository for accessing search queries
+ */
 interface SearchRepository {
 
-    companion object {
-        private var searchRepository: SearchRepository? = null
-
-        internal fun getInstance(databaseProvider: () -> Database): SearchRepository =
-            searchRepository ?: SearchRepositoryImpl(databaseProvider()).also {
-                searchRepository = it
-            }
-    }
-
+    /**
+     * Get list of 5 most recent search queries
+     */
     suspend fun getSearchQueries(): List<Search>
 
+    /**
+     * Submit a new search query to the repository
+     * @param searchQuery: search query to be submitted
+     */
     suspend fun handleSearchQuery(searchQuery: String)
 }
 
+/**
+ * Internal implementation of SearchRepository
+ */
 internal class SearchRepositoryImpl(
     private val database: Database,
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO

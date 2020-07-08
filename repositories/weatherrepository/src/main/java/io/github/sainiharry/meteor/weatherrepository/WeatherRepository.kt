@@ -1,6 +1,5 @@
 package io.github.sainiharry.meteor.weatherrepository
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.room.Room
@@ -11,57 +10,34 @@ import io.github.sainiharry.meteor.weatherrepository.database.WeatherModel
 import io.github.sainiharry.meteor.weatherrepository.database.toWeather
 import io.github.sainiharry.meteor.weatherrepository.network.*
 import io.github.sainiharry.searchrepository.SearchRepository
-import io.github.sainiharry.searchrepository.getSearchRepository
+import org.koin.dsl.module
 
 private const val DATABASE_NAME = "WeatherDb"
 
 private const val UNIT_METRIC = "metric"
 
 /**
- * Returns cached version of [WeatherRepository] implementation
- * @param applicationContext applicationContext
+ * Koin module for providing single instance of WeatherRepository. Injecting components should pass
+ * applicationContext when injecting weatherRepository
  */
-fun getWeatherRepository(
-    applicationContext: Context
-): WeatherRepository = WeatherRepository.getInstance(
-    openWeatherServiceProvider = {
+val weatherRepositoryModule = module {
+    single<WeatherRepository> {
         val weatherApi = WeatherApi(BuildConfig.WEATHER_API_KEY)
         val retrofit = NetworkInteractor.getRetrofit(weatherApi)
-        retrofit.create(OpenWeatherService::class.java)
-    },
-    weatherDatabaseProvider = {
-        Room.databaseBuilder(
-            applicationContext,
-            WeatherDatabase::class.java,
-            DATABASE_NAME
-        ).build()
-    },
-    searchRepositoryProvider = {
-        getSearchRepository(applicationContext)
+        val openWeatherService = retrofit.create(OpenWeatherService::class.java)
+
+        WeatherRepositoryImpl(
+            openWeatherService,
+            Room.databaseBuilder(get(), WeatherDatabase::class.java, DATABASE_NAME).build(),
+            get()
+        )
     }
-)
+}
 
 /**
  * Repository for accessing data related to weather
  */
 interface WeatherRepository {
-
-    companion object {
-
-        private var weatherRepository: WeatherRepository? = null
-
-        internal fun getInstance(
-            openWeatherServiceProvider: () -> OpenWeatherService,
-            weatherDatabaseProvider: () -> WeatherDatabase,
-            searchRepositoryProvider: () -> SearchRepository
-        ): WeatherRepository = weatherRepository ?: WeatherRepositoryImpl(
-            openWeatherServiceProvider(),
-            weatherDatabaseProvider(),
-            searchRepositoryProvider()
-        ).also {
-            weatherRepository = it
-        }
-    }
 
     /**
      * Get current weather data for a city
@@ -100,6 +76,9 @@ interface WeatherRepository {
     fun getForecastListener(cityName: String): LiveData<List<Weather>>
 }
 
+/**
+ * Internal implementation of WeatherRepository
+ */
 internal class WeatherRepositoryImpl(
     private val openWeatherService: OpenWeatherService,
     private val weatherDatabase: WeatherDatabase,

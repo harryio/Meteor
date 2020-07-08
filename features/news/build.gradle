@@ -48,6 +48,8 @@ dependencies {
     implementation libraries.kotlinStdLib
     implementation libraries.location
 
+    implementation koin
+
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries
 }

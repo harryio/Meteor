@@ -22,11 +22,11 @@ import io.github.sainiharry.meteor.commonfeature.EventObserver
 import io.github.sainiharry.meteor.search.searchViewModel
 import io.github.sainiharry.meteor.weather.databinding.FragmentWeatherBinding
 import io.github.sainiharry.meteor.weather.forecast.ForecastAdapter
-import io.github.sainiharry.meteor.weatherrepository.getWeatherRepository
 import kotlinx.android.synthetic.main.fragment_weather.*
 import kotlinx.coroutines.Dispatchers
+import org.koin.android.ext.android.get
 
-const val REQUEST_LOCATION_CODE = 923
+internal const val REQUEST_LOCATION_CODE = 923
 
 class WeatherFragment : BaseFragment() {
 
@@ -34,10 +34,7 @@ class WeatherFragment : BaseFragment() {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return WeatherViewModel(
-                    getWeatherRepository(requireContext().applicationContext),
-                    Dispatchers.Main.immediate
-                ) as T
+                return WeatherViewModel(get(), Dispatchers.Main.immediate) as T
             }
         }
     })

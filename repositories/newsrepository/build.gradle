@@ -51,6 +51,8 @@ dependencies {
     implementation androidLibraries
     implementation room
 
+    implementation koin
+
     kapt compilerLibraries.room
     kapt compilerLibraries.moshi
 

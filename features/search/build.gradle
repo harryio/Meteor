@@ -46,6 +46,8 @@ dependencies {
 
     implementation libraries.kotlinStdLib
 
+    implementation koin
+
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries
 }
