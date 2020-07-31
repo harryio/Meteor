@@ -38,5 +38,8 @@ workflows:
   build:
     jobs:
       - build:
+          filters:
             branches:
-              ignore: develop, master
+              ignore:
+                - develop
+                - master
