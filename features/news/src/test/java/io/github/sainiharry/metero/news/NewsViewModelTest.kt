@@ -127,7 +127,6 @@ class NewsViewModelTest {
         publishedAt: String = "2020-06-14T22:20:57Z",
         content: String = "LOS ANGLES"
     ) = News(
-        id,
         author,
         title,
         description,
