@@ -31,7 +31,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run:
           name: Run Tests
-          command: .gradlew testDebugUnitTest --console=plain
+          command: ./gradlew testDebugUnitTest --console=plain
       - store_artifacts:
           path: app/buil/reports
           destination: reports
