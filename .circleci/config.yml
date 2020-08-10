@@ -32,7 +32,32 @@ jobs:
       - run:
           name: Run Tests
           command: ./gradlew testDebugUnitTest --console=plain
-
+      - run:
+          name: Build Debug Apk
+          command: ./gradlew --console=plain assembleDebug
+      - run:
+          name: Stash APK
+          command: |
+            APK_NAME="app-debug.apk"
+            APK_PATH="./app/build/outputs/apk/debug/$APK_NAME"
+            mkdir ~/workspace
+            cp $APK_PATH ~/workspace/$APK_NAME
+      - persist_to_workspace:
+          root: ~/workspace
+          paths:
+            - "*.apk"
+  tag-debug-release:
+    - docker:
+        - image: cibuilds/github:0.10
+    - steps:
+        - checkout
+        - attach_workspace:
+            at: /tmp/workspace
+        - run:
+            name: Create Tag
+            command: |
+              VNAME = $(grep 'versionName\s' app/build.gradle | tr -d ' "[a-zA-Z]')
+              ghr -u ${CIRCLE_USERNAME} -prerelease -b "Debug Build Triggered by $CIRCLE_USERNAME" -c ${CIRCLE_SHA1} "v$VNAME-$CIRCLE_BUILD_NUM-DEBUG" ~/workspace
 workflows:
   version: 2.1
   build:
@@ -43,3 +68,9 @@ workflows:
               ignore:
                 - develop
                 - master
+      - tag-debug-release:
+          requires:
+            - build
+          filters:
+            branches:
+              only: develop
