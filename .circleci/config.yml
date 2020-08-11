@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build:
+  test-and-build-apk:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-29
@@ -47,9 +47,9 @@ jobs:
           paths:
             - "*.apk"
   tag-debug-release:
-    - docker:
-        - image: cibuilds/github:0.10
-    - steps:
+    docker:
+        - image: circleci/golang:1.8
+    steps:
         - checkout
         - attach_workspace:
             at: /tmp/workspace
@@ -57,20 +57,21 @@ jobs:
             name: Create Tag
             command: |
               VNAME=$(grep 'versionName\s' app/build.gradle | tr -d ' "[a-zA-Z]')
-              ghr -u "$CIRCLE_USERNAME" -prerelease -b "Debug Build Triggered by $CIRCLE_USERNAME" "v$VNAME-$CIRCLE_BUILD_NUM-DEBUG" ~/workspace
+              ghr -u "$CIRCLE_USERNAME" -prerelease -b "Debug Build Triggered by $CIRCLE_USERNAME" "v$VNAME-$CIRCLE_BUILD_NUM-DEBUG" /tmp/workspace
 workflows:
   version: 2.1
   build:
     jobs:
-      - build:
+      - test-and-build-apk:
           filters:
             branches:
               ignore:
                 - develop
                 - master
-      - tag-debug-release:
-          requires:
-            - build
-          filters:
-            branches:
-              only: develop
+#      - tag-debug-release:
+#          requires:
+#            - test-and-build-apk
+#          filters:
+#            branches:
+#              only:
+#                - develop
