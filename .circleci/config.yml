@@ -73,5 +73,4 @@ workflows:
             - test-and-build-apk
           filters:
             branches:
-              only:
-                - develop
+              only: develop
