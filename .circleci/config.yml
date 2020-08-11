@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build:
+  test-and-build-apk:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-29
@@ -32,14 +32,46 @@ jobs:
       - run:
           name: Run Tests
           command: ./gradlew testDebugUnitTest --console=plain
-
+      - run:
+          name: Build Debug Apk
+          command: ./gradlew --console=plain assembleDebug
+      - run:
+          name: Stash APK
+          command: |
+            APK_NAME="app-debug.apk"
+            APK_PATH="./app/build/outputs/apk/debug/$APK_NAME"
+            mkdir ~/workspace
+            cp $APK_PATH ~/workspace/$APK_NAME
+      - persist_to_workspace:
+          root: ~/workspace
+          paths:
+            - "*.apk"
+  tag-debug-release:
+    docker:
+        - image: circleci/golang:1.8
+    steps:
+        - checkout
+        - attach_workspace:
+            at: /tmp/workspace
+        - run:
+            name: Create Tag
+            command: |
+              VNAME=$(grep 'versionName\s' app/build.gradle | tr -d ' "[a-zA-Z]')
+              ghr -u "$CIRCLE_USERNAME" -prerelease -b "Debug Build Triggered by $CIRCLE_USERNAME" "v$VNAME-$CIRCLE_BUILD_NUM-DEBUG" /tmp/workspace
 workflows:
   version: 2.1
   build:
     jobs:
-      - build:
+      - test-and-build-apk:
           filters:
             branches:
               ignore:
                 - develop
                 - master
+      - tag-debug-release:
+          requires:
+            - test-and-build-apk
+          filters:
+            branches:
+              only:
+                - develop
