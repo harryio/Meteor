@@ -57,7 +57,7 @@ jobs:
             name: Create Tag
             command: |
               VNAME=$(grep 'versionName\s' app/build.gradle | tr -d ' "[a-zA-Z]')
-              BODY = $(git cherry -v develop)
+              BODY=$(git cherry -v develop)
               ghr -t "$GITHUB_TOKEN" -u "$CIRCLE_USERNAME" -prerelease -b "$BODY" "v$VNAME-$CIRCLE_BUILD_NUM-debug" /tmp/workspace
 workflows:
   version: 2.1
