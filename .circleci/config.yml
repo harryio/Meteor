@@ -68,10 +68,10 @@ workflows:
               ignore:
                 - develop
                 - master
-#      - tag-debug-release:
-#          requires:
-#            - test-and-build-apk
-#          filters:
-#            branches:
-#              only:
-#                - develop
+      - tag-debug-release:
+          requires:
+            - test-and-build-apk
+          filters:
+            branches:
+              only:
+                - develop
