@@ -15,6 +15,9 @@ publisher-template: &publisherTemplate
         name: Link Build Tools
         command: echo 'export PATH=${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}:${PATH}' >> $BASH_ENV
     - run:
+        name: Chmod permissions
+        command: sudo chmod +x ./gradlew
+    - run:
         name: Export secrets to Gradle properties
         command: |
           echo -e "METEOR_RELEASE_STORE_FILE=meteor-release-keystore.jks\n" >> gradle.properties
@@ -65,6 +68,9 @@ jobs:
       - checkout
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+      - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
       - run:
           name: Create Local Properties
           command: touch local.properties
