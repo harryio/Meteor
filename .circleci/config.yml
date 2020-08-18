@@ -77,10 +77,10 @@ jobs:
       - run:
           name: Export secrets to Gradle properties
           command: |
-            echo -e "METEOR_RELEASE_STORE_FILE=meteor-release-keystore.jks\n" >> gradle.properties
+            echo -e "\nMETEOR_RELEASE_STORE_FILE=meteor-release-keystore.jks\n" >> gradle.properties
             echo -e "METEOR_RELEASE_STORE_PASS=$METEOR_RELEASE_STORE_PASS\n" >> gradle.properties
             echo -e "METEOR_RELEASE_KEY_ALIAS=$METEOR_RELEASE_KEY_ALIAS\n" >> gradle.properties
-            echo -e "METEOR_RELEASE_KEY_PASS=$METEOR_RELEASE-KEY_PASS" >> gradle.properties
+            echo -e "METEOR_RELEASE_KEY_PASS=$METEOR_RELEASE_KEY_PASS" >> gradle.properties
       - run:
           name: Add Api Keys
           command: |
