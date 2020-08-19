@@ -9,54 +9,54 @@ publisher-template: &publisherTemplate
   <<: *defaults
   steps:
     - checkout
-    - restore_cache:
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-    - run:
-        name: Link Build Tools
-        command: echo 'export PATH=${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}:${PATH}' >> $BASH_ENV
-    - run:
-        name: Chmod permissions
-        command: sudo chmod +x ./gradlew
-    - run:
-        name: Export secrets to Gradle properties
-        command: |
-          echo -e "\nMETEOR_RELEASE_STORE_FILE=meteor-release-keystore.jks\n" >> gradle.properties
-          echo -e "METEOR_RELEASE_STORE_PASS=$METEOR_RELEASE_STORE_PASS\n" >> gradle.properties
-          echo -e "METEOR_RELEASE_KEY_ALIAS=$METEOR_RELEASE_KEY_ALIAS\n" >> gradle.properties
-          echo -e "METEOR_RELEASE_KEY_PASS=$METEOR_RELEASE_KEY_PASS" >> gradle.properties
-    - run:
-        name: Create Local Properties
-        command: touch local.properties
-    - run:
-        name: Add Api Keys
-        command: |
-          echo -e "weatherApiKey=\"$WEATHER_API_KEY\"\n" >> local.properties
-          echo -e "newsApiKey=\"$NEWS_API_KEY\"\n" >> local.properties
-    - run:
-        name: Download Dependencies
-        command: ./gradlew --no-daemon --max-workers 2 --console=plain androidDependencies
-    - save_cache:
-        paths:
-          - ~/.gradle
-        key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
-    - run:
-        name: Decrypt Keystore
-        command: openssl aes-256-cbc -pbkdf2 -d -in meteor-keystore.jks.enc -out app/meteor-release-keystore.jks -k $KEYSTORE_DECRYPTION_KEY -iv $KEYSTORE_DECRYPTION_IV -md sha256
-    - run:
-        name: Assemble, Align and Sign the APK
-        command: ./gradlew --no-daemon --max-workers 2 --console=plain clean "assemble${BUILD_TYPE}"
-    - run:
-        name: Verify and Stash APK
-        command: |
-          APK_NAME="app-${BUILD_TYPE}.apk"
-          APK_PATH="./app/build/outputs/apk/$BUILD_TYPE/$APK_NAME"
-          zipalign -c -v 4 $APK_PATH && apksigner verify $APK_PATH
-          mkdir ~/workspace
-          cp $APK_PATH ~/workspace/$APK_NAME
-    - persist_to_workspace:
-        root: ~/workspace
-        paths:
-          - "*.apk"
+#    - restore_cache:
+#        key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+#    - run:
+#        name: Link Build Tools
+#        command: echo 'export PATH=${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}:${PATH}' >> $BASH_ENV
+#    - run:
+#        name: Chmod permissions
+#        command: sudo chmod +x ./gradlew
+#    - run:
+#        name: Export secrets to Gradle properties
+#        command: |
+#          echo -e "\nMETEOR_RELEASE_STORE_FILE=meteor-release-keystore.jks\n" >> gradle.properties
+#          echo -e "METEOR_RELEASE_STORE_PASS=$METEOR_RELEASE_STORE_PASS\n" >> gradle.properties
+#          echo -e "METEOR_RELEASE_KEY_ALIAS=$METEOR_RELEASE_KEY_ALIAS\n" >> gradle.properties
+#          echo -e "METEOR_RELEASE_KEY_PASS=$METEOR_RELEASE_KEY_PASS" >> gradle.properties
+#    - run:
+#        name: Create Local Properties
+#        command: touch local.properties
+#    - run:
+#        name: Add Api Keys
+#        command: |
+#          echo -e "weatherApiKey=\"$WEATHER_API_KEY\"\n" >> local.properties
+#          echo -e "newsApiKey=\"$NEWS_API_KEY\"\n" >> local.properties
+#    - run:
+#        name: Download Dependencies
+#        command: ./gradlew --no-daemon --max-workers 2 --console=plain androidDependencies
+#    - save_cache:
+#        paths:
+#          - ~/.gradle
+#        key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+#    - run:
+#        name: Decrypt Keystore
+#        command: openssl aes-256-cbc -pbkdf2 -d -in meteor-keystore.jks.enc -out app/meteor-release-keystore.jks -k $KEYSTORE_DECRYPTION_KEY -iv $KEYSTORE_DECRYPTION_IV -md sha256
+#    - run:
+#        name: Assemble, Align and Sign the APK
+#        command: ./gradlew --no-daemon --max-workers 2 --console=plain clean "assemble${BUILD_TYPE}"
+#    - run:
+#        name: Verify and Stash APK
+#        command: |
+#          APK_NAME="app-${BUILD_TYPE}.apk"
+#          APK_PATH="./app/build/outputs/apk/$BUILD_TYPE/$APK_NAME"
+#          zipalign -c -v 4 $APK_PATH && apksigner verify $APK_PATH
+#          mkdir ~/workspace
+#          cp $APK_PATH ~/workspace/$APK_NAME
+#    - persist_to_workspace:
+#        root: ~/workspace
+#        paths:
+#          - "*.apk"
 
 version: 2.1
 jobs:
@@ -121,7 +121,7 @@ jobs:
           command: |
             VNAME=$(grep 'versionName\s' app/build.gradle | tr -d ' "[a-zA-Z]')
             BODY=$(git cherry -v develop)
-            ghr -t "$GITHUB_TOKEN" -u "$CIRCLE_USERNAME" -prerelease -b "$BODY" "v$VNAME-$CIRCLE_BUILD_NUM-RELEASE" /tmp/workspace
+            ghr -t "$GITHUB_TOKEN" -u "$CIRCLE_USERNAME" -b "$BODY" "v$VNAME-$CIRCLE_BUILD_NUM-RELEASE" /tmp/workspace
   tag-debug-release:
     <<: *defaults
     environment:
