@@ -282,7 +282,6 @@ fun mockWeather(
     country: String = "US",
     timestamp: Long = System.currentTimeMillis()
 ) = Weather(
-    id,
     main,
     icon,
     cityId,
