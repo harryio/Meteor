@@ -163,11 +163,9 @@ workflows:
           filters:
             branches:
               only: develop
-          context: org-global
       - tag-release:
           requires:
             - publish-release
           filters:
             branches:
               only: master
-          context: org-global
